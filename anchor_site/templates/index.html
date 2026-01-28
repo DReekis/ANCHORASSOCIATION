@@ -1,18 +1,165 @@
 {% extends "base.html" %}
 
-{% block title %}Home - Anchor Association{% endblock %}
+{% block title %}Anchor Association - Roots of Education, Fruits of Sustainability{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 {% endblock %}
 
 {% block content %}
-<section class="section" style="padding-top: 120px;">
-    <div class="container" style="text-align: center;">
-        <h1 style="font-size: 3rem; margin-bottom: 1rem;">Welcome to Anchor Association</h1>
-        <p style="color: var(--text-muted); font-size: 1.25rem;">
-            Phase 1 Complete: File Structure, Flask Backend, and Design System established.
+
+<!-- ============================================
+     SECTION 1: HERO
+     ============================================ -->
+<section class="hero">
+    <div class="hero__container container">
+        <h1 class="hero__title">
+            Roots of Education.<br>Fruits of Sustainability.
+        </h1>
+        <p class="hero__subtitle">
+            Empowering West Bengal through holistic learning and environmental stewardship.
         </p>
+        <a href="#mission" class="hero__cta">Our Story</a>
     </div>
 </section>
+
+
+<!-- ============================================
+     SECTION 2: VIDEO MAP
+     ============================================ -->
+<section class="film-map">
+    <div class="container">
+        <div class="map-container">
+            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80"
+                alt="Map of West Bengal showing Anchor Association's impact areas" class="map-container__image">
+            <div class="map-container__overlay">
+                <button class="map-container__play-btn" aria-label="Watch the film" data-open-modal>
+                    <svg class="map-container__play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                    <span>Watch the film</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Video Modal -->
+<dialog class="video-modal" id="videoModal">
+    <div class="video-modal__content">
+        <button class="video-modal__close" aria-label="Close video" data-close-modal>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            </svg>
+        </button>
+        <div class="video-modal__player">
+            <div class="video-modal__placeholder">
+                <p>Video Player Placeholder</p>
+                <p class="text-muted">Add your video embed URL here</p>
+            </div>
+        </div>
+    </div>
+</dialog>
+
+
+<!-- ============================================
+     SECTION 3: THE MISSION
+     ============================================ -->
+<section class="mission section" id="mission">
+    <div class="container">
+        <div class="mission__content">
+            <h2 class="mission__title">Our Mission</h2>
+            <p class="mission__text">
+                Bridging the gap between traditional education and environmental consciousness.
+                We believe in nurturing minds that understand the delicate balance between
+                progress and preservation, creating a generation of thoughtful leaders
+                who can shape a sustainable future for West Bengal and beyond.
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================
+     SECTION 4: BENTO GRID - DISCOVER ANCHOR
+     ============================================ -->
+<section class="discover section">
+    <div class="container">
+        <h2 class="discover__heading">Discover Anchor</h2>
+
+        <div class="bento-grid">
+            <!-- Card 1: Education (8 cols, 1 row) -->
+            <a href="/projects" class="bento-card card-edu">
+                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80"
+                    alt="Students engaged in holistic learning at Anchor Association" class="bento-card__image">
+                <div class="bento-card__overlay">
+                    <span class="bento-card__tag">Education</span>
+                    <h3 class="bento-card__title">Holistic Learning</h3>
+                    <p class="bento-card__desc">Nurturing curious minds through innovative teaching methods</p>
+                </div>
+            </a>
+
+            <!-- Card 2: Resort (4 cols, spans 2 rows - TALL PILLAR) -->
+            <a href="/resort" class="bento-card card-resort">
+                <img src="https://images.unsplash.com/photo-1586375300773-8384e3e4916f?auto=format&fit=crop&q=80"
+                    alt="Eco-friendly resort accommodations" class="bento-card__image">
+                <div class="bento-card__overlay">
+                    <span class="bento-card__tag">Sustainability</span>
+                    <h3 class="bento-card__title">Eco Stays</h3>
+                    <p class="bento-card__desc">Experience nature responsibly</p>
+                </div>
+            </a>
+
+            <!-- Card 3: Impact (8 cols, 1 row - sits under Education) -->
+            <div class="bento-card card-impact">
+                <div class="bento-card__impact-content">
+                    <span class="bento-card__tag">Community</span>
+                    <h3 class="bento-card__title">Our Impact</h3>
+                    <div class="bento-card__stats">
+                        <div class="stat">
+                            <span class="stat__number">5,000+</span>
+                            <span class="stat__label">Lives Touched</span>
+                        </div>
+                    </div>
+                    <p class="bento-card__reg">Reg No: S0008516</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Video Modal Functionality
+    const modal = document.getElementById('videoModal');
+    const openBtn = document.querySelector('[data-open-modal]');
+    const closeBtn = document.querySelector('[data-close-modal]');
+
+    openBtn?.addEventListener('click', () => {
+        modal.showModal();
+        document.body.style.overflow = 'hidden';
+    });
+
+    closeBtn?.addEventListener('click', () => {
+        modal.close();
+        document.body.style.overflow = '';
+    });
+
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.close();
+            document.body.style.overflow = '';
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal?.open) {
+            modal.close();
+            document.body.style.overflow = '';
+        }
+    });
+</script>
 {% endblock %}

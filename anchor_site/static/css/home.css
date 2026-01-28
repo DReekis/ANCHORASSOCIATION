@@ -2,4 +2,702 @@
    ANCHOR ASSOCIATION - HOME PAGE STYLES
    ============================================ */
 
-/* Styles for the home page will go here */
+/* ============================================
+   SECTION 1: HERO
+   ============================================ */
+.hero {
+   min-height: 100vh;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding-top: 180px;
+   padding-bottom: 80px;
+   text-align: center;
+   background: linear-gradient(180deg,
+         var(--bg-paper) 0%,
+         rgba(47, 107, 79, 0.03) 100%);
+}
+
+.hero__container {
+   max-width: 900px;
+}
+
+.hero__title {
+   font-family: var(--font-head);
+   font-size: clamp(2.5rem, 6vw, 4rem);
+   font-weight: 700;
+   line-height: 1.1;
+   color: var(--text-main);
+   margin-bottom: 24px;
+   letter-spacing: -0.02em;
+}
+
+.hero__title br {
+   display: block;
+}
+
+.hero__subtitle {
+   font-size: clamp(1rem, 2.5vw, 1.25rem);
+   color: var(--text-muted);
+   max-width: 600px;
+   margin: 0 auto 40px;
+   line-height: 1.7;
+}
+
+.hero__cta {
+   display: inline-block;
+   padding: 14px 32px;
+   font-size: 1rem;
+   font-weight: 600;
+   color: var(--primary);
+   background: transparent;
+   border: 2px solid var(--primary);
+   border-radius: 9999px;
+   transition: var(--transition-smooth);
+}
+
+.hero__cta:hover {
+   background: var(--primary);
+   color: white;
+   transform: translateY(-2px);
+   box-shadow: 0 8px 24px rgba(47, 107, 79, 0.25);
+}
+
+
+/* ============================================
+   SECTION 2: VIDEO MAP
+   ============================================ */
+.film-map {
+   padding: 40px 0 80px;
+}
+
+.map-container {
+   position: relative;
+   height: 600px;
+   border-radius: var(--radius-apple);
+   overflow: hidden;
+   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.map-container__image {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.map-container:hover .map-container__image {
+   transform: scale(1.02);
+}
+
+.map-container__overlay {
+   position: absolute;
+   inset: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: linear-gradient(180deg,
+         rgba(0, 0, 0, 0.1) 0%,
+         rgba(0, 0, 0, 0.3) 100%);
+}
+
+.map-container__play-btn {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   padding: 16px 32px;
+   font-size: 1rem;
+   font-weight: 600;
+   color: var(--text-main);
+   background: rgba(255, 255, 255, 0.85);
+   backdrop-filter: blur(20px);
+   -webkit-backdrop-filter: blur(20px);
+   border: 1px solid rgba(255, 255, 255, 0.4);
+   border-radius: 9999px;
+   cursor: pointer;
+   transition: var(--transition-smooth);
+   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.map-container__play-btn:hover {
+   background: rgba(255, 255, 255, 0.95);
+   transform: scale(1.05);
+   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
+.map-container__play-icon {
+   width: 24px;
+   height: 24px;
+   color: var(--primary);
+}
+
+@media (max-width: 768px) {
+   .map-container {
+      height: 400px;
+      border-radius: 16px;
+   }
+}
+
+
+/* ============================================
+   VIDEO MODAL
+   ============================================ */
+.video-modal {
+   display: none;
+   position: fixed;
+   inset: 0;
+   width: 100%;
+   max-width: 100%;
+   height: 100%;
+   max-height: 100%;
+   margin: 0;
+   padding: 24px;
+   background: rgba(0, 0, 0, 0.9);
+   border: none;
+   z-index: 2000;
+}
+
+.video-modal[open] {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.video-modal::backdrop {
+   background: transparent;
+}
+
+.video-modal__content {
+   position: relative;
+   width: 100%;
+   max-width: 1000px;
+}
+
+.video-modal__close {
+   position: absolute;
+   top: -48px;
+   right: 0;
+   padding: 8px;
+   background: rgba(255, 255, 255, 0.1);
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   transition: var(--transition-smooth);
+}
+
+.video-modal__close:hover {
+   background: rgba(255, 255, 255, 0.2);
+}
+
+.video-modal__close svg {
+   width: 24px;
+   height: 24px;
+   color: white;
+}
+
+.video-modal__player {
+   position: relative;
+   width: 100%;
+   padding-bottom: 56.25%;
+   background: #000;
+   border-radius: 16px;
+   overflow: hidden;
+}
+
+.video-modal__placeholder {
+   position: absolute;
+   inset: 0;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   color: white;
+   gap: 8px;
+}
+
+.video-modal__placeholder .text-muted {
+   color: rgba(255, 255, 255, 0.5);
+   font-size: 0.875rem;
+}
+
+
+/* ============================================
+   SECTION 3: MISSION
+   ============================================ */
+.mission {
+   background: var(--bg-paper);
+}
+
+.mission__content {
+   max-width: 800px;
+   margin: 0 auto;
+   text-align: center;
+}
+
+.mission__title {
+   font-family: var(--font-head);
+   font-size: clamp(2rem, 4vw, 2.5rem);
+   color: var(--text-main);
+   margin-bottom: 24px;
+}
+
+.mission__text {
+   font-size: clamp(1.1rem, 2vw, 1.25rem);
+   line-height: 1.8;
+   color: var(--text-muted);
+}
+
+
+/* ============================================
+   SECTION 4: DISCOVER / BENTO GRID
+   ============================================ */
+.discover {
+   background: var(--bg-paper);
+}
+
+.discover__heading {
+   font-family: var(--font-head);
+   font-size: clamp(2rem, 4vw, 2.5rem);
+   text-align: center;
+   margin-bottom: 48px;
+   color: var(--text-main);
+}
+
+
+/* ============================================
+   BENTO GRID - PERFECT RECTANGLE LAYOUT
+   ============================================ */
+.bento-grid {
+   display: grid;
+   grid-template-columns: repeat(12, 1fr);
+   grid-auto-rows: minmax(300px, auto);
+   gap: 24px;
+}
+
+/* Education Card: 8 columns, 1 row */
+.card-edu {
+   grid-column: span 8;
+   grid-row: span 1;
+}
+
+/* Resort Card: 4 columns, 2 rows (TALL PILLAR - KEY FIX) */
+.card-resort {
+   grid-column: span 4;
+   grid-row: span 2;
+}
+
+/* Impact Card: 8 columns, 1 row (sits directly under Education) */
+.card-impact {
+   grid-column: span 8;
+   grid-row: span 1;
+}
+
+
+/* ----- Bento Card Base Styles ----- */
+.bento-card {
+   position: relative;
+   border-radius: var(--radius-apple);
+   overflow: hidden;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bento-card:hover {
+   transform: scale(1.02);
+}
+
+.bento-card__image {
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bento-card:hover .bento-card__image {
+   transform: scale(1.05);
+}
+
+.bento-card__overlay {
+   position: relative;
+   z-index: 1;
+   padding: 32px;
+   background: linear-gradient(180deg,
+         transparent 0%,
+         rgba(0, 0, 0, 0.6) 100%);
+   color: white;
+}
+
+.bento-card__tag {
+   display: inline-block;
+   padding: 6px 14px;
+   font-size: 0.75rem;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.05em;
+   background: rgba(255, 255, 255, 0.2);
+   backdrop-filter: blur(10px);
+   border-radius: 9999px;
+   margin-bottom: 12px;
+}
+
+.bento-card__title {
+   font-family: var(--font-head);
+   font-size: 1.75rem;
+   font-weight: 700;
+   margin-bottom: 8px;
+   line-height: 1.2;
+}
+
+.bento-card__desc {
+   font-size: 0.95rem;
+   opacity: 0.85;
+   line-height: 1.5;
+}
+
+
+/* ----- Resort Card (Tall Pillar) ----- */
+.card-resort .bento-card__overlay {
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   background: linear-gradient(180deg,
+         transparent 40%,
+         rgba(0, 0, 0, 0.7) 100%);
+}
+
+
+/* ----- Impact Card (Gradient Background) ----- */
+.card-impact {
+   background: linear-gradient(135deg,
+         var(--primary) 0%,
+         #1a4a35 100%);
+   color: white;
+}
+
+.card-impact:hover {
+   background: linear-gradient(135deg,
+         #377a5a 0%,
+         var(--primary) 100%);
+}
+
+.bento-card__impact-content {
+   padding: 32px;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+}
+
+.card-impact .bento-card__tag {
+   background: rgba(255, 255, 255, 0.15);
+   align-self: flex-start;
+}
+
+.card-impact .bento-card__title {
+   font-family: var(--font-head);
+   font-size: 1.75rem;
+   margin-bottom: 24px;
+}
+
+.bento-card__stats {
+   flex: 1;
+   display: flex;
+   align-items: center;
+}
+
+.stat {
+   display: flex;
+   flex-direction: column;
+   gap: 4px;
+}
+
+.stat__number {
+   font-family: var(--font-head);
+   font-size: clamp(2.5rem, 5vw, 3.5rem);
+   font-weight: 700;
+   line-height: 1;
+}
+
+.stat__label {
+   font-size: 1rem;
+   opacity: 0.85;
+}
+
+.bento-card__reg {
+   font-size: 0.8rem;
+   opacity: 0.6;
+   margin-top: 16px;
+}
+
+
+/* ============================================
+   RESPONSIVE: TABLET (max-width: 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+
+   /* Hero */
+   .hero {
+      padding-top: 140px;
+      padding-bottom: 60px;
+   }
+
+   .hero__subtitle {
+      max-width: 500px;
+      margin-bottom: 32px;
+   }
+
+   /* Map Container */
+   .map-container {
+      height: 500px;
+   }
+
+   .map-container__play-btn {
+      padding: 14px 28px;
+   }
+
+   /* Bento Grid */
+   .bento-grid {
+      grid-template-columns: repeat(8, 1fr);
+      gap: 20px;
+   }
+
+   .card-edu {
+      grid-column: span 8;
+      grid-row: span 1;
+   }
+
+   .card-resort {
+      grid-column: span 4;
+      grid-row: span 2;
+   }
+
+   .card-impact {
+      grid-column: span 4;
+      grid-row: span 1;
+   }
+}
+
+
+/* ============================================
+   RESPONSIVE: MOBILE (max-width: 768px)
+   ============================================ */
+@media (max-width: 768px) {
+
+   /* Hero */
+   .hero {
+      min-height: auto;
+      padding-top: 120px;
+      padding-bottom: 48px;
+   }
+
+   .hero__title {
+      margin-bottom: 20px;
+   }
+
+   .hero__subtitle {
+      max-width: 100%;
+      margin-bottom: 28px;
+      padding: 0 8px;
+   }
+
+   .hero__cta {
+      padding: 12px 28px;
+      font-size: 0.95rem;
+   }
+
+   /* Film Map */
+   .film-map {
+      padding: 24px 0 48px;
+   }
+
+   .map-container {
+      height: 350px;
+      border-radius: 16px;
+   }
+
+   .map-container__play-btn {
+      padding: 12px 24px;
+      font-size: 0.9rem;
+      gap: 10px;
+   }
+
+   .map-container__play-icon {
+      width: 20px;
+      height: 20px;
+   }
+
+   /* Video Modal */
+   .video-modal {
+      padding: 16px;
+   }
+
+   .video-modal__content {
+      max-width: 100%;
+   }
+
+   .video-modal__close {
+      top: -40px;
+   }
+
+   .video-modal__player {
+      border-radius: 12px;
+   }
+
+   /* Mission */
+   .mission__content {
+      padding: 0 8px;
+   }
+
+   .mission__title {
+      margin-bottom: 20px;
+   }
+
+   .mission__text {
+      line-height: 1.7;
+   }
+
+   /* Discover */
+   .discover__heading {
+      margin-bottom: 32px;
+   }
+
+   /* Bento Grid - STACKED */
+   .bento-grid {
+      grid-template-columns: 1fr;
+      grid-auto-rows: minmax(280px, auto);
+      gap: 16px;
+   }
+
+   .card-edu,
+   .card-resort,
+   .card-impact {
+      grid-column: span 1;
+      grid-row: auto;
+   }
+
+   .bento-card__overlay {
+      padding: 24px;
+   }
+
+   .bento-card__title {
+      font-size: 1.5rem;
+   }
+
+   .bento-card__desc {
+      font-size: 0.9rem;
+   }
+
+   .bento-card__tag {
+      padding: 5px 12px;
+      font-size: 0.7rem;
+   }
+
+   /* Impact Card */
+   .bento-card__impact-content {
+      padding: 24px;
+   }
+
+   .card-impact .bento-card__title {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+   }
+
+   .stat__label {
+      font-size: 0.9rem;
+   }
+}
+
+
+/* ============================================
+   RESPONSIVE: SMALL MOBILE (max-width: 480px)
+   ============================================ */
+@media (max-width: 480px) {
+
+   /* Hero */
+   .hero {
+      padding-top: 100px;
+      padding-bottom: 40px;
+   }
+
+   .hero__title {
+      margin-bottom: 16px;
+   }
+
+   .hero__subtitle {
+      margin-bottom: 24px;
+      line-height: 1.6;
+   }
+
+   .hero__cta {
+      padding: 10px 24px;
+      font-size: 0.9rem;
+   }
+
+   /* Film Map */
+   .film-map {
+      padding: 16px 0 40px;
+   }
+
+   .map-container {
+      height: 280px;
+      border-radius: 12px;
+   }
+
+   .map-container__play-btn {
+      padding: 10px 20px;
+      font-size: 0.85rem;
+   }
+
+   .map-container__play-icon {
+      width: 18px;
+      height: 18px;
+   }
+
+   /* Bento Grid */
+   .bento-grid {
+      grid-auto-rows: minmax(240px, auto);
+      gap: 12px;
+   }
+
+   .bento-card__overlay {
+      padding: 20px;
+   }
+
+   .bento-card__title {
+      font-size: 1.35rem;
+   }
+
+   .bento-card__tag {
+      padding: 4px 10px;
+      font-size: 0.65rem;
+      margin-bottom: 8px;
+   }
+
+   /* Impact Card */
+   .bento-card__impact-content {
+      padding: 20px;
+   }
+
+   .card-impact .bento-card__title {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+   }
+
+   .stat__number {
+      font-size: 2rem;
+   }
+
+   .stat__label {
+      font-size: 0.85rem;
+   }
+
+   .bento-card__reg {
+      font-size: 0.75rem;
+      margin-top: 12px;
+   }
+}
