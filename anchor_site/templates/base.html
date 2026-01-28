@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Anchor Association - Empowering communities through sustainable development and education.">
+    
+    <title>{% block title %}Anchor Association{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- Glass Navigation -->
+    <nav class="nav-glass" role="navigation" aria-label="Main navigation">
+        <a href="{{ url_for('home') }}" class="nav-glass__logo">Anchor</a>
+        
+        <button class="nav-glass__hamburger" aria-label="Toggle menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <div class="nav-glass__links">
+            <a href="{{ url_for('home') }}" class="nav-glass__link">Home</a>
+            <a href="#" class="nav-glass__link">Projects</a>
+            <a href="#" class="nav-glass__link">The Resort</a>
+            <a href="#" class="nav-glass__link">Gallery</a>
+            <a href="#" class="nav-glass__link nav-glass__link--cta">Donate</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__content">
+            <div class="footer__logo">Anchor Association</div>
+            <p class="footer__tagline">Rooted in Community. Growing Together.</p>
+            
+            <nav class="footer__links" aria-label="Footer navigation">
+                <a href="{{ url_for('home') }}" class="footer__link">Home</a>
+                <a href="#" class="footer__link">Projects</a>
+                <a href="#" class="footer__link">The Resort</a>
+                <a href="#" class="footer__link">Gallery</a>
+                <a href="#" class="footer__link">Contact</a>
+            </nav>
+            
+            <div class="footer__divider"></div>
+            
+            <p class="footer__copyright">
+                &copy; {{ current_year }} Anchor Association. Registered Society.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+    
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.nav-glass__hamburger');
+        const navLinks = document.querySelector('.nav-glass__links');
+        
+        hamburger?.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            navLinks.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

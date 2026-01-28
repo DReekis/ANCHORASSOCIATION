@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Anchor Association{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 120px;">
+    <div class="container" style="text-align: center;">
+        <h1 style="font-size: 3rem; margin-bottom: 1rem;">Welcome to Anchor Association</h1>
+        <p style="color: var(--text-muted); font-size: 1.25rem;">
+            Phase 1 Complete: File Structure, Flask Backend, and Design System established.
+        </p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,281 @@
+/* ============================================
+   ANCHOR ASSOCIATION - GLOBAL DESIGN SYSTEM
+   ============================================ */
+
+/* ----- CSS Variables ----- */
+:root {
+    /* Colors */
+    --bg-paper: #F6F5F1;
+    --primary: #2F6B4F;
+    --accent: #E07A3F;
+    --text-main: #2B2B2B;
+    --text-muted: #6F6F6F;
+
+    /* Typography */
+    --font-head: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Layout */
+    --radius-apple: 24px;
+    --container-width: 1240px;
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ----- Modern CSS Reset ----- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-paper);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition-smooth);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+}
+
+
+/* ============================================
+   NAVIGATION - Glass Navbar
+   ============================================ */
+.nav-glass {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 9999px; /* Pill shape */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+}
+
+.nav-glass__logo {
+    font-family: var(--font-head);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-right: 16px;
+}
+
+.nav-glass__links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-glass__link {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+    border-radius: 9999px;
+    transition: var(--transition-smooth);
+}
+
+.nav-glass__link:hover {
+    background: rgba(47, 107, 79, 0.1);
+    color: var(--primary);
+}
+
+.nav-glass__link--cta {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+}
+
+.nav-glass__link--cta:hover {
+    background: #c96a35;
+    color: white;
+}
+
+/* Mobile hamburger (hidden by default) */
+.nav-glass__hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+}
+
+.nav-glass__hamburger span {
+    width: 20px;
+    height: 2px;
+    background: var(--text-main);
+    border-radius: 2px;
+    transition: var(--transition-smooth);
+}
+
+/* Mobile Navigation Styles */
+@media (max-width: 768px) {
+    .nav-glass {
+        width: calc(100% - 32px);
+        max-width: 400px;
+        padding: 12px 20px;
+        justify-content: space-between;
+    }
+
+    .nav-glass__links {
+        display: none;
+        position: absolute;
+        top: calc(100% + 12px);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 4px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: var(--radius-apple);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-glass__links.active {
+        display: flex;
+    }
+
+    .nav-glass__link {
+        width: 100%;
+        text-align: center;
+        padding: 12px 16px;
+    }
+
+    .nav-glass__hamburger {
+        display: flex;
+    }
+}
+
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+    padding: 48px 24px;
+    text-align: center;
+    background: var(--bg-paper);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.footer__content {
+    max-width: var(--container-width);
+    margin: 0 auto;
+}
+
+.footer__logo {
+    font-family: var(--font-head);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 16px;
+}
+
+.footer__tagline {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+}
+
+.footer__links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.footer__link {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.footer__link:hover {
+    color: var(--primary);
+}
+
+.footer__divider {
+    width: 60px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0 auto 24px;
+    border-radius: 2px;
+}
+
+.footer__copyright {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.container {
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
