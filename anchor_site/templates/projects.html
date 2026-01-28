@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Our Projects - Anchor Association{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/projects.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- ============================================
+     PAGE HEADER
+     ============================================ -->
+<section class="projects-hero">
+    <div class="container">
+        <h1 class="projects-hero__title">Human Potential.</h1>
+        <p class="projects-hero__subtitle">
+            From early childhood to livelihood. A holistic approach to development.
+        </p>
+    </div>
+</section>
+
+
+<!-- ============================================
+     PILLAR A: EARLY FOUNDATIONS
+     ============================================ -->
+<section class="feature-section section">
+    <div class="container">
+        <div class="feature-row">
+            <div class="feature-row__image">
+                <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80"
+                    alt="Children engaged in early learning activities" loading="lazy">
+            </div>
+            <div class="feature-row__content">
+                <span class="feature-row__tag">Early Foundations</span>
+                <h2 class="feature-row__title">Kindergarten & Early Learning</h2>
+                <p class="feature-row__text">
+                    Providing a strong educational foundation for children in South 24 Parganas.
+                    Now expanding to Bankura & Burdwan Districts.
+                </p>
+                <p class="feature-row__note">
+                    <svg class="feature-row__icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    Also featuring the <strong>'Atma Katha' Language Center</strong> for communication skills.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================
+     PILLAR B: COMMUNITY WELLNESS (Reversed)
+     ============================================ -->
+<section class="feature-section feature-section--alt section">
+    <div class="container">
+        <div class="feature-row feature-row--reversed">
+            <div class="feature-row__image">
+                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80"
+                    alt="Healthcare professionals providing medical care" loading="lazy">
+            </div>
+            <div class="feature-row__content">
+                <span class="feature-row__tag">Community Wellness</span>
+                <h2 class="feature-row__title">Finding Cures Charitable Dispensary</h2>
+                <p class="feature-row__text">
+                    Essential healthcare for underserved communities. We believe no one should
+                    be denied medical attention due to financial constraints.
+                </p>
+                <div class="feature-row__stats">
+                    <div class="mini-stat">
+                        <span class="mini-stat__number">2,500+</span>
+                        <span class="mini-stat__label">Patients Served</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat__number">Free</span>
+                        <span class="mini-stat__label">Consultations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================
+     PILLAR C: VOCATIONAL EMPOWERMENT
+     ============================================ -->
+<section class="vocational-section section">
+    <div class="container">
+        <div class="vocational-header">
+            <span class="vocational-header__tag">Vocational Empowerment</span>
+            <h2 class="vocational-header__title">The Art of Independence</h2>
+            <p class="vocational-header__subtitle">Learn & Shine Program</p>
+        </div>
+
+        <div class="vocational-grid">
+            <!-- Card 1: Beauty & Wellness -->
+            <div class="vocational-card">
+                <div class="vocational-card__icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+                    </svg>
+                </div>
+                <h3 class="vocational-card__title">Beauty & Wellness</h3>
+                <p class="vocational-card__text">
+                    Professional training in makeup, skincare, and personal grooming techniques.
+                </p>
+            </div>
+
+            <!-- Card 2: Textile Arts -->
+            <div class="vocational-card">
+                <div class="vocational-card__icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19.3 16.9c.4-.7.7-1.5.7-2.4 0-2.5-2-4.5-4.5-4.5S11 12 11 14.5s2 4.5 4.5 4.5c.9 0 1.7-.3 2.4-.7l3.2 3.2 1.4-1.4-3.2-3.2zm-3.8.1c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5zM12 20v2C6.48 22 2 17.52 2 12S6.48 2 12 2c4.84 0 8.87 3.44 9.8 8h-2.07c-.64-3.13-3.36-5.5-6.73-5.5-3.72 0-6.75 3.03-6.75 6.75S9.28 18.25 13 18.25c.69 0 1.35-.11 1.97-.31l1.51 1.51C15.33 19.8 13.72 20 12 20z" />
+                    </svg>
+                </div>
+                <h3 class="vocational-card__title">Textile Arts</h3>
+                <p class="vocational-card__text">
+                    Mastery in stitching, knitting, and traditional embroidery crafts.
+                </p>
+            </div>
+
+            <!-- Card 3: Career Edge -->
+            <div class="vocational-card">
+                <div class="vocational-card__icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                </div>
+                <h3 class="vocational-card__title">Career Edge</h3>
+                <p class="vocational-card__text">
+                    Job placement assistance and entrepreneurial guidance for sustainable livelihoods.
+                </p>
+            </div>
+
+            <!-- Card 4: Nivedita SHG -->
+            <div class="vocational-card">
+                <div class="vocational-card__icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                    </svg>
+                </div>
+                <h3 class="vocational-card__title">Nivedita SHG</h3>
+                <p class="vocational-card__text">
+                    Micro-financing and self-help groups empowering women towards financial independence.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

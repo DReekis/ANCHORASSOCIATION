@@ -2,4 +2,408 @@
    ANCHOR ASSOCIATION - PROJECTS PAGE STYLES
    ============================================ */
 
-/* Styles for the projects page will go here */
+/* ============================================
+   PAGE HEADER / HERO
+   ============================================ */
+.projects-hero {
+   padding-top: 160px;
+   padding-bottom: 80px;
+   text-align: center;
+   background: linear-gradient(180deg,
+         var(--bg-paper) 0%,
+         rgba(47, 107, 79, 0.05) 100%);
+}
+
+.projects-hero__title {
+   font-family: var(--font-head);
+   font-size: clamp(2.5rem, 6vw, 4rem);
+   font-weight: 700;
+   color: var(--text-main);
+   margin-bottom: 16px;
+   letter-spacing: -0.02em;
+}
+
+.projects-hero__subtitle {
+   font-size: clamp(1rem, 2.5vw, 1.25rem);
+   color: var(--text-muted);
+   max-width: 600px;
+   margin: 0 auto;
+   line-height: 1.7;
+}
+
+
+/* ============================================
+   FEATURE SECTIONS (Pillar A & B)
+   ============================================ */
+.feature-section {
+   background: var(--bg-paper);
+}
+
+.feature-section--alt {
+   background: rgba(47, 107, 79, 0.03);
+}
+
+.feature-row {
+   display: flex;
+   align-items: center;
+   gap: 64px;
+}
+
+.feature-row--reversed {
+   flex-direction: row-reverse;
+}
+
+.feature-row__image {
+   flex: 1;
+   min-width: 0;
+}
+
+.feature-row__image img {
+   width: 100%;
+   height: 400px;
+   object-fit: cover;
+   border-radius: var(--radius-apple);
+   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-row__image img:hover {
+   transform: scale(1.02);
+}
+
+.feature-row__content {
+   flex: 1;
+   min-width: 0;
+}
+
+.feature-row__tag {
+   display: inline-block;
+   padding: 6px 14px;
+   font-size: 0.75rem;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   color: var(--primary);
+   background: rgba(47, 107, 79, 0.1);
+   border-radius: 9999px;
+   margin-bottom: 16px;
+}
+
+.feature-row__title {
+   font-family: var(--font-head);
+   font-size: clamp(1.75rem, 4vw, 2.25rem);
+   font-weight: 700;
+   color: var(--text-main);
+   margin-bottom: 16px;
+   line-height: 1.2;
+}
+
+.feature-row__text {
+   font-size: 1.1rem;
+   line-height: 1.8;
+   color: var(--text-muted);
+   margin-bottom: 20px;
+}
+
+.feature-row__note {
+   display: flex;
+   align-items: flex-start;
+   gap: 10px;
+   font-size: 0.95rem;
+   color: var(--text-main);
+   padding: 16px;
+   background: rgba(47, 107, 79, 0.05);
+   border-radius: 12px;
+   border-left: 3px solid var(--primary);
+}
+
+.feature-row__icon {
+   width: 20px;
+   height: 20px;
+   flex-shrink: 0;
+   color: var(--primary);
+   margin-top: 2px;
+}
+
+.feature-row__note strong {
+   color: var(--primary);
+}
+
+
+/* ----- Mini Stats ----- */
+.feature-row__stats {
+   display: flex;
+   gap: 32px;
+   margin-top: 24px;
+}
+
+.mini-stat {
+   display: flex;
+   flex-direction: column;
+   gap: 4px;
+}
+
+.mini-stat__number {
+   font-family: var(--font-head);
+   font-size: 1.75rem;
+   font-weight: 700;
+   color: var(--primary);
+}
+
+.mini-stat__label {
+   font-size: 0.85rem;
+   color: var(--text-muted);
+}
+
+
+/* ============================================
+   VOCATIONAL SECTION (Pillar C)
+   ============================================ */
+.vocational-section {
+   background: var(--bg-paper);
+}
+
+.vocational-header {
+   text-align: center;
+   margin-bottom: 48px;
+}
+
+.vocational-header__tag {
+   display: inline-block;
+   padding: 6px 14px;
+   font-size: 0.75rem;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   color: var(--accent);
+   background: rgba(224, 122, 63, 0.1);
+   border-radius: 9999px;
+   margin-bottom: 16px;
+}
+
+.vocational-header__title {
+   font-family: var(--font-head);
+   font-size: clamp(2rem, 4vw, 2.5rem);
+   font-weight: 700;
+   color: var(--text-main);
+   margin-bottom: 8px;
+}
+
+.vocational-header__subtitle {
+   font-size: 1.1rem;
+   color: var(--text-muted);
+}
+
+
+/* ----- Vocational Grid ----- */
+.vocational-grid {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 24px;
+}
+
+.vocational-card {
+   background: white;
+   padding: 32px;
+   border-radius: var(--radius-apple);
+   border: 1px solid rgba(0, 0, 0, 0.05);
+   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vocational-card:hover {
+   transform: translateY(-5px);
+   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+.vocational-card__icon {
+   width: 48px;
+   height: 48px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: rgba(47, 107, 79, 0.1);
+   border-radius: 12px;
+   margin-bottom: 20px;
+}
+
+.vocational-card__icon svg {
+   width: 24px;
+   height: 24px;
+   color: var(--primary);
+}
+
+.vocational-card__title {
+   font-family: var(--font-head);
+   font-size: 1.25rem;
+   font-weight: 700;
+   color: var(--text-main);
+   margin-bottom: 12px;
+}
+
+.vocational-card__text {
+   font-size: 0.95rem;
+   line-height: 1.6;
+   color: var(--text-muted);
+}
+
+
+/* ============================================
+   RESPONSIVE: TABLET (max-width: 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+   .projects-hero {
+      padding-top: 140px;
+      padding-bottom: 60px;
+   }
+
+   .feature-row {
+      gap: 40px;
+   }
+
+   .feature-row__image img {
+      height: 350px;
+   }
+
+   .vocational-grid {
+      grid-template-columns: repeat(2, 1fr);
+   }
+}
+
+
+/* ============================================
+   RESPONSIVE: MOBILE (max-width: 768px)
+   ============================================ */
+@media (max-width: 768px) {
+   .projects-hero {
+      padding-top: 120px;
+      padding-bottom: 48px;
+   }
+
+   .projects-hero__title {
+      margin-bottom: 12px;
+   }
+
+   /* Feature Rows - Stack with image on top */
+   .feature-row,
+   .feature-row--reversed {
+      flex-direction: column-reverse;
+      gap: 32px;
+   }
+
+   .feature-row__image img {
+      height: 280px;
+   }
+
+   .feature-row__tag {
+      margin-bottom: 12px;
+   }
+
+   .feature-row__title {
+      margin-bottom: 12px;
+   }
+
+   .feature-row__text {
+      font-size: 1rem;
+      margin-bottom: 16px;
+   }
+
+   .feature-row__note {
+      padding: 14px;
+      font-size: 0.9rem;
+   }
+
+   .feature-row__stats {
+      gap: 24px;
+      margin-top: 20px;
+   }
+
+   .mini-stat__number {
+      font-size: 1.5rem;
+   }
+
+   /* Vocational Grid - 2 columns on tablet, 1 on mobile */
+   .vocational-header {
+      margin-bottom: 32px;
+   }
+
+   .vocational-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+   }
+
+   .vocational-card {
+      padding: 24px;
+   }
+
+   .vocational-card__icon {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 16px;
+   }
+
+   .vocational-card__title {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+   }
+
+   .vocational-card__text {
+      font-size: 0.9rem;
+   }
+}
+
+
+/* ============================================
+   RESPONSIVE: SMALL MOBILE (max-width: 480px)
+   ============================================ */
+@media (max-width: 480px) {
+   .projects-hero {
+      padding-top: 100px;
+      padding-bottom: 40px;
+   }
+
+   .feature-row,
+   .feature-row--reversed {
+      gap: 24px;
+   }
+
+   .feature-row__image img {
+      height: 220px;
+      border-radius: 16px;
+   }
+
+   .feature-row__note {
+      flex-direction: column;
+      gap: 8px;
+   }
+
+   .feature-row__icon {
+      margin-top: 0;
+   }
+
+   .feature-row__stats {
+      flex-direction: column;
+      gap: 16px;
+   }
+
+   /* Vocational Grid - Single column */
+   .vocational-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+   }
+
+   .vocational-card {
+      padding: 20px;
+   }
+
+   .vocational-card__icon {
+      width: 40px;
+      height: 40px;
+   }
+
+   .vocational-card__icon svg {
+      width: 20px;
+      height: 20px;
+   }
+}
