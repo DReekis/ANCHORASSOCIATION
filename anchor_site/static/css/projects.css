@@ -1,409 +1,297 @@
-/* ============================================
-   ANCHOR ASSOCIATION - PROJECTS PAGE STYLES
-   ============================================ */
-
-/* ============================================
-   PAGE HEADER / HERO
-   ============================================ */
-.projects-hero {
-   padding-top: 160px;
-   padding-bottom: 80px;
+/* ---------- Page Header ---------- */
+.projects-header {
    text-align: center;
-   background: linear-gradient(180deg,
-         var(--bg-paper) 0%,
-         rgba(47, 107, 79, 0.05) 100%);
+   padding: 160px 0 80px;
 }
 
-.projects-hero__title {
+.projects-header__title {
    font-family: var(--font-head);
-   font-size: clamp(2.5rem, 6vw, 4rem);
+   font-size: clamp(2.8rem, 7vw, 4.5rem);
    font-weight: 700;
    color: var(--text-main);
-   margin-bottom: 16px;
-   letter-spacing: -0.02em;
+   letter-spacing: -0.03em;
+   line-height: 1.08;
+   margin-bottom: 20px;
 }
 
-.projects-hero__subtitle {
-   font-size: clamp(1rem, 2.5vw, 1.25rem);
+.projects-header__sub {
+   font-size: clamp(1rem, 2.2vw, 1.15rem);
    color: var(--text-muted);
-   max-width: 600px;
+   max-width: 520px;
    margin: 0 auto;
    line-height: 1.7;
 }
 
 
 /* ============================================
-   FEATURE SECTIONS (Pillar A & B)
+   SECTION 1 — Feature Row (Minions Fun House)
    ============================================ */
 .feature-section {
-   background: var(--bg-paper);
-}
-
-.feature-section--alt {
-   background: rgba(47, 107, 79, 0.03);
+   padding: 40px 0 80px;
 }
 
 .feature-row {
    display: flex;
    align-items: center;
-   gap: 64px;
+   justify-content: space-between;
+   gap: 80px;
 }
 
-.feature-row--reversed {
-   flex-direction: row-reverse;
-}
-
-.feature-row__image {
-   flex: 1;
-   min-width: 0;
-}
-
-.feature-row__image img {
-   width: 100%;
-   height: 400px;
-   object-fit: cover;
+.feature-image-container {
+   width: 50%;
+   height: 500px;
    border-radius: var(--radius-apple);
-   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
-   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   overflow: hidden;
+   flex-shrink: 0;
+   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+   background: #e8e6e1;
 }
 
-.feature-row__image img:hover {
-   transform: scale(1.02);
+.feature-image-container img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
 }
 
-.feature-row__content {
-   flex: 1;
-   min-width: 0;
+.feature-text {
+   width: 45%;
+   padding: 0;
 }
 
-.feature-row__tag {
+.feature-text__label {
    display: inline-block;
-   padding: 6px 14px;
-   font-size: 0.75rem;
+   font-size: 0.7rem;
    font-weight: 600;
    text-transform: uppercase;
-   letter-spacing: 0.08em;
+   letter-spacing: 0.12em;
    color: var(--primary);
-   background: rgba(47, 107, 79, 0.1);
-   border-radius: 9999px;
-   margin-bottom: 16px;
+   opacity: 0.75;
+   margin-bottom: 14px;
 }
 
-.feature-row__title {
+.feature-text__title {
    font-family: var(--font-head);
-   font-size: clamp(1.75rem, 4vw, 2.25rem);
+   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
    font-weight: 700;
    color: var(--text-main);
-   margin-bottom: 16px;
    line-height: 1.2;
-}
-
-.feature-row__text {
-   font-size: 1.1rem;
-   line-height: 1.8;
-   color: var(--text-muted);
    margin-bottom: 20px;
 }
 
-.feature-row__note {
-   display: flex;
-   align-items: flex-start;
-   gap: 10px;
-   font-size: 0.95rem;
-   color: var(--text-main);
-   padding: 16px;
-   background: rgba(47, 107, 79, 0.05);
-   border-radius: 12px;
-   border-left: 3px solid var(--primary);
-}
-
-.feature-row__icon {
-   width: 20px;
-   height: 20px;
-   flex-shrink: 0;
-   color: var(--primary);
-   margin-top: 2px;
-}
-
-.feature-row__note strong {
-   color: var(--primary);
-}
-
-
-/* ----- Mini Stats ----- */
-.feature-row__stats {
-   display: flex;
-   gap: 32px;
-   margin-top: 24px;
-}
-
-.mini-stat {
-   display: flex;
-   flex-direction: column;
-   gap: 4px;
-}
-
-.mini-stat__number {
-   font-family: var(--font-head);
-   font-size: 1.75rem;
-   font-weight: 700;
-   color: var(--primary);
-}
-
-.mini-stat__label {
-   font-size: 0.85rem;
+.feature-text__body {
+   font-size: 1.02rem;
+   line-height: 1.8;
    color: var(--text-muted);
+   margin-bottom: 12px;
+}
+
+.feature-text__body:last-child {
+   margin-bottom: 0;
+}
+
+.feature-text__body strong {
+   color: var(--text-main);
+   font-weight: 600;
 }
 
 
 /* ============================================
-   VOCATIONAL SECTION (Pillar C)
+   SECTION 2 — Initiatives (4 Photo Cards)
    ============================================ */
-.vocational-section {
-   background: var(--bg-paper);
+.initiatives-section {
+   padding: 80px 0;
+   background: rgba(47, 107, 79, 0.025);
 }
 
-.vocational-header {
+.initiatives-header {
    text-align: center;
-   margin-bottom: 48px;
+   max-width: 580px;
+   margin: 0 auto 56px;
 }
 
-.vocational-header__tag {
-   display: inline-block;
-   padding: 6px 14px;
-   font-size: 0.75rem;
-   font-weight: 600;
-   text-transform: uppercase;
-   letter-spacing: 0.08em;
-   color: var(--accent);
-   background: rgba(224, 122, 63, 0.1);
-   border-radius: 9999px;
-   margin-bottom: 16px;
-}
-
-.vocational-header__title {
+.initiatives-header__title {
    font-family: var(--font-head);
-   font-size: clamp(2rem, 4vw, 2.5rem);
+   font-size: clamp(1.8rem, 4vw, 2.5rem);
    font-weight: 700;
    color: var(--text-main);
-   margin-bottom: 8px;
+   line-height: 1.15;
+   margin-bottom: 14px;
 }
 
-.vocational-header__subtitle {
-   font-size: 1.1rem;
+.initiatives-header__sub {
+   font-size: 1.05rem;
    color: var(--text-muted);
+   line-height: 1.7;
 }
 
 
-/* ----- Vocational Grid ----- */
-.vocational-grid {
+/* ----- Card Grid ----- */
+.initiatives-grid {
    display: grid;
    grid-template-columns: repeat(4, 1fr);
    gap: 24px;
 }
 
-.vocational-card {
+.initiative-card {
    background: white;
-   padding: 32px;
    border-radius: var(--radius-apple);
+   overflow: hidden;
    border: 1px solid rgba(0, 0, 0, 0.05);
-   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.vocational-card:hover {
-   transform: translateY(-5px);
-   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+.initiative-card:hover {
+   transform: translateY(-6px);
+   box-shadow: 0 16px 44px rgba(0, 0, 0, 0.1);
 }
 
-.vocational-card__icon {
-   width: 48px;
-   height: 48px;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   background: rgba(47, 107, 79, 0.1);
-   border-radius: 12px;
-   margin-bottom: 20px;
+
+/* Card Image */
+.initiative-card__img {
+   width: 100%;
+   aspect-ratio: 16 / 10;
+   overflow: hidden;
+   background: #e8e6e1;
 }
 
-.vocational-card__icon svg {
-   width: 24px;
-   height: 24px;
-   color: var(--primary);
+.initiative-card__img img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   display: block;
+   transition: transform 0.4s ease;
 }
 
-.vocational-card__title {
+.initiative-card:hover .initiative-card__img img {
+   transform: scale(1.05);
+}
+
+
+/* Card Body */
+.initiative-card__body {
+   padding: 24px;
+}
+
+.initiative-card__title {
    font-family: var(--font-head);
-   font-size: 1.25rem;
+   font-size: 1.1rem;
    font-weight: 700;
    color: var(--text-main);
+   margin-bottom: 2px;
+}
+
+.initiative-card__tagline {
+   font-size: 0.78rem;
+   font-style: italic;
+   color: var(--primary);
    margin-bottom: 12px;
 }
 
-.vocational-card__text {
-   font-size: 0.95rem;
+.initiative-card__text {
+   font-size: 0.88rem;
    line-height: 1.6;
    color: var(--text-muted);
 }
 
 
 /* ============================================
-   RESPONSIVE: TABLET (max-width: 1024px)
+   SECTION 3 — Learn & Shine (reuses initiative-card styles)
    ============================================ */
-@media (max-width: 1024px) {
-   .projects-hero {
-      padding-top: 140px;
-      padding-bottom: 60px;
-   }
-
-   .feature-row {
-      gap: 40px;
-   }
-
-   .feature-row__image img {
-      height: 350px;
-   }
-
-   .vocational-grid {
-      grid-template-columns: repeat(2, 1fr);
-   }
+.shine-section {
+   padding: 80px 0 100px;
 }
 
 
-/* ============================================
-   RESPONSIVE: MOBILE (max-width: 768px)
-   ============================================ */
-@media (max-width: 768px) {
-   .projects-hero {
-      padding-top: 120px;
-      padding-bottom: 48px;
+/* ==============================================
+   RESPONSIVE — Tablet (max-width: 900px)
+   ============================================== */
+@media (max-width: 900px) {
+
+   /* Header */
+   .projects-header {
+      padding: 120px 0 56px;
    }
 
-   .projects-hero__title {
-      margin-bottom: 12px;
-   }
-
-   /* Feature Rows - Stack with image on top */
-   .feature-row,
-   .feature-row--reversed {
-      flex-direction: column-reverse;
+   /* Section 1: Minions Fun House — stack */
+   .feature-row {
+      flex-direction: column !important;
       gap: 32px;
    }
 
-   .feature-row__image img {
-      height: 280px;
+   .feature-image-container,
+   .feature-text {
+      width: 100%;
    }
 
-   .feature-row__tag {
-      margin-bottom: 12px;
+   .feature-image-container {
+      height: 320px;
    }
 
-   .feature-row__title {
-      margin-bottom: 12px;
+   .feature-section {
+      padding: 32px 0 56px;
    }
 
-   .feature-row__text {
-      font-size: 1rem;
-      margin-bottom: 16px;
-   }
-
-   .feature-row__note {
-      padding: 14px;
-      font-size: 0.9rem;
-   }
-
-   .feature-row__stats {
-      gap: 24px;
-      margin-top: 20px;
-   }
-
-   .mini-stat__number {
-      font-size: 1.5rem;
-   }
-
-   /* Vocational Grid - 2 columns on tablet, 1 on mobile */
-   .vocational-header {
-      margin-bottom: 32px;
-   }
-
-   .vocational-grid {
+   /* Section 2: Cards — 2 columns */
+   .initiatives-grid {
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      gap: 20px;
    }
 
-   .vocational-card {
-      padding: 24px;
+   .initiatives-section {
+      padding: 56px 0;
    }
 
-   .vocational-card__icon {
-      width: 44px;
-      height: 44px;
-      margin-bottom: 16px;
+   .initiatives-header {
+      margin-bottom: 36px;
    }
 
-   .vocational-card__title {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-   }
-
-   .vocational-card__text {
-      font-size: 0.9rem;
+   /* Section 3: Learn & Shine */
+   .shine-section {
+      padding: 56px 0 72px;
    }
 }
 
 
-/* ============================================
-   RESPONSIVE: SMALL MOBILE (max-width: 480px)
-   ============================================ */
+/* ==============================================
+   RESPONSIVE — Small phones (max-width: 480px)
+   ============================================== */
 @media (max-width: 480px) {
-   .projects-hero {
-      padding-top: 100px;
-      padding-bottom: 40px;
+
+   .projects-header {
+      padding: 100px 0 40px;
    }
 
-   .feature-row,
-   .feature-row--reversed {
-      gap: 24px;
-   }
-
-   .feature-row__image img {
-      height: 220px;
+   .feature-image-container {
+      height: 260px;
       border-radius: 16px;
    }
 
-   .feature-row__note {
-      flex-direction: column;
-      gap: 8px;
+   .feature-text__body {
+      font-size: 0.95rem;
    }
 
-   .feature-row__icon {
-      margin-top: 0;
+   .feature-section {
+      padding: 24px 0 40px;
    }
 
-   .feature-row__stats {
-      flex-direction: column;
+   /* Cards — single column */
+   .initiatives-grid {
+      grid-template-columns: 1fr;
       gap: 16px;
    }
 
-   /* Vocational Grid - Single column */
-   .vocational-grid {
-      grid-template-columns: 1fr;
-      gap: 12px;
-   }
-
-   .vocational-card {
+   .initiative-card__body {
       padding: 20px;
    }
 
-   .vocational-card__icon {
-      width: 40px;
-      height: 40px;
+   .initiatives-section {
+      padding: 40px 0;
    }
 
-   .vocational-card__icon svg {
-      width: 20px;
-      height: 20px;
+   /* Learn & Shine */
+   .shine-section {
+      padding: 40px 0 56px;
    }
 }
