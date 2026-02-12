@@ -34,6 +34,25 @@ def projects():
     return render_template('projects.html')
 
 
+@app.route('/gallery')
+def gallery():
+    """Render the gallery page."""
+    return render_template('gallery.html')
+
+
+@app.route('/resort')
+def resort():
+    """Render the resort page."""
+    return render_template('resort.html')
+
+
+@app.route('/donate')
+def donate():
+    """Render the donate page."""
+    return render_template('donate.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+
 

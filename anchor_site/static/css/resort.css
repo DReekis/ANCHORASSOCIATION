@@ -1,5 +1,180 @@
 /* ============================================
-   ANCHOR ASSOCIATION - RESORT PAGE STYLES
+   RESORT PAGE — Coming Soon Teaser
+   Glassmorphism overlay on nature background.
    ============================================ */
 
-/* Styles for the resort page will go here */
+
+/* ---------- Full-viewport Hero ---------- */
+.resort-hero {
+   min-height: 80vh;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+   position: relative;
+}
+
+
+/* ---------- Overlay (dim + blur via card, not background) ---------- */
+.resort-hero__overlay {
+   position: absolute;
+   inset: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 40px 20px;
+   background: rgba(0, 0, 0, 0.35);
+}
+
+
+/* ---------- Glassmorphism Card ---------- */
+.resort-card {
+   text-align: center;
+   max-width: 520px;
+   width: 100%;
+   padding: 56px 48px;
+   background: rgba(255, 255, 255, 0.08);
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px);
+   border: 1px solid rgba(255, 255, 255, 0.15);
+   border-radius: var(--radius-apple);
+   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+}
+
+
+/* ---------- Badge ---------- */
+.resort-badge {
+   display: inline-block;
+   padding: 6px 18px;
+   font-size: 0.72rem;
+   font-weight: 700;
+   text-transform: uppercase;
+   letter-spacing: 0.1em;
+   color: white;
+   background: var(--accent);
+   border-radius: 9999px;
+   margin-bottom: 28px;
+}
+
+
+/* ---------- Typography (white for contrast) ---------- */
+.resort-card__title {
+   font-family: var(--font-head);
+   font-size: clamp(1.8rem, 5vw, 2.6rem);
+   font-weight: 700;
+   color: white;
+   line-height: 1.15;
+   letter-spacing: -0.02em;
+   margin-bottom: 20px;
+}
+
+.resort-card__text {
+   font-size: clamp(0.92rem, 2vw, 1.05rem);
+   color: rgba(255, 255, 255, 0.8);
+   line-height: 1.7;
+   margin-bottom: 32px;
+}
+
+.resort-card__text strong {
+   color: white;
+   font-weight: 600;
+}
+
+
+/* ---------- Email Form ---------- */
+.resort-form__row {
+   display: flex;
+   gap: 10px;
+   max-width: 380px;
+   margin: 0 auto;
+}
+
+.resort-form__input {
+   flex: 1;
+   padding: 14px 18px;
+   font-family: var(--font-body);
+   font-size: 0.9rem;
+   color: white;
+   background: rgba(255, 255, 255, 0.1);
+   border: 1px solid rgba(255, 255, 255, 0.2);
+   border-radius: 12px;
+   outline: none;
+   transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.resort-form__input::placeholder {
+   color: rgba(255, 255, 255, 0.45);
+}
+
+.resort-form__input:focus {
+   border-color: rgba(255, 255, 255, 0.5);
+   background: rgba(255, 255, 255, 0.15);
+}
+
+.resort-form__btn {
+   padding: 14px 24px;
+   font-family: var(--font-body);
+   font-size: 0.85rem;
+   font-weight: 600;
+   color: white;
+   background: var(--primary);
+   border: none;
+   border-radius: 12px;
+   cursor: pointer;
+   transition: background 0.2s ease, transform 0.15s ease;
+   white-space: nowrap;
+}
+
+.resort-form__btn:hover {
+   background: #24654a;
+   transform: translateY(-1px);
+}
+
+.resort-form__success {
+   margin-top: 14px;
+   font-size: 0.82rem;
+   color: rgba(255, 255, 255, 0.7);
+   font-style: italic;
+}
+
+
+/* ==============================================
+   RESPONSIVE — Tablet (max-width: 768px)
+   ============================================== */
+@media (max-width: 768px) {
+   .resort-card {
+      padding: 40px 32px;
+   }
+
+   .resort-form__row {
+      flex-direction: column;
+   }
+
+   .resort-form__btn {
+      width: 100%;
+   }
+}
+
+
+/* ==============================================
+   RESPONSIVE — Mobile (max-width: 480px)
+   ============================================== */
+@media (max-width: 480px) {
+   .resort-hero {
+      min-height: 100vh;
+   }
+
+   .resort-hero__overlay {
+      padding: 20px 16px;
+   }
+
+   .resort-card {
+      padding: 36px 24px;
+   }
+
+   .resort-badge {
+      margin-bottom: 22px;
+   }
+}

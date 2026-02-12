@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Gallery — Anchor Association{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/gallery.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- ========== PAGE HEADER ========== -->
+<header class="gallery-header">
+    <div class="container">
+        <h1 class="gallery-header__title">Life at Anchor.</h1>
+        <p class="gallery-header__sub">
+            Documenting our journey in education and sustainability.
+        </p>
+    </div>
+</header>
+
+
+<!-- ========== FILTER BAR ========== -->
+<div class="gallery-filters">
+    <div class="container">
+        <div class="filter-bar">
+            <button class="filter-btn filter-btn--active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="education">Education</button>
+            <button class="filter-btn" data-filter="environment">Environment</button>
+            <button class="filter-btn" data-filter="community">Community</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ========== MASONRY GRID ========== -->
+<section class="gallery-section">
+    <div class="container">
+        <div class="masonry-grid">
+
+            <div class="masonry-item" data-category="education">
+                <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80"
+                    alt="Children learning in classroom" width="600" height="400" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="environment">
+                <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80"
+                    alt="Lush green forest canopy" width="600" height="800" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="community">
+                <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&w=600&q=80"
+                    alt="Community gathering and discussion" width="600" height="400" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="education">
+                <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=600&q=80"
+                    alt="Books stacked for learning" width="600" height="700" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="environment">
+                <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80"
+                    alt="Golden field at sunset" width="600" height="400" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="community">
+                <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=600&q=80"
+                    alt="Team collaboration meeting" width="600" height="500" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="education">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80"
+                    alt="Students collaborating on project" width="600" height="400" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="environment">
+                <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80"
+                    alt="Mountain valley with morning mist" width="600" height="900" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="community">
+                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=80"
+                    alt="Women entrepreneurship workshop" width="600" height="400" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="education">
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=600&q=80"
+                    alt="Graduation celebration" width="600" height="600" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="environment">
+                <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=600&q=80"
+                    alt="Sunlight through tree branches" width="600" height="700" loading="lazy" decoding="async">
+            </div>
+
+            <div class="masonry-item" data-category="community">
+                <img src="https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?auto=format&fit=crop&w=600&q=80"
+                    alt="Textile crafting workshop" width="600" height="400" loading="lazy" decoding="async">
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ========== LIGHTBOX MODAL ========== -->
+<dialog id="lightbox" class="lightbox">
+    <div class="lightbox__backdrop" data-close></div>
+    <div class="lightbox__content">
+        <img id="lightbox-img" class="lightbox__img" src="" alt="">
+        <button class="lightbox__close" data-close aria-label="Close lightbox">&times;</button>
+    </div>
+</dialog>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Filter buttons
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('.masonry-item');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
+            btn.classList.add('filter-btn--active');
+
+            const filter = btn.dataset.filter;
+            items.forEach(item => {
+                if (filter === 'all' || item.dataset.category === filter) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    items.forEach(item => {
+        item.addEventListener('click', () => {
+            const img = item.querySelector('img');
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.showModal();
+        });
+    });
+
+    // Close lightbox
+    lightbox.querySelectorAll('[data-close]').forEach(el => {
+        el.addEventListener('click', () => lightbox.close());
+    });
+
+    lightbox.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') lightbox.close();
+    });
+</script>
+{% endblock %}

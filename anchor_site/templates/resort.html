@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}The Resort — Anchor Association{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/resort.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<section class="resort-hero"
+    style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80');">
+    <div class="resort-hero__overlay">
+        <div class="resort-card">
+
+            <span class="resort-badge">Under Construction</span>
+
+            <h1 class="resort-card__title">Rajbandh Resort<br>& Eco-Village</h1>
+
+            <p class="resort-card__text">
+                A 20-acre experiment in sustainability —<br>
+                organic farming, eco-living, and rural tourism.<br>
+                <strong>Opening 2026.</strong>
+            </p>
+
+            <form class="resort-form"
+                onsubmit="event.preventDefault(); this.querySelector('.resort-form__success').style.display = 'block'; this.querySelector('button').textContent = 'Subscribed ✓';">
+                <div class="resort-form__row">
+                    <input type="email" class="resort-form__input" placeholder="your@email.com" required
+                        aria-label="Email address">
+                    <button type="submit" class="resort-form__btn">Notify Me</button>
+                </div>
+                <p class="resort-form__success" style="display:none;">We'll let you know when we launch!</p>
+            </form>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
