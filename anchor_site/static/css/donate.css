@@ -1,0 +1,603 @@
+/* ============================================
+   DONATE PAGE — Honor Card System
+   Green → Silver → Gold tiers
+   ============================================ */
+
+
+/* ---------- Hero ---------- */
+.donate-hero {
+    text-align: center;
+    padding: 150px 0 60px;
+    background: var(--bg-main);
+}
+
+.donate-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #B08968;
+    margin-bottom: 12px;
+}
+
+.donate-hero__title {
+    font-family: 'Playfair Display', var(--font-head);
+    font-size: clamp(2.8rem, 7vw, 4.5rem);
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin-bottom: 20px;
+}
+
+.donate-hero__sub {
+    font-size: clamp(1rem, 2.2vw, 1.15rem);
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+.donate-hero__sub strong {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+
+/* ---------- Main Grid ---------- */
+.donate-main {
+    padding: 40px 0 120px;
+    background: var(--bg-main);
+}
+
+.donate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+}
+
+
+/* ============================================
+   THE HONOR CARD
+   ============================================ */
+.donate-card-col {
+    position: sticky;
+    top: 120px;
+}
+
+.honor-card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1.586 / 1;
+    border-radius: 20px;
+    padding: 32px;
+    overflow: hidden;
+    transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    /* Default: Green tier */
+    background: linear-gradient(135deg, #1b4332, #2d6a4f, #40916c);
+    box-shadow: 0 20px 60px rgba(27, 67, 50, 0.3);
+}
+
+.honor-card:hover {
+    transform: translateY(-10px) scale(1.02) rotateX(2deg);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.honor-card__shine {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.08) 45%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.08) 55%,
+            transparent 70%);
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    pointer-events: none;
+    z-index: 1;
+    transition: background-position 0.6s ease, opacity 0.4s ease;
+    opacity: 0.6;
+}
+
+.honor-card:hover .honor-card__shine {
+    background-position: 100% 50%;
+    opacity: 1;
+}
+
+.honor-card__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.honor-card__logo {
+    font-family: 'Playfair Display', var(--font-head);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.honor-card__bottom {
+    display: flex;
+    flex-direction: column;
+}
+
+.honor-card__rank {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 6px;
+    transition: color 0.3s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.honor-card__name {
+    font-family: 'Playfair Display', var(--font-head);
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    font-weight: 700;
+    color: white;
+    margin-bottom: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.honor-card__meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.03em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+
+/* --- Tier: Silver (Gunmetal Steel) --- */
+.honor-card--silver {
+    background: linear-gradient(135deg, #2c3e50, #4a5568, #718096);
+    box-shadow: 0 20px 60px rgba(44, 62, 80, 0.4);
+}
+
+/* --- Tier: Gold (Bronze / Antique Gold) --- */
+.honor-card--gold {
+    background: linear-gradient(135deg, #78350f, #92400e, #b45309);
+    box-shadow: 0 20px 60px rgba(120, 53, 15, 0.45);
+}
+
+.honor-card--gold .honor-card__shine {
+    background: linear-gradient(120deg,
+            transparent 25%,
+            rgba(255, 255, 255, 0.12) 40%,
+            rgba(255, 255, 255, 0.25) 50%,
+            rgba(255, 255, 255, 0.12) 60%,
+            transparent 75%);
+    background-size: 200% 100%;
+}
+
+/* --- Tier: Green (Deep Forest) --- */
+.honor-card--green {
+    background: linear-gradient(135deg, #1b4332, #2d6a4f, #40916c);
+    box-shadow: 0 20px 60px rgba(27, 67, 50, 0.3);
+}
+
+.card-hint {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 20px;
+}
+
+
+/* ============================================
+   THE FORM
+   ============================================ */
+.form-title {
+    font-family: 'Playfair Display', var(--font-head);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 24px;
+}
+
+/* Amount Pills */
+.amount-pills {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.pill {
+    padding: 12px 24px;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    background: white;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pill:hover {
+    border-color: #B08968;
+    color: #B08968;
+}
+
+.pill--active {
+    background: #B08968;
+    border-color: #B08968;
+    color: white;
+}
+
+.pill--gold {
+    border-color: rgba(176, 137, 104, 0.3);
+}
+
+.pill-custom {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 16px;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    background: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    transition: border-color 0.2s ease;
+}
+
+.pill-custom:focus-within {
+    border-color: #B08968;
+}
+
+.pill-custom input {
+    border: none;
+    outline: none;
+    width: 80px;
+    padding: 12px 0;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    background: transparent;
+}
+
+.pill-custom input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Hide number spinners */
+.pill-custom input::-webkit-inner-spin-button,
+.pill-custom input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.pill-custom input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Form Fields */
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.field label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.field input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    color: var(--text-main);
+    background: white;
+    transition: border-color 0.2s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.field input:focus {
+    border-color: #B08968;
+}
+
+.field input::placeholder {
+    color: #c0b8b0;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Donate Button */
+.donate-btn {
+    width: 100%;
+    padding: 18px 32px;
+    border: none;
+    border-radius: 14px;
+    background: #B08968;
+    color: white;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.donate-btn:hover:not(:disabled) {
+    background: #9a7556;
+    transform: translateY(-2px);
+}
+
+.donate-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.donate-btn__icon {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+}
+
+.donate-btn:hover:not(:disabled) .donate-btn__icon {
+    transform: translateX(4px);
+}
+
+.donate-secure {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 14px;
+}
+
+
+/* ============================================
+   SUCCESS MODAL
+   ============================================ */
+.success-modal {
+    border: none;
+    border-radius: 20px;
+    padding: 48px 40px;
+    max-width: 460px;
+    width: 90%;
+    background: white;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    overflow: visible;
+}
+
+.success-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.success-modal__content {
+    text-align: center;
+}
+
+.success-title {
+    font-family: 'Playfair Display', var(--font-head);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+.success-sub {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+}
+
+.success-modal .honor-card {
+    max-width: 340px;
+    margin: 0 auto 32px;
+}
+
+.honor-card--final .honor-card__shine {
+    animation: shimmer 2.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+
+    0%,
+    100% {
+        transform: translateX(-100%);
+    }
+
+    50% {
+        transform: translateX(100%);
+    }
+}
+
+.success-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.success-btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.success-btn:hover {
+    transform: translateY(-2px);
+}
+
+.success-btn--download {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--text-main);
+}
+
+.success-btn--whatsapp {
+    background: #25D366;
+    color: white;
+}
+
+.success-close {
+    background: none;
+    border: none;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 8px;
+    font-family: var(--font-body);
+}
+
+.success-close:hover {
+    color: var(--text-main);
+}
+
+
+/* ============================================
+   CONFETTI (Pure CSS)
+   ============================================ */
+.confetti-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 0;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -10px;
+    left: var(--x);
+    width: 8px;
+    height: 12px;
+    background: hsl(var(--hue), 80%, 60%);
+    border-radius: 2px;
+    animation: confetti-fall 1.8s ease-out var(--delay) forwards;
+    opacity: 0;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(300px) rotate(720deg) scale(0.3);
+        opacity: 0;
+    }
+}
+
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+    .donate-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .donate-card-col {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .honor-card {
+        max-width: 360px;
+    }
+
+    .donate-hero {
+        padding: 130px 0 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .donate-hero {
+        padding: 120px 0 32px;
+    }
+
+    .donate-main {
+        padding: 24px 0 80px;
+    }
+
+    .honor-card {
+        max-width: 100%;
+        padding: 28px 24px;
+    }
+
+    .amount-pills {
+        gap: 8px;
+    }
+
+    .pill {
+        padding: 10px 18px;
+        font-size: 0.82rem;
+    }
+
+    .field-row {
+        grid-template-columns: 1fr;
+    }
+
+    .success-modal {
+        padding: 32px 24px;
+    }
+
+    .success-actions {
+        flex-direction: column;
+    }
+}

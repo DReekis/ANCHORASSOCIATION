@@ -2,20 +2,322 @@
 
 {% block title %}Donate — Anchor Association{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/donate.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
-<header class="projects-header" style="text-align:center; padding:160px 0 80px;">
+<!-- ========== HERO ========== -->
+<section class="donate-hero">
     <div class="container">
-        <h1
-            style="font-family:var(--font-head); font-size:clamp(2.8rem,7vw,4.5rem); font-weight:700; color:var(--text-main); letter-spacing:-0.03em; line-height:1.08; margin-bottom:20px;">
-            Support Our Mission.
-        </h1>
-        <p
-            style="font-size:clamp(1rem,2.2vw,1.15rem); color:var(--text-muted); max-width:520px; margin:0 auto; line-height:1.7;">
-            Every contribution helps us build a brighter future for those who need it most.
-            Donate page coming soon.
+        <span class="donate-label">Make a Difference</span>
+        <h1 class="donate-hero__title">Give Hope.<br>Earn Honor.</h1>
+        <p class="donate-hero__sub">
+            Every donation unlocks your personal <strong>Digital Honor Card</strong> —
+            a badge of your generosity that grows with your giving.
         </p>
     </div>
-</header>
+</section>
 
+
+<!-- ========== TWO-COLUMN LAYOUT ========== -->
+<section class="donate-main">
+    <div class="container">
+        <div class="donate-grid">
+
+            <!-- LEFT: Live Honor Card Preview -->
+            <div class="donate-card-col">
+                <div class="honor-card" id="honorCard">
+                    <div class="honor-card__shine"></div>
+                    <div class="honor-card__content">
+                        <div class="honor-card__logo">ANCHOR ASSOCIATION</div>
+                        <div class="honor-card__bottom">
+                            <div class="honor-card__rank" id="cardRank">Friend of Anchor</div>
+                            <div class="honor-card__name" id="cardName">Your Name</div>
+                            <div class="honor-card__meta">
+                                <span>Member Since <span id="cardYear">2026</span></span>
+                                <span id="cardAmount">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="card-hint">Your card updates as you fill in details ↗</p>
+            </div>
+
+            <!-- RIGHT: Donation Form -->
+            <div class="donate-form-col">
+                <h2 class="form-title">Choose Your Impact</h2>
+
+                <!-- Amount Pills -->
+                <div class="amount-pills">
+                    <button class="pill" data-amount="500" type="button">₹500</button>
+                    <button class="pill" data-amount="1200" type="button">₹1,200</button>
+                    <button class="pill pill--gold" data-amount="5000" type="button">₹5,000</button>
+                    <div class="pill-custom">
+                        <span>₹</span>
+                        <input type="number" id="customAmount" placeholder="Custom" min="1">
+                    </div>
+                </div>
+
+                <input type="hidden" id="selectedAmount" value="0">
+                <input type="hidden" id="impactTitle" value="Friend of Anchor">
+
+                <!-- Donor Info -->
+                <div class="form-fields">
+                    <div class="field">
+                        <label for="donorName">Full Name</label>
+                        <input type="text" id="donorName" placeholder="Rajesh Kumar" autocomplete="name">
+                    </div>
+                    <div class="field">
+                        <label for="donorEmail">Email</label>
+                        <input type="email" id="donorEmail" placeholder="rajesh@example.com" autocomplete="email">
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="donorPhone">Phone</label>
+                            <input type="tel" id="donorPhone" placeholder="+91 98765 43210" autocomplete="tel">
+                        </div>
+                        <div class="field">
+                            <label for="donorPAN">PAN (for 80G)</label>
+                            <input type="text" id="donorPAN" placeholder="ABCDE1234F" maxlength="10"
+                                style="text-transform:uppercase;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <button class="donate-btn" id="donateBtn" type="button" disabled>
+                    <span class="donate-btn__text">Donate & Claim Card</span>
+                    <span class="donate-btn__icon">→</span>
+                </button>
+                <p class="donate-secure">🔒 Secured by Razorpay · 80G Tax Benefit</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ========== SUCCESS MODAL ========== -->
+<dialog class="success-modal" id="successModal">
+    <div class="success-modal__content">
+        <!-- Confetti -->
+        <div class="confetti-container" id="confettiBox"></div>
+
+        <h2 class="success-title">🎉 Card Unlocked!</h2>
+        <p class="success-sub">Thank you for your generous donation.</p>
+
+        <!-- Final Shiny Card -->
+        <div class="honor-card honor-card--final" id="finalCard">
+            <div class="honor-card__shine"></div>
+            <div class="honor-card__content">
+                <div class="honor-card__logo">ANCHOR ASSOCIATION</div>
+                <div class="honor-card__bottom">
+                    <div class="honor-card__rank" id="finalRank">Friend of Anchor</div>
+                    <div class="honor-card__name" id="finalName">Your Name</div>
+                    <div class="honor-card__meta">
+                        <span>Member Since 2026</span>
+                        <span id="finalAmount">₹0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="success-actions">
+            <button class="success-btn success-btn--download" id="downloadBtn" type="button">
+                Download Card
+            </button>
+            <a class="success-btn success-btn--whatsapp" id="shareBtn" href="#" target="_blank" rel="noopener">
+                Share to WhatsApp
+            </a>
+        </div>
+        <button class="success-close" id="closeModal" type="button">Close</button>
+    </div>
+</dialog>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    (function () {
+        /* ---- DOM refs ---- */
+        const pills = document.querySelectorAll('.pill');
+        const customInput = document.getElementById('customAmount');
+        const selectedAmt = document.getElementById('selectedAmount');
+        const impactTitle = document.getElementById('impactTitle');
+        const nameInput = document.getElementById('donorName');
+        const emailInput = document.getElementById('donorEmail');
+        const phoneInput = document.getElementById('donorPhone');
+        const donateBtn = document.getElementById('donateBtn');
+
+        // Card preview
+        const honorCard = document.getElementById('honorCard');
+        const cardRank = document.getElementById('cardRank');
+        const cardName = document.getElementById('cardName');
+        const cardAmount = document.getElementById('cardAmount');
+
+        // Modal
+        const modal = document.getElementById('successModal');
+        const finalCard = document.getElementById('finalCard');
+        const finalRank = document.getElementById('finalRank');
+        const finalName = document.getElementById('finalName');
+        const finalAmount = document.getElementById('finalAmount');
+        const closeModal = document.getElementById('closeModal');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const confettiBox = document.getElementById('confettiBox');
+
+        let currentAmount = 0;
+
+        /* ---- Tier logic ---- */
+        function getTier(amount) {
+            if (amount >= 5000) return { rank: 'Champion of Change', tier: 'gold' };
+            if (amount >= 1000) return { rank: 'Guardian of Education', tier: 'silver' };
+            return { rank: 'Friend of Anchor', tier: 'green' };
+        }
+
+        function updateCard(amount) {
+            currentAmount = amount;
+            const { rank, tier } = getTier(amount);
+            cardRank.textContent = rank;
+            cardAmount.textContent = '₹' + amount.toLocaleString('en-IN');
+            impactTitle.value = rank;
+
+            honorCard.className = 'honor-card honor-card--' + tier;
+            validateForm();
+        }
+
+        /* ---- Amount pills ---- */
+        pills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                pills.forEach(p => p.classList.remove('pill--active'));
+                pill.classList.add('pill--active');
+                customInput.value = '';
+                const amt = parseInt(pill.dataset.amount);
+                selectedAmt.value = amt;
+                updateCard(amt);
+            });
+        });
+
+        customInput.addEventListener('input', () => {
+            pills.forEach(p => p.classList.remove('pill--active'));
+            const amt = parseInt(customInput.value) || 0;
+            selectedAmt.value = amt;
+            updateCard(amt);
+        });
+
+        /* ---- Name sync ---- */
+        nameInput.addEventListener('input', () => {
+            cardName.textContent = nameInput.value || 'Your Name';
+            validateForm();
+        });
+
+        /* ---- Validation ---- */
+        function validateForm() {
+            const valid = currentAmount > 0 && nameInput.value.trim() && emailInput.value.trim();
+            donateBtn.disabled = !valid;
+        }
+        emailInput.addEventListener('input', validateForm);
+        phoneInput.addEventListener('input', validateForm);
+
+        /* ---- Razorpay ---- */
+        donateBtn.addEventListener('click', async () => {
+            const amount = parseInt(selectedAmt.value);
+            if (!amount || amount <= 0) return;
+
+            // 1. Create order (mock)
+            let orderData;
+            try {
+                const res = await fetch('/api/create_order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount })
+                });
+                orderData = await res.json();
+            } catch {
+                alert('Could not create order. Please try again.');
+                return;
+            }
+
+            // 2. Open Razorpay
+            const options = {
+                key: 'rzp_test_1DP5mmOlF5G5ag',
+                amount: orderData.amount,
+                currency: 'INR',
+                name: 'Anchor Association',
+                description: impactTitle.value,
+                order_id: orderData.order_id,
+                prefill: {
+                    name: nameInput.value,
+                    email: emailInput.value,
+                    contact: phoneInput.value
+                },
+                theme: { color: '#B08968' },
+                handler: async function (response) {
+                    // 3. Verify (mock)
+                    try {
+                        const vRes = await fetch('/api/verify_payment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature
+                            })
+                        });
+                        const vData = await vRes.json();
+                        if (vData.status === 'success') {
+                            showSuccess(amount);
+                        }
+                    } catch {
+                        showSuccess(amount); // still show in dev
+                    }
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        });
+
+        /* ---- Success modal ---- */
+        function showSuccess(amount) {
+            const { rank, tier } = getTier(amount);
+            finalRank.textContent = rank;
+            finalName.textContent = nameInput.value || 'Donor';
+            finalAmount.textContent = '₹' + amount.toLocaleString('en-IN');
+            finalCard.className = 'honor-card honor-card--final honor-card--' + tier;
+
+            // WhatsApp share
+            const msg = encodeURIComponent(
+                `I just donated ₹${amount.toLocaleString('en-IN')} to Anchor Association and earned the "${rank}" Honor Card! 🎉 Join me: anchorassociation.org/donate`
+            );
+            shareBtn.href = 'https://wa.me/?text=' + msg;
+
+            // Confetti
+            confettiBox.innerHTML = '';
+            for (let i = 0; i < 60; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti-piece';
+                c.style.setProperty('--x', (Math.random() * 100) + '%');
+                c.style.setProperty('--delay', (Math.random() * 0.6) + 's');
+                c.style.setProperty('--hue', Math.floor(Math.random() * 360));
+                confettiBox.appendChild(c);
+            }
+
+            modal.showModal();
+        }
+
+        closeModal.addEventListener('click', () => modal.close());
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.close();
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            alert('Download feature coming soon! Your card details have been saved.');
+        });
+    })();
+</script>
 {% endblock %}

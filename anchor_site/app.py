@@ -1,7 +1,8 @@
 
 import os
+import uuid
 from datetime import datetime
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 import cloudinary
 import cloudinary.api
 
@@ -47,7 +48,24 @@ def cafe():
     return render_template('cafe.html')
 
 
+# --- Razorpay Mock API ---
+
+@app.route('/api/create_order', methods=['POST'])
+def create_order():
+    data = request.get_json()
+    amount = data.get('amount', 0)
+    order_id = 'order_' + uuid.uuid4().hex[:16]
+    return jsonify({
+        'order_id': order_id,
+        'amount': amount * 100,
+        'currency': 'INR'
+    })
+
+
+@app.route('/api/verify_payment', methods=['POST'])
+def verify_payment():
+    return jsonify({'status': 'success'})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
-
-
