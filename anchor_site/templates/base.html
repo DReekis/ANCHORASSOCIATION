@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content="Anchor Association - Empowering communities through sustainable development and education.">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{% block title %}Anchor Association{% endblock %}</title>
 
@@ -22,6 +23,9 @@
 </head>
 
 <body>
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay"></div>
+
     <!-- Glass Navigation -->
     <nav class="nav-glass" role="navigation" aria-label="Main navigation">
         <a href="{{ url_for('home') }}" class="nav-glass__logo">Anchor</a>
@@ -33,10 +37,13 @@
         </button>
 
         <div class="nav-glass__links">
-            <a href="{{ url_for('home') }}" class="nav-glass__link">Home</a>
-            <a href="{{ url_for('projects') }}" class="nav-glass__link">Projects</a>
-            <a href="{{ url_for('cafe') }}" class="nav-glass__link">The Cafe</a>
-            <a href="{{ url_for('gallery') }}" class="nav-glass__link">Gallery</a>
+            <a href="{{ url_for('home') }}" class="nav-glass__link {{ 'active' if request.path == '/' }}">Home</a>
+            <a href="{{ url_for('projects') }}"
+                class="nav-glass__link {{ 'active' if 'projects' in request.path }}">Projects</a>
+            <a href="{{ url_for('cafe') }}" class="nav-glass__link {{ 'active' if 'cafe' in request.path }}">The
+                Cafe</a>
+            <a href="{{ url_for('gallery') }}"
+                class="nav-glass__link {{ 'active' if 'gallery' in request.path }}">Gallery</a>
             <a href="{{ url_for('donate') }}" class="nav-glass__link nav-glass__link--cta">Donate</a>
         </div>
     </nav>
@@ -55,9 +62,9 @@
             <nav class="footer__links" aria-label="Footer navigation">
                 <a href="{{ url_for('home') }}" class="footer__link">Home</a>
                 <a href="{{ url_for('projects') }}" class="footer__link">Projects</a>
-                <a href="#" class="footer__link">The Resort</a>
-                <a href="#" class="footer__link">Gallery</a>
-                <a href="#" class="footer__link">Contact</a>
+                <a href="{{ url_for('cafe') }}" class="footer__link">The Cafe</a>
+                <a href="{{ url_for('gallery') }}" class="footer__link">Gallery</a>
+                <a href="{{ url_for('donate') }}" class="footer__link">Donate</a>
             </nav>
 
             <div class="footer__divider"></div>
@@ -67,6 +74,9 @@
             </p>
         </div>
     </footer>
+
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
 
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
@@ -82,6 +92,19 @@
             hamburger.setAttribute('aria-expanded', !expanded);
             navLinks.classList.toggle('active');
         });
+
+        // Lenis Smooth Scroll Init
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
     </script>
 </body>
 

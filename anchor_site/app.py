@@ -3,11 +3,60 @@ import os
 import uuid
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
+from flask_talisman import Talisman
+from flask_wtf.csrf import CSRFProtect
 import cloudinary
 import cloudinary.api
 
-# Initialize Flask app
 app = Flask(__name__)
+
+# Security Config
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-fallback-secret-key')
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+# CSRF
+csrf = CSRFProtect(app)
+
+#  CSP
+csp = {
+    'default-src': "'self'",
+    'script-src': [
+        "'self'",
+        'https://checkout.razorpay.com',
+        'https://unpkg.com',
+        'https://cdn.jsdelivr.net',
+    ],
+    'style-src': [
+        "'self'",
+        'https://fonts.googleapis.com',
+        "'unsafe-inline'",
+    ],
+    'font-src': [
+        "'self'",
+        'https://fonts.gstatic.com',
+    ],
+    'img-src': [
+        "'self'",
+        'data:',
+        'https://res.cloudinary.com',
+        'https://images.unsplash.com',
+        'https://grainy-gradients.vercel.app',
+    ],
+    'connect-src': [
+        "'self'",
+        'https://lumberjack.razorpay.com',
+        'https://api.razorpay.com',
+    ],
+    'frame-src': [
+        "'self'",
+        'https://api.razorpay.com',
+        'https://googleusercontent.com',
+    ],
+}
+
+Talisman(app, content_security_policy=csp, force_https=False)
 
 # Configure Cloudinary from environment variables
 cloudinary.config(
@@ -35,7 +84,6 @@ def projects():
 @app.route('/gallery')
 def gallery():
     return render_template('gallery.html')
-
 
 
 @app.route('/donate')
@@ -68,4 +116,4 @@ def verify_payment():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

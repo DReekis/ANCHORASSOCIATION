@@ -10,9 +10,7 @@
 }
 
 
-/* ============================================
-   HERO — Full-viewport bamboo night
-   ============================================ */
+/* HERO — Full-viewport bamboo night */
 .cafe-hero {
     position: relative;
     min-height: 100vh;
@@ -96,9 +94,7 @@
 }
 
 
-/* ============================================
-   SHARED — Section headers & label
-   ============================================ */
+/* SHARED — Section headers & label */
 .cafe-label {
     display: inline-block;
     font-size: 0.7rem;
@@ -131,9 +127,7 @@
 }
 
 
-/* ============================================
-   REVIEWS — Warm Glass Cards
-   ============================================ */
+/* REVIEWS — Warm Glass Cards */
 .cafe-reviews {
     padding: 100px 0;
     background: var(--cafe-bg);
@@ -208,9 +202,7 @@
 }
 
 
-/* ============================================
-   MENU — Elegant paper card
-   ============================================ */
+/* MENU — Elegant paper card */
 .cafe-menu-section {
     padding: 100px 0;
     background: var(--cafe-dark);
@@ -318,9 +310,7 @@
 }
 
 
-/* ============================================
-   EARTHEN CUP — Feature Row
-   ============================================ */
+/* EARTHEN CUP — Feature Row */
 .cafe-earthen {
     padding: 100px 0;
     background: var(--cafe-bg);
@@ -367,9 +357,7 @@
 }
 
 
-/* ============================================
-   LOCATION — Map + Info
-   ============================================ */
+/* LOCATION — Map + Info */
 .cafe-location {
     padding: 100px 0;
     background: white;
@@ -430,9 +418,7 @@
 }
 
 
-/* ==============================================
-   RESPONSIVE — Tablet (max-width: 900px)
-   ============================================== */
+/* RESPONSIVE — Tablet (max-width: 900px) */
 @media (max-width: 900px) {
     .review-grid {
         grid-template-columns: 1fr;
@@ -467,9 +453,7 @@
 }
 
 
-/* ==============================================
-   RESPONSIVE — Mobile (max-width: 480px)
-   ============================================== */
+/* RESPONSIVE — Mobile (max-width: 480px) */
 @media (max-width: 480px) {
     .cafe-hero__title {
         font-size: clamp(2.4rem, 12vw, 3.5rem);

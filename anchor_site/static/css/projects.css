@@ -1,4 +1,4 @@
-/* ---------- Page Header ---------- */
+/* Page Header */
 .projects-header {
    text-align: center;
    padding: 160px 0 80px;
@@ -23,9 +23,7 @@
 }
 
 
-/* ============================================
-   SECTION 1 — Feature Row (Minions Fun House)
-   ============================================ */
+/* SECTION 1 — Feature Row (Minions Fun House) */
 .feature-section {
    padding: 40px 0 80px;
 }
@@ -96,9 +94,7 @@
 }
 
 
-/* ============================================
-   SECTION 2 — Initiatives (4 Photo Cards)
-   ============================================ */
+/* SECTION 2 — Initiatives (4 Photo Cards) */
 .initiatives-section {
    padding: 80px 0;
    background: rgba(47, 107, 79, 0.025);
@@ -196,17 +192,13 @@
 }
 
 
-/* ============================================
-   SECTION 3 — Learn & Shine (reuses initiative-card styles)
-   ============================================ */
+/* SECTION 3 — Learn & Shine (reuses initiative-card styles) */
 .shine-section {
    padding: 80px 0 100px;
 }
 
 
-/* ==============================================
-   RESPONSIVE — Tablet (max-width: 900px)
-   ============================================== */
+/* RESPONSIVE — Tablet (max-width: 900px) */
 @media (max-width: 900px) {
 
    /* Header */
@@ -254,9 +246,7 @@
 }
 
 
-/* ==============================================
-   RESPONSIVE — Small phones (max-width: 480px)
-   ============================================== */
+/* RESPONSIVE — Small phones (max-width: 480px) */
 @media (max-width: 480px) {
 
    .projects-header {

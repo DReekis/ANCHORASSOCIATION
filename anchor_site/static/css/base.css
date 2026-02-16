@@ -1,8 +1,6 @@
-/* ============================================
-   ANCHOR ASSOCIATION - GLOBAL DESIGN SYSTEM
-   ============================================ */
+/* ANCHOR ASSOCIATION - GLOBAL DESIGN SYSTEM */
 
-/* ----- CSS Variables ----- */
+/* CSS Variables */
 :root {
     /* Colors */
     --bg-paper: #F6F5F1;
@@ -23,7 +21,7 @@
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ----- Modern CSS Reset ----- */
+/* Modern CSS Reset */
 *,
 *::before,
 *::after {
@@ -32,17 +30,24 @@
     padding: 0;
 }
 
-html {
-    scroll-behavior: smooth;
-}
 
 body {
     font-family: var(--font-body);
     background-color: var(--bg-paper);
     color: var(--text-main);
     line-height: 1.6;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.noise-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.04;
+    pointer-events: none;
 }
 
 h1,
@@ -81,9 +86,7 @@ button {
 }
 
 
-/* ============================================
-   NAVIGATION - Glass Navbar
-   ============================================ */
+/* NAVIGATION - Glass Navbar */
 .nav-glass {
     position: fixed;
     top: 20px;
@@ -101,7 +104,6 @@ button {
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 9999px;
-    /* Pill shape */
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
 }
 
@@ -133,6 +135,12 @@ button {
     color: var(--primary);
 }
 
+.nav-glass__link.active {
+    background: rgba(47, 107, 79, 0.1);
+    color: var(--primary);
+    font-weight: 600;
+}
+
 .nav-glass__link--cta {
     background: var(--accent);
     color: white;
@@ -144,7 +152,7 @@ button {
     color: white;
 }
 
-/* Mobile hamburger (hidden by default) */
+/* Mobile hamburger  */
 .nav-glass__hamburger {
     display: none;
     flex-direction: column;
@@ -200,9 +208,7 @@ button {
 }
 
 
-/* ============================================
-   FOOTER
-   ============================================ */
+/* FOOTER */
 .footer {
     padding: 48px 24px;
     text-align: center;
@@ -261,9 +267,7 @@ button {
 }
 
 
-/* ============================================
-   UTILITY CLASSES
-   ============================================ */
+/* UTILITY CLASSES */
 .container {
     width: 100%;
     max-width: var(--container-width);
@@ -273,6 +277,18 @@ button {
 
 .section {
     padding: 80px 0;
+}
+
+/* Scroll Reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .sr-only {
@@ -288,9 +304,7 @@ button {
 }
 
 
-/* ============================================
-   RESPONSIVE: TABLET (768px - 1024px)
-   ============================================ */
+/* RESPONSIVE: TABLET (768px - 1024px) */
 @media (max-width: 1024px) {
     :root {
         --radius-apple: 20px;
@@ -314,9 +328,7 @@ button {
 }
 
 
-/* ============================================
-   RESPONSIVE: MOBILE (max-width: 768px)
-   ============================================ */
+/* RESPONSIVE: MOBILE (max-width: 768px) */
 @media (max-width: 768px) {
     :root {
         --radius-apple: 16px;
@@ -359,9 +371,7 @@ button {
 }
 
 
-/* ============================================
-   RESPONSIVE: SMALL MOBILE (max-width: 480px)
-   ============================================ */
+/* RESPONSIVE: SMALL MOBILE (max-width: 480px) */
 @media (max-width: 480px) {
     .container {
         padding: 0 12px;

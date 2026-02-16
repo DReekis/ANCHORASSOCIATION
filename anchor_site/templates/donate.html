@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<!-- ========== HERO ========== -->
+<!-- HERO -->
 <section class="donate-hero">
     <div class="container">
         <span class="donate-label">Make a Difference</span>
@@ -22,7 +22,7 @@
 </section>
 
 
-<!-- ========== TWO-COLUMN LAYOUT ========== -->
+<!-- TWO-COLUMN LAYOUT -->
 <section class="donate-main">
     <div class="container">
         <div class="donate-grid">
@@ -99,7 +99,7 @@
 </section>
 
 
-<!-- ========== SUCCESS MODAL ========== -->
+<!-- SUCCESS MODAL -->
 <dialog class="success-modal" id="successModal">
     <div class="success-modal__content">
         <!-- Confetti -->
@@ -229,11 +229,15 @@
             if (!amount || amount <= 0) return;
 
             // 1. Create order (mock)
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             let orderData;
             try {
                 const res = await fetch('/api/create_order', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
                     body: JSON.stringify({ amount })
                 });
                 orderData = await res.json();
@@ -261,7 +265,10 @@
                     try {
                         const vRes = await fetch('/api/verify_payment', {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken
+                            },
                             body: JSON.stringify({
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_payment_id: response.razorpay_payment_id,

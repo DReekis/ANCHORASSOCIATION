@@ -1,4 +1,4 @@
-/* ---------- Header ---------- */
+/* Header */
 .gallery-header {
    text-align: center;
    padding: 160px 0 48px;
@@ -177,9 +177,7 @@
 }
 
 
-/* ==============================================
-   RESPONSIVE — Tablet (max-width: 900px)
-   ============================================== */
+/* RESPONSIVE — Tablet (max-width: 900px) */
 @media (max-width: 900px) {
    .gallery-header {
       padding: 120px 0 36px;
@@ -201,9 +199,7 @@
 }
 
 
-/* ==============================================
-   RESPONSIVE — Mobile (max-width: 480px)
-   ============================================== */
+/* RESPONSIVE — Mobile (max-width: 480px) */
 @media (max-width: 480px) {
    .gallery-header {
       padding: 100px 0 28px;
