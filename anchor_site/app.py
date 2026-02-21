@@ -24,6 +24,7 @@ csp = {
     'default-src': "'self'",
     'script-src': [
         "'self'",
+        "'unsafe-inline'",
         'https://checkout.razorpay.com',
         'https://unpkg.com',
         'https://cdn.jsdelivr.net',
@@ -52,7 +53,7 @@ csp = {
     'frame-src': [
         "'self'",
         'https://api.razorpay.com',
-        'https://googleusercontent.com',
+        'https://www.google.com',
     ],
 }
 
@@ -97,6 +98,7 @@ def cafe():
 
 
 # --- Razorpay Mock API ---
+
 
 @app.route('/api/create_order', methods=['POST'])
 def create_order():
