@@ -8,9 +8,28 @@
 
 {% block content %}
 
-<!-- HERO: Bamboo Night Glow -->
-<section class="cafe-hero"
-    style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80');">
+<!-- HERO: Bamboo Night Glow — Photo Mosaic -->
+<section class="cafe-hero">
+    <!-- Mosaic Photo Grid (swap src with your own photos) -->
+    <div class="cafe-hero__mosaic">
+        <img class="mosaic-tile mosaic-tile--1" src="{{ url_for('static', filename='photos/front_cafe.png') }}"
+            alt="Bagan Bilash cafe front view" loading="eager">
+        <img class="mosaic-tile mosaic-tile--2" src="{{ url_for('static', filename='photos/Kullhad.jpeg') }}"
+            alt="Kullhad earthen cup" loading="eager">
+        <img class="mosaic-tile mosaic-tile--3" src="{{ url_for('static', filename='photos/Kullhad_nature.jpeg') }}"
+            alt="Kullhad with nature backdrop" loading="eager">
+        <img class="mosaic-tile mosaic-tile--4" src="{{ url_for('static', filename='photos/image.png') }}"
+            alt="Bagan Bilash" loading="eager">
+        <img class="mosaic-tile mosaic-tile--5" src="{{ url_for('static', filename='photos/front_cafe.png') }}"
+            alt="Cafe exterior night view" loading="eager">
+        <img class="mosaic-tile mosaic-tile--6" src="{{ url_for('static', filename='photos/Kullhad.jpeg') }}"
+            alt="Earthen kullhad close-up" loading="eager">
+        <img class="mosaic-tile mosaic-tile--7" src="{{ url_for('static', filename='photos/Kullhad_nature.jpeg') }}"
+            alt="Nature and kullhad" loading="eager">
+        <img class="mosaic-tile mosaic-tile--8" src="{{ url_for('static', filename='photos/image.png') }}"
+            alt="Bagan Bilash moments" loading="eager">
+    </div>
+
     <div class="cafe-hero__overlay">
         <div class="cafe-hero__content">
             <h1 class="cafe-hero__title">Bagan Bilash.</h1>
@@ -101,65 +120,88 @@
             <div class="menu-items">
                 <div class="menu-item">
                     <div class="menu-item__img-wrap">
-                        <img src="https://images.unsplash.com/photo-1596904675237-77aa5d7d3d72?auto=format&fit=crop&w=120&q=80"
-                            alt="Masala Chai in earthen cup" width="60" height="60" loading="lazy">
+                        <img src="{{ url_for('static', filename='photos/Maggie.jpg') }}" alt="Maggi"
+                            width="60" height="60" loading="lazy">
                     </div>
                     <div class="menu-item__info">
-                        <span class="menu-item__name">Masala Chai</span>
-                        <span class="menu-item__desc">Spiced tea in a kullad</span>
+                        <span class="menu-item__name">Maggi</span>
+                        <span class="menu-item__desc">Veg and egg</span>
                     </div>
-                    <span class="menu-item__price">₹40</span>
+                    <span class="menu-item__price">&#8377;40 - 50</span>
                 </div>
 
                 <div class="menu-item">
                     <div class="menu-item__img-wrap">
-                        <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=120&q=80"
-                            alt="Samosa platter" width="60" height="60" loading="lazy">
+                        <img src="{{ url_for('static', filename='photos/coffee.jpg') }}" alt="Coffee" width="60"
+                            height="60" loading="lazy">
                     </div>
                     <div class="menu-item__info">
-                        <span class="menu-item__name">Samosa Platter</span>
-                        <span class="menu-item__desc">Crispy, with tamarind chutney</span>
+                        <span class="menu-item__name">Coffee</span>
+                        <span class="menu-item__desc">Freshly brewed</span>
                     </div>
-                    <span class="menu-item__price">₹60</span>
+                    <span class="menu-item__price">&#8377;50</span>
                 </div>
 
                 <div class="menu-item">
                     <div class="menu-item__img-wrap">
-                        <img src="https://images.unsplash.com/photo-1606491956689-2ea866880049?auto=format&fit=crop&w=120&q=80"
-                            alt="Cold coffee" width="60" height="60" loading="lazy">
+                        <img src="{{ url_for('static', filename='photos/Milk_Tea.png') }}" alt="Milk tea" width="60"
+                            height="60" loading="lazy">
                     </div>
                     <div class="menu-item__info">
-                        <span class="menu-item__name">Cold Coffee</span>
-                        <span class="menu-item__desc">Blended with jaggery</span>
+                        <span class="menu-item__name">Milk Tea</span>
+                        <span class="menu-item__desc">Hot and comforting</span>
                     </div>
-                    <span class="menu-item__price">₹80</span>
+                    <span class="menu-item__price">&#8377;20</span>
                 </div>
 
                 <div class="menu-item">
                     <div class="menu-item__img-wrap">
-                        <img src="https://images.unsplash.com/photo-1567337710282-00832b415979?auto=format&fit=crop&w=120&q=80"
-                            alt="Veg Thali" width="60" height="60" loading="lazy">
+                        <img src="{{ url_for('static', filename='photos/red_tea.jpg') }}" alt="Lemon tea" width="60"
+                            height="60" loading="lazy">
                     </div>
                     <div class="menu-item__info">
-                        <span class="menu-item__name">Veg Thali</span>
-                        <span class="menu-item__desc">Seasonal, farm-fresh</span>
+                        <span class="menu-item__name">Lemon Tea</span>
+                        <span class="menu-item__desc">Light and zesty</span>
                     </div>
-                    <span class="menu-item__price">₹120</span>
+                    <span class="menu-item__price">&#8377;10</span>
                 </div>
 
                 <div class="menu-item">
                     <div class="menu-item__img-wrap">
-                        <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=120&q=80"
-                            alt="Jaggery kulfi dessert" width="60" height="60" loading="lazy">
+                        <img src="{{ url_for('static', filename='photos/sandwich.jpg') }}" alt="Sandwich"
+                            width="60" height="60" loading="lazy">
                     </div>
                     <div class="menu-item__info">
-                        <span class="menu-item__name">Jaggery Kulfi</span>
-                        <span class="menu-item__desc">Traditional frozen dessert</span>
+                        <span class="menu-item__name">Sandwich</span>
+                        <span class="menu-item__desc">Veg and egg</span>
                     </div>
-                    <span class="menu-item__price">₹50</span>
+                    <span class="menu-item__price">&#8377;35 - 50</span>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-item__img-wrap">
+                        <img src="{{ url_for('static', filename='photos/omlette.jpg') }}" alt="Omlet" width="60"
+                            height="60" loading="lazy">
+                    </div>
+                    <div class="menu-item__info">
+                        <span class="menu-item__name">Omlet</span>
+                        <span class="menu-item__desc">Simple and tasty</span>
+                    </div>
+                    <span class="menu-item__price">&#8377;20</span>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-item__img-wrap">
+                        <img src="{{ url_for('static', filename='photos/image.png') }}" alt="Egg toast" width="60"
+                            height="60" loading="lazy">
+                    </div>
+                    <div class="menu-item__info">
+                        <span class="menu-item__name">Egg Toast</span>
+                        <span class="menu-item__desc">Crisp toast with egg</span>
+                    </div>
+                    <span class="menu-item__price">&#8377;30</span>
                 </div>
             </div>
-
             <div class="menu-footer">
                 <p>Proceeds from your meal support the Anchor Association School.</p>
             </div>
@@ -173,7 +215,7 @@
     <div class="container">
         <div class="earthen-row">
             <div class="earthen-img">
-                <img src="https://images.unsplash.com/photo-1596904675237-77aa5d7d3d72?auto=format&fit=crop&w=700&q=80"
+                <img src=""
                     alt="Chai served in traditional earthen kullad cup" width="700" height="500" loading="lazy"
                     decoding="async">
             </div>
