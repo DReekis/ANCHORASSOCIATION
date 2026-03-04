@@ -97,7 +97,7 @@
                 <img src="{{ url_for('static', filename='photos/front_cafe.png') }}"
                     alt="Bagan Bilash cafe — warm bamboo interiors at night" class="bento-card__image">
                 <div class="bento-card__overlay">
-                    <span class="bento-card__tag">Social Kitchen</span>
+                    <span class="bento-card__tag">The Cafe</span>
                     <h3 class="bento-card__title">Bagan Bilash</h3>
                     <p class="bento-card__desc">Where every meal makes an impact</p>
                 </div>
@@ -106,12 +106,15 @@
             <!-- Card 3: Live Gallery Slideshow (8 cols, 1 row) -->
             <a href="/gallery" class="bento-card card-gallery">
                 <div class="gallery-slideshow" id="gallerySlideshow">
+                    {% if home_slides %}
+                    {% for slide in home_slides %}
+                    <img src="{{ slide.url }}" alt="Life at Anchor moment"
+                        class="gallery-slide {% if loop.first %}active{% endif %}" loading="lazy" decoding="async">
+                    {% endfor %}
+                    {% else %}
                     <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80"
                         alt="Community moments at Anchor" class="gallery-slide active">
-                    <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&q=80"
-                        alt="Students learning together" class="gallery-slide">
-                    <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&q=80"
-                        alt="Events and celebrations" class="gallery-slide">
+                    {% endif %}
                 </div>
                 <div class="bento-card__overlay">
                     <span class="bento-card__tag">Live Moments</span>
@@ -126,7 +129,7 @@
 
 {% block scripts %}
 <script>
-    // Video Modal Functionality
+
     const modal = document.getElementById('videoModal');
     const openBtn = document.querySelector('[data-open-modal]');
     const closeBtn = document.querySelector('[data-close-modal]');

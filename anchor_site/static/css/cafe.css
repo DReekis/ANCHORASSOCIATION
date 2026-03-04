@@ -1,4 +1,3 @@
-/* ---------- Palette overrides ---------- */
 :root {
     --cafe-bg: #F9F5F0;
     --cafe-dark: #1A1A1A;
@@ -227,6 +226,22 @@
     font-size: 1.02rem;
     color: var(--cafe-muted);
     line-height: 1.7;
+}
+
+
+/* STORY - Earthen style extensions */
+.cafe-story-features .cafe-section-header {
+    margin-bottom: 56px;
+}
+
+.story-feature-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+}
+
+.cafe-story-features .earthen-row--reverse {
+    flex-direction: row-reverse;
 }
 
 
@@ -581,6 +596,10 @@
         gap: 20px;
     }
 
+    .story-feature-stack {
+        gap: 44px;
+    }
+
     .earthen-row {
         flex-direction: column;
         gap: 40px;
@@ -683,6 +702,10 @@
     .cafe-earthen,
     .cafe-location {
         padding: 56px 0;
+    }
+
+    .story-feature-stack {
+        gap: 30px;
     }
 
     .menu-card {
