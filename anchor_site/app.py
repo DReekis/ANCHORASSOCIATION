@@ -64,8 +64,8 @@ csp = {
 
 Talisman(app, content_security_policy=csp, force_https=False)
 
-# Configure Cloudinary from environment variables.
-# Supports either explicit keys or CLOUDINARY_URL.
+
+# Cloudinary Configuration
 cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
 cloud_api_key = os.environ.get('CLOUDINARY_API_KEY')
 cloud_api_secret = os.environ.get('CLOUDINARY_API_SECRET')
@@ -104,22 +104,41 @@ LIVE_GALLERY_LIMIT = _parse_positive_int(os.getenv('CLOUDINARY_LIVE_GALLERY_LIMI
 
 def get_cloudinary_folder_images(folder_path, max_results=12):
     normalized_folder = (folder_path or '').strip().strip('/')
+    if normalized_folder.startswith('Home/'):
+        normalized_folder = normalized_folder[5:]
     if not normalized_folder:
         return []
 
-    result = cloudinary.api.resources(
-        type='upload',
-        prefix=f'{normalized_folder}/',
-        max_results=max_results,
-        direction='desc',
-        resource_type='image'
-    )
-
     images = []
-    for resource in result.get('resources', []):
-        secure_url = resource.get('secure_url')
-        if secure_url:
-            images.append({'url': secure_url})
+    try:
+        if hasattr(cloudinary.api, 'resources_by_asset_folder'):
+            result = cloudinary.api.resources_by_asset_folder(
+                asset_folder=normalized_folder,
+                max_results=max_results
+            )
+            for resource in result.get('resources', []):
+                secure_url = resource.get('secure_url')
+                if secure_url:
+                    images.append({'url': secure_url})
+            if images:
+                return images
+    except Exception as e:
+        pass
+
+    try:
+        result = cloudinary.api.resources(
+            type='upload',
+            prefix=f'{normalized_folder}/',
+            max_results=max_results,
+            resource_type='image'
+        )
+        for resource in result.get('resources', []):
+            secure_url = resource.get('secure_url')
+            if secure_url:
+                images.append({'url': secure_url})
+    except Exception as e:
+        app.logger.warning('Failed to load Cloudinary folder "%s": %s', normalized_folder, e)
+
     return images
 
 
@@ -151,13 +170,26 @@ def gallery():
     categories = ['education', 'environment', 'community']
     images = []
     for cat in categories:
+        folder_path = f'anchor/gallery/{cat}'
         try:
-            result = cloudinary.api.resources(
-                type='upload',
-                prefix=f'anchor/gallery/{cat}/',
-                max_results=30,
-                resource_type='image'
-            )
+            result = {}
+            if hasattr(cloudinary.api, 'resources_by_asset_folder'):
+                try:
+                    result = cloudinary.api.resources_by_asset_folder(
+                        asset_folder=folder_path,
+                        max_results=30
+                    )
+                except Exception:
+                    pass
+            
+            if not result or not result.get('resources'):
+                result = cloudinary.api.resources(
+                    type='upload',
+                    prefix=f'{folder_path}/',
+                    max_results=30,
+                    resource_type='image'
+                ) or {}
+
             for r in result.get('resources', []):
                 images.append({
                     'url': r['secure_url'],

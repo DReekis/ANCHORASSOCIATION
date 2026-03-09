@@ -77,7 +77,10 @@
    object-fit: cover;
    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
    will-change: transform;
+   -webkit-backface-visibility: hidden;
    backface-visibility: hidden;
+   transform: translateZ(0);
+   /* Force hardware acceleration */
 }
 
 .map-container:hover .map-container__image {
@@ -378,7 +381,10 @@
    justify-content: flex-end;
    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
    will-change: transform;
+   -webkit-backface-visibility: hidden;
    backface-visibility: hidden;
+   transform: translateZ(0);
+   /* Force hardware acceleration */
 }
 
 .bento-card:hover {
@@ -393,7 +399,9 @@
    object-fit: cover;
    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
    will-change: transform;
+   -webkit-backface-visibility: hidden;
    backface-visibility: hidden;
+   transform: translateZ(0);
 }
 
 .bento-card:hover .bento-card__image {
@@ -471,7 +479,9 @@
    opacity: 0;
    transition: opacity 1s ease;
    will-change: opacity;
+   -webkit-backface-visibility: hidden;
    backface-visibility: hidden;
+   transform: translateZ(0);
 }
 
 .gallery-slide.active {
