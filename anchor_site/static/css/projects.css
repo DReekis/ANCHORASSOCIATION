@@ -93,6 +93,60 @@
    font-weight: 600;
 }
 
+.feature-text__lead {
+   font-size: 1.15rem;
+   color: var(--text-main);
+   line-height: 1.6;
+}
+
+.feature-list {
+   list-style: none;
+   padding: 0;
+   margin: 24px 0;
+   display: flex;
+   flex-direction: column;
+   gap: 16px;
+}
+
+.feature-list li {
+   position: relative;
+   padding-left: 28px;
+   font-size: 1.02rem;
+   line-height: 1.6;
+   color: var(--text-muted);
+}
+
+.feature-list li::before {
+   content: '—';
+   position: absolute;
+   left: 0;
+   top: 0;
+   color: var(--primary);
+   font-weight: 700;
+}
+
+.feature-list li strong {
+   color: var(--text-main);
+   font-weight: 600;
+}
+
+.feature-quote {
+   margin-top: 32px;
+   padding: 24px;
+   background: rgba(47, 107, 79, 0.04);
+   border-left: 4px solid var(--primary);
+   border-radius: 0 var(--radius-apple) var(--radius-apple) 0;
+}
+
+.feature-quote p {
+   font-family: var(--font-head);
+   font-size: 1.25rem;
+   font-style: italic;
+   color: var(--text-main);
+   line-height: 1.5;
+   margin: 0;
+}
+
 
 /* SECTION 2 — Initiatives (4 Photo Cards) */
 .initiatives-section {

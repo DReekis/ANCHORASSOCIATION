@@ -238,6 +238,95 @@
 }
 
 
+/* LEADERSHIP SECTION */
+.leadership {
+   background: var(--bg-paper);
+}
+
+.leadership__header {
+   text-align: center;
+   margin-bottom: 48px;
+}
+
+.leadership__title {
+   font-family: var(--font-head);
+   font-size: clamp(2rem, 4vw, 2.5rem);
+   color: var(--text-main);
+   margin-bottom: 16px;
+}
+
+.leadership__subtitle {
+   font-size: clamp(1rem, 2vw, 1.15rem);
+   color: var(--text-muted);
+}
+
+.leadership-grid {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 32px;
+}
+
+.leader-card {
+   background: #ffffff;
+   border-radius: var(--radius-apple);
+   padding: 40px 32px;
+   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+   transition: transform 0.3s ease;
+   text-align: center;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.leader-card:hover {
+   transform: translateY(-8px);
+}
+
+.leader-card__image {
+   width: 80px;
+   height: 80px;
+   border-radius: 50%;
+   object-fit: cover;
+   margin-bottom: 24px;
+}
+
+.leader-card__quote {
+   font-style: italic;
+   font-size: 1.05rem;
+   color: var(--text-main);
+   line-height: 1.6;
+   margin-bottom: 24px;
+   flex-grow: 1;
+}
+
+.leader-card__info {
+   margin-top: auto;
+}
+
+.leader-card__name {
+   font-family: var(--font-head);
+   font-size: 1.25rem;
+   font-weight: 700;
+   color: var(--text-main);
+   margin-bottom: 4px;
+}
+
+.leader-card__title {
+   font-size: 0.9rem;
+   font-weight: 600;
+   color: var(--primary);
+   text-transform: uppercase;
+   letter-spacing: 0.05em;
+}
+
+@media (max-width: 900px) {
+   .leadership-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+   }
+}
+
+
 /* SECTION 4: DISCOVER / BENTO GRID */
 .discover {
    background: var(--bg-paper);
