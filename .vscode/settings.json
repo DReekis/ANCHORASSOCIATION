@@ -1,4 +1,6 @@
 {
+    "python.envFile": "${workspaceFolder}/anchor_site/.env",
+    "python.terminal.useEnvFile": true,
     "python.testing.pytestArgs": [
         "anchor_site"
     ],

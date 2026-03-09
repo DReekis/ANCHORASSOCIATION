@@ -9,8 +9,9 @@ import cloudinary
 import cloudinary.api
 import razorpay
 
-# Load environment variables from .env
-load_dotenv()
+# Load environment variables from anchor_site/.env
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 app = Flask(__name__)
 
@@ -63,15 +64,63 @@ csp = {
 
 Talisman(app, content_security_policy=csp, force_https=False)
 
-# Configure Cloudinary from environment variables
-cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET')
-)
+# Configure Cloudinary from environment variables.
+# Supports either explicit keys or CLOUDINARY_URL.
+cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
+cloud_api_key = os.environ.get('CLOUDINARY_API_KEY')
+cloud_api_secret = os.environ.get('CLOUDINARY_API_SECRET')
+
+if cloud_name and cloud_api_key and cloud_api_secret:
+    cloudinary.config(
+        cloud_name=cloud_name,
+        api_key=cloud_api_key,
+        api_secret=cloud_api_secret
+    )
+elif os.environ.get('CLOUDINARY_URL'):
+    cloudinary.config()
+else:
+    app.logger.warning(
+        'Cloudinary is not configured. Set CLOUDINARY_CLOUD_NAME/CLOUDINARY_API_KEY/CLOUDINARY_API_SECRET '
+        'or CLOUDINARY_URL in anchor_site/.env'
+    )
 
 # Initialize Razorpay client
 client = razorpay.Client(auth=(os.getenv('RZP_KEY_ID'), os.getenv('RZP_KEY_SECRET')))
+
+
+def _parse_positive_int(raw_value, default_value):
+    try:
+        parsed = int(raw_value)
+        if parsed > 0:
+            return parsed
+    except (TypeError, ValueError):
+        pass
+    return default_value
+
+
+LIVE_GALLERY_FOLDER = os.getenv('CLOUDINARY_LIVE_GALLERY_FOLDER', 'anchor/live-gallery')
+LIVE_GALLERY_LIMIT = _parse_positive_int(os.getenv('CLOUDINARY_LIVE_GALLERY_LIMIT'), 12)
+
+
+def get_cloudinary_folder_images(folder_path, max_results=12):
+    normalized_folder = (folder_path or '').strip().strip('/')
+    if not normalized_folder:
+        return []
+
+    result = cloudinary.api.resources(
+        type='upload',
+        prefix=f'{normalized_folder}/',
+        max_results=max_results,
+        direction='desc',
+        resource_type='image'
+    )
+
+    images = []
+    for resource in result.get('resources', []):
+        secure_url = resource.get('secure_url')
+        if secure_url:
+            images.append({'url': secure_url})
+    return images
 
 
 @app.context_processor
@@ -83,16 +132,12 @@ def inject_year():
 def home():
     home_slides = []
     try:
-        result = cloudinary.api.resources(
-            type='upload',
-            prefix='anchor/gallery/',
-            max_results=10,
-            resource_type='image'
+        home_slides = get_cloudinary_folder_images(
+            folder_path=LIVE_GALLERY_FOLDER,
+            max_results=LIVE_GALLERY_LIMIT
         )
-        for r in result.get('resources', []):
-            home_slides.append({'url': r['secure_url']})
-    except Exception:
-        pass  # gracefully fall back to empty
+    except Exception as e:
+        app.logger.warning('Failed to load home live-gallery images from Cloudinary: %s', e)
     return render_template('index.html', home_slides=home_slides)
 
 
@@ -119,8 +164,8 @@ def gallery():
                     'category': cat,
                     'public_id': r['public_id']
                 })
-        except Exception:
-            pass  # gracefully skip if folder doesn't exist yet
+        except Exception as e:
+            app.logger.warning('Failed to load Cloudinary gallery category "%s": %s', cat, e)
     return render_template('gallery.html', images=images)
 
 
