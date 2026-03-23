@@ -167,37 +167,38 @@ def projects():
 
 @app.route('/gallery')
 def gallery():
-    categories = ['education', 'environment', 'community']
+    folder_path = 'anchor/gallery'
     images = []
-    for cat in categories:
-        folder_path = f'anchor/gallery/{cat}'
-        try:
-            result = {}
-            if hasattr(cloudinary.api, 'resources_by_asset_folder'):
-                try:
-                    result = cloudinary.api.resources_by_asset_folder(
-                        asset_folder=folder_path,
-                        max_results=30
-                    )
-                except Exception:
-                    pass
-            
-            if not result or not result.get('resources'):
-                result = cloudinary.api.resources(
-                    type='upload',
-                    prefix=f'{folder_path}/',
-                    max_results=30,
-                    resource_type='image'
-                ) or {}
+    try:
+        result = {}
+        if hasattr(cloudinary.api, 'resources_by_asset_folder'):
+            try:
+                result = cloudinary.api.resources_by_asset_folder(
+                    asset_folder=folder_path,
+                    max_results=100
+                )
+            except Exception:
+                pass
+        
+        if not result or not result.get('resources'):
+            result = cloudinary.api.resources(
+                type='upload',
+                prefix=f'{folder_path}/',
+                max_results=100,
+                resource_type='image'
+            ) or {}
 
-            for r in result.get('resources', []):
-                images.append({
-                    'url': r['secure_url'],
-                    'category': cat,
-                    'public_id': r['public_id']
-                })
-        except Exception as e:
-            app.logger.warning('Failed to load Cloudinary gallery category "%s": %s', cat, e)
+        for r in result.get('resources', []):
+            images.append({
+                'url': r['secure_url'],
+                'public_id': r['public_id']
+            })
+    except Exception as e:
+        app.logger.warning('Failed to load Cloudinary gallery: %s', e)
+
+    import random
+    random.shuffle(images)
+
     return render_template('gallery.html', images=images)
 
 

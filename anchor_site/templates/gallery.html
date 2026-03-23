@@ -19,17 +19,6 @@
 </header>
 
 
-<!-- FILTER BAR -->
-<div class="gallery-filters">
-    <div class="container">
-        <div class="filter-bar">
-            <button class="filter-btn filter-btn--active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="education">Education</button>
-            <button class="filter-btn" data-filter="environment">Environment</button>
-            <button class="filter-btn" data-filter="community">Community</button>
-        </div>
-    </div>
-</div>
 
 
 <!-- MASONRY GRID -->
@@ -38,8 +27,8 @@
         <div class="masonry-grid">
 
             {% for img in images %}
-            <div class="masonry-item" data-category="{{ img.category }}">
-                <img src="{{ img.url }}" alt="Anchor {{ img.category }} moment" loading="lazy" decoding="async">
+            <div class="masonry-item">
+                <img src="{{ img.url }}" alt="Anchor moment" loading="lazy" decoding="async">
             </div>
             {% endfor %}
 
@@ -65,24 +54,24 @@
 
 {% block scripts %}
 <script>
-    // Filter buttons
-    const filterBtns = document.querySelectorAll('.filter-btn');
     const items = document.querySelectorAll('.masonry-item');
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
-            btn.classList.add('filter-btn--active');
-
-            const filter = btn.dataset.filter;
-            items.forEach(item => {
-                if (filter === 'all' || item.dataset.category === filter) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+    // Smart Lazy Loading Fade-in
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
         });
+    }, {
+        root: null,
+        rootMargin: '0px 0px 50px 0px',
+        threshold: 0.1
+    });
+
+    items.forEach(item => {
+        observer.observe(item);
     });
 
     // Lightbox
