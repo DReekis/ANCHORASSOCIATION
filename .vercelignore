@@ -1,0 +1,11 @@
+.git
+.venv
+venv
+.vscode
+__pycache__
+*.pyc
+.env
+.env.*
+public
+anchor_site/.env
+anchor_site/.env.*

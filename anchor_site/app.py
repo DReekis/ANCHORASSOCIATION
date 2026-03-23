@@ -2,18 +2,30 @@
 import os
 from datetime import datetime
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 import cloudinary
 import cloudinary.api
 import razorpay
 
-# Load environment variables from anchor_site/.env
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(BASE_DIR)
 load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(os.path.join(PROJECT_DIR, '.env'))
 
-app = Flask(__name__)
+ON_VERCEL = os.getenv('VERCEL') == '1' or bool(os.getenv('VERCEL_URL'))
+
+app = Flask(__name__, static_folder=None)
+
+if ON_VERCEL:
+    # Vercel serves /static/** from the public/ directory. Keep the endpoint
+    # for url_for() without letting Flask serve those files itself.
+    app.add_url_rule('/static/<path:filename>', endpoint='static', build_only=True)
+else:
+    @app.route('/static/<path:filename>', endpoint='static')
+    def local_static(filename):
+        return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
 
 # Security Config
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-fallback-secret-key')
@@ -85,7 +97,16 @@ else:
     )
 
 # Initialize Razorpay client
-client = razorpay.Client(auth=(os.getenv('RZP_KEY_ID'), os.getenv('RZP_KEY_SECRET')))
+rzp_key_id = os.getenv('RZP_KEY_ID')
+rzp_key_secret = os.getenv('RZP_KEY_SECRET')
+
+client = None
+if rzp_key_id and rzp_key_secret:
+    client = razorpay.Client(auth=(rzp_key_id, rzp_key_secret))
+else:
+    app.logger.warning(
+        'Razorpay is not fully configured. Set RZP_KEY_ID and RZP_KEY_SECRET to enable payments.'
+    )
 
 
 def _parse_positive_int(raw_value, default_value):
@@ -204,7 +225,7 @@ def gallery():
 
 @app.route('/donate')
 def donate():
-    return render_template('donate.html', rzp_key=os.getenv('RZP_KEY_ID'))
+    return render_template('donate.html', rzp_key=rzp_key_id)
 
 
 @app.route('/cafe')
@@ -217,6 +238,9 @@ def cafe():
 
 @app.route('/api/create_order', methods=['POST'])
 def create_order():
+    if client is None:
+        return jsonify({'error': 'Payment gateway is not configured'}), 503
+
     try:
         data = request.get_json()
         amount = int(data.get('amount', 0))
@@ -239,6 +263,9 @@ def create_order():
 
 @app.route('/api/verify_payment', methods=['POST'])
 def verify_payment():
+    if client is None:
+        return jsonify({'status': 'failure', 'error': 'Payment gateway is not configured'}), 503
+
     try:
         data = request.get_json()
         client.utility.verify_payment_signature({
