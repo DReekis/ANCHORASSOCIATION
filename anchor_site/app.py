@@ -14,18 +14,11 @@ PROJECT_DIR = os.path.dirname(BASE_DIR)
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 load_dotenv(os.path.join(PROJECT_DIR, '.env'))
 
-ON_VERCEL = os.getenv('VERCEL') == '1' or bool(os.getenv('VERCEL_URL'))
-
 app = Flask(__name__, static_folder=None)
 
-if ON_VERCEL:
-    # Vercel serves /static/** from the public/ directory. Keep the endpoint
-    # for url_for() without letting Flask serve those files itself.
-    app.add_url_rule('/static/<path:filename>', endpoint='static', build_only=True)
-else:
-    @app.route('/static/<path:filename>', endpoint='static')
-    def local_static(filename):
-        return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
+@app.route('/static/<path:filename>', endpoint='static')
+def static_files(filename):
+    return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
 
 # Security Config
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-fallback-secret-key')
