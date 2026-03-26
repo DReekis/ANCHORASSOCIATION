@@ -1,0 +1,117 @@
+.content-hero {
+    padding: 170px 0 84px;
+    background:
+        radial-gradient(circle at top left, rgba(47, 107, 79, 0.16), transparent 28%),
+        radial-gradient(circle at right center, rgba(224, 122, 63, 0.12), transparent 24%),
+        linear-gradient(180deg, #f6f5f1 0%, #f9f6ef 100%);
+}
+
+.content-hero--warm {
+    background:
+        radial-gradient(circle at top left, rgba(224, 122, 63, 0.18), transparent 30%),
+        radial-gradient(circle at right center, rgba(47, 107, 79, 0.12), transparent 28%),
+        linear-gradient(180deg, #faf4eb 0%, #f6f5f1 100%);
+}
+
+.content-hero__inner {
+    max-width: 860px;
+}
+
+.content-hero__eyebrow {
+    display: inline-flex;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(47, 107, 79, 0.12);
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.content-hero__title {
+    margin-top: 24px;
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 1;
+    color: #203428;
+}
+
+.content-hero__text {
+    margin-top: 20px;
+    font-size: 1.08rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+}
+
+.content-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 32px;
+}
+
+.content-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent) 0%, #ef9c69 100%);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.content-button--ghost {
+    background: rgba(47, 107, 79, 0.08);
+    color: var(--primary);
+}
+
+.content-grid-section {
+    padding: 64px 0 88px;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.content-card {
+    padding: 28px;
+    border-radius: 28px;
+    background: #ffffff;
+    border: 1px solid rgba(32, 52, 40, 0.08);
+    box-shadow: 0 20px 44px rgba(36, 44, 39, 0.08);
+}
+
+.content-card__eyebrow {
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.content-card__title {
+    margin-top: 18px;
+    font-size: 2rem;
+    color: #203428;
+}
+
+.content-card__copy {
+    margin-top: 14px;
+    color: var(--text-main);
+    line-height: 1.8;
+}
+
+@media (max-width: 900px) {
+    .content-hero {
+        padding: 144px 0 70px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}

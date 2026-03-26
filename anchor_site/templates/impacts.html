@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Impacts | Anchor Association{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/content-page.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="content-hero">
+    <div class="container content-hero__inner">
+        <p class="content-hero__eyebrow">Impacts</p>
+        <h1 class="content-hero__title">A cleaner structure for how Anchor’s impact is presented.</h1>
+        <p class="content-hero__text">
+            This page now supports the exact navigation structure you asked for, with dedicated
+            sections for long-term impact, stories, recognition, and communities served.
+        </p>
+    </div>
+</section>
+
+<section class="content-grid-section">
+    <div class="container content-grid">
+        {% for section in impact_sections %}
+        <article class="content-card" id="{{ section.id }}">
+            <span class="content-card__eyebrow">{{ section.eyebrow }}</span>
+            <h2 class="content-card__title">{{ section.title }}</h2>
+            <p class="content-card__copy">{{ section.copy }}</p>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

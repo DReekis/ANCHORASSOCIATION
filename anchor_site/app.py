@@ -1,13 +1,21 @@
 
 import os
 from datetime import datetime
+from urllib.parse import quote_plus
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, session, redirect, url_for
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 import cloudinary
 import cloudinary.api
 import razorpay
+
+try:
+    from .models import db, AdminUser, InitiativeSection, InitiativeSubitem
+    from .admin_panel import setup_admin
+except ImportError:
+    from models import db, AdminUser, InitiativeSection, InitiativeSubitem
+    from admin_panel import setup_admin
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
@@ -26,8 +34,16 @@ app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
+# Database Config
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'anchor.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 # CSRF
 csrf = CSRFProtect(app)
+
+# Initialize Database & Admin
+db.init_app(app)
+setup_admin(app, db)
 
 #  CSP
 csp = {
@@ -38,15 +54,21 @@ csp = {
         'https://checkout.razorpay.com',
         'https://unpkg.com',
         'https://cdn.jsdelivr.net',
+        'https://cdnjs.cloudflare.com',
+        'https://stackpath.bootstrapcdn.com',
+        'https://code.jquery.com',
     ],
     'style-src': [
         "'self'",
         'https://fonts.googleapis.com',
         "'unsafe-inline'",
+        'https://stackpath.bootstrapcdn.com',
+        'https://cdnjs.cloudflare.com',
     ],
     'font-src': [
         "'self'",
         'https://fonts.gstatic.com',
+        'https://cdnjs.cloudflare.com',
     ],
     'img-src': [
         "'self'",
@@ -116,6 +138,292 @@ LIVE_GALLERY_FOLDER = os.getenv('CLOUDINARY_LIVE_GALLERY_FOLDER', 'anchor/live-g
 LIVE_GALLERY_LIMIT = _parse_positive_int(os.getenv('CLOUDINARY_LIVE_GALLERY_LIMIT'), 12)
 
 
+def _donation_link(purpose):
+    return f"/donate?purpose={quote_plus(purpose)}"
+
+
+IMPACT_PAGE_SECTIONS = [
+    {
+        'id': 'impacts-over-the-years',
+        'eyebrow': '01',
+        'title': 'Impacts Over the Years',
+        'copy': (
+            'Anchor Association keeps building long-term community strength through '
+            'education, eco-conscious livelihoods, healthcare, and guided learning support.'
+        ),
+    },
+    {
+        'id': 'success-stories',
+        'eyebrow': '02',
+        'title': 'Success & Stories',
+        'copy': (
+            'Each initiative is designed to create visible progress, from stronger schooling '
+            'pathways to greater confidence, employability, and community participation.'
+        ),
+    },
+    {
+        'id': 'awards-recognition',
+        'eyebrow': '03',
+        'title': 'Awards & Recognition',
+        'copy': (
+            'This space is ready for institutional recognitions, media mentions, community '
+            'appreciation, and milestone acknowledgements as the organization grows.'
+        ),
+    },
+    {
+        'id': 'areas-communities',
+        'eyebrow': '04',
+        'title': 'Areas & Communities',
+        'copy': (
+            'Our work is rooted in place: local learners, women-led groups, families, and '
+            'neighborhood communities who benefit from consistent, practical support.'
+        ),
+    },
+]
+
+JOIN_MEMBER_HIGHLIGHTS = [
+    {
+        'eyebrow': 'Membership',
+        'title': 'Become part of the working community.',
+        'copy': (
+            'Join as a member to contribute your time, perspective, and commitment to the '
+            'organization’s long-term social work.'
+        ),
+    },
+    {
+        'eyebrow': 'Contribution',
+        'title': 'Support programs beyond one-time moments.',
+        'copy': (
+            'Members help strengthen continuity across education, healthcare, awareness work, '
+            'eco projects, and future local partnerships.'
+        ),
+    },
+    {
+        'eyebrow': 'Next Step',
+        'title': 'Membership information can be finalized by the Anchor team.',
+        'copy': (
+            'This page is ready for your exact eligibility, fee, and application workflow once '
+            'those details are confirmed.'
+        ),
+    },
+]
+
+DEFAULT_INITIATIVES = [
+    {
+        'slug': 'anchor-public-school',
+        'title': 'Anchor Public School',
+        'summary': 'Holistic education that grows confidence, discipline, and curiosity.',
+        'description': (
+            'Anchor Public School is designed to give learners a stable, joyful, and '
+            'future-facing academic environment. The focus stays on strong foundational '
+            'learning, individual care, and a culture where children can grow with dignity, '
+            'creativity, and consistent encouragement.'
+        ),
+        'impact_label': 'Beneficiaries',
+        'impact_value': '1,000+',
+        'cta_label': 'Support Us',
+        'cta_url': _donation_link('Anchor Public School'),
+        'media_url': 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
+        'media_alt': 'Students learning in a classroom',
+        'theme': 'forest',
+        'display_style': 'feature',
+        'order': 1,
+        'subitems': [],
+    },
+    {
+        'slug': 'eco-urban-hub',
+        'title': 'Eco Urban Hub',
+        'summary': 'Sustainability, hospitality, and local livelihood in one living project.',
+        'description': (
+            'Eco Urban Hub brings together environmental awareness, community gathering, and '
+            'responsible enterprise. It is a space where sustainable design and everyday human '
+            'connection meet, creating a public-facing initiative that can support both '
+            'livelihood and local visibility.'
+        ),
+        'impact_label': 'Served Daily',
+        'impact_value': '1,000+',
+        'cta_label': 'Book Us',
+        'cta_url': '/cafe',
+        'media_url': '/static/photos/front_cafe.png',
+        'media_alt': 'Bagan Bilash eco cafe exterior',
+        'theme': 'clay',
+        'display_style': 'feature',
+        'order': 2,
+        'subitems': ['Bagan Bilash'],
+    },
+    {
+        'slug': 'self-help-group',
+        'title': 'Self Help Group',
+        'summary': 'Women-led self-reliance through shared learning and economic confidence.',
+        'description': (
+            'The self help group initiative creates practical support systems where women can '
+            'build confidence, organize collectively, and strengthen income pathways through '
+            'group-based participation and mentorship.'
+        ),
+        'impact_label': 'Beneficiaries',
+        'impact_value': '1,000+',
+        'cta_label': 'Support Us',
+        'cta_url': _donation_link('Nivedita SHG'),
+        'media_url': 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80',
+        'media_alt': 'Women gathered in a community learning session',
+        'theme': 'sage',
+        'display_style': 'feature',
+        'order': 3,
+        'subitems': ['Nivedita SHG'],
+    },
+    {
+        'slug': 'children-activity-centre',
+        'title': 'Children Activity Centre',
+        'summary': 'A playful, caring space where children stay active and engaged.',
+        'description': (
+            'This initiative supports children through structured activities, guided play, '
+            'creative engagement, and spaces that make learning feel safe and enjoyable. It is '
+            'meant to keep childhood energetic, expressive, and socially connected.'
+        ),
+        'impact_label': 'Beneficiaries',
+        'impact_value': '1,000+',
+        'cta_label': 'Support Us',
+        'cta_url': _donation_link('Minions Fun House'),
+        'media_url': 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=1200&q=80',
+        'media_alt': 'Children participating in a joyful activity',
+        'theme': 'sunrise',
+        'display_style': 'feature',
+        'order': 4,
+        'subitems': ['Minions Fun House'],
+    },
+    {
+        'slug': 'charitable-clinic',
+        'title': 'Charitable Clinic',
+        'summary': 'Accessible care for families who need dependable health support.',
+        'description': (
+            'The charitable clinic initiative focuses on reaching people with basic care, '
+            'timely guidance, and a more compassionate healthcare experience. It supports the '
+            'larger goal of reducing everyday vulnerability through regular community attention.'
+        ),
+        'impact_label': 'Beneficiaries',
+        'impact_value': '1,000+',
+        'cta_label': 'Support Us',
+        'cta_url': _donation_link('Finding Cures'),
+        'media_url': 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80',
+        'media_alt': 'Medical support consultation',
+        'theme': 'ink',
+        'display_style': 'feature',
+        'order': 5,
+        'subitems': ['Finding Cures'],
+    },
+    {
+        'slug': 'language-learning-programme',
+        'title': 'Language Learning Programme',
+        'summary': 'Communication skills that open confidence, connection, and opportunity.',
+        'description': (
+            'Language learning becomes a bridge to wider participation. This programme helps '
+            'learners express themselves with greater confidence and prepares them for stronger '
+            'engagement in education, work, and public life.'
+        ),
+        'impact_label': 'Beneficiaries',
+        'impact_value': '1,000+',
+        'cta_label': 'Support Us',
+        'cta_url': _donation_link('Atma Katha'),
+        'media_url': 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80',
+        'media_alt': 'Language learning and reading materials',
+        'theme': 'forest',
+        'display_style': 'feature',
+        'order': 6,
+        'subitems': ['Atma Katha'],
+    },
+    {
+        'slug': 'self-independent-learning',
+        'title': 'Self Independent Learning',
+        'summary': 'Learning support that builds initiative, focus, and self-belief.',
+        'description': (
+            'Self Independent Learning is shaped to encourage ownership in the learning process. '
+            'It supports learners who need reinforcement, direction, and practical encouragement '
+            'to continue growing with confidence.'
+        ),
+        'impact_label': 'Beneficiaries',
+        'impact_value': '1,000+',
+        'cta_label': 'Support Us',
+        'cta_url': _donation_link('Learn & Shine'),
+        'media_url': 'https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80',
+        'media_alt': 'Students learning independently together',
+        'theme': 'clay',
+        'display_style': 'feature',
+        'order': 7,
+        'subitems': ['Learn & Shine'],
+    },
+    {
+        'slug': 'career-development-programme',
+        'title': 'Career Development Programme',
+        'summary': 'Career guidance that helps participants prepare for real opportunities.',
+        'description': (
+            'Career Development Programme is about readiness: clarity, presentation, and '
+            'direction. It supports participants as they move from aspiration toward practical '
+            'steps, stronger employability, and longer-term economic confidence.'
+        ),
+        'impact_label': 'Beneficiaries',
+        'impact_value': '1,000+',
+        'cta_label': 'Support Us',
+        'cta_url': _donation_link('Career Edge'),
+        'media_url': 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80',
+        'media_alt': 'Young professionals in a collaborative workshop',
+        'theme': 'sage',
+        'display_style': 'feature',
+        'order': 8,
+        'subitems': ['Career Edge'],
+    },
+    {
+        'slug': 'other-regular-activities',
+        'title': 'Other Regular Activities',
+        'summary': 'Consistent community action that keeps everyday support visible.',
+        'description': (
+            'These regular activities keep Anchor closely connected to community needs '
+            'throughout the year.'
+        ),
+        'impact_label': 'Activities',
+        'impact_value': '05',
+        'cta_label': 'Support Us',
+        'cta_url': _donation_link('Other Regular Activities'),
+        'media_url': '',
+        'media_alt': '',
+        'theme': 'sunrise',
+        'display_style': 'list',
+        'order': 9,
+        'subitems': [
+            'Plantation',
+            'Awareness (Women & Child)',
+            'Blood Donation Camp',
+            'Blanket Distribution in Winter',
+            'Cloth Distribution during festive season',
+        ],
+    },
+    {
+        'slug': 'past-initiatives',
+        'title': 'Past Initiatives',
+        'summary': 'A record of responsive work delivered across urgent and special contexts.',
+        'description': (
+            'Past initiatives capture the breadth of Anchor’s response during specific community '
+            'needs and milestone programs.'
+        ),
+        'impact_label': 'Archives',
+        'impact_value': '05',
+        'cta_label': 'Explore Impact',
+        'cta_url': '/impacts#success-stories',
+        'media_url': '',
+        'media_alt': '',
+        'theme': 'ink',
+        'display_style': 'list',
+        'order': 10,
+        'subitems': [
+            'Covid Awareness Programme',
+            'Medical Camp',
+            "'YAAS' Disaster Relief Programme",
+            'Multi Talent Development Competition',
+            'Orphan Feeding & Initiatives',
+        ],
+    },
+]
+
+
 def get_cloudinary_folder_images(folder_path, max_results=12):
     normalized_folder = (folder_path or '').strip().strip('/')
     if normalized_folder.startswith('Home/'):
@@ -156,6 +464,66 @@ def get_cloudinary_folder_images(folder_path, max_results=12):
     return images
 
 
+def seed_default_initiatives():
+    if InitiativeSection.query.first():
+        return
+
+    for raw_section_data in DEFAULT_INITIATIVES:
+        section_data = dict(raw_section_data)
+        subitems = section_data.pop('subitems', [])
+        section = InitiativeSection(**section_data)
+        db.session.add(section)
+        db.session.flush()
+
+        for index, title in enumerate(subitems, start=1):
+            db.session.add(
+                InitiativeSubitem(
+                    section_id=section.id,
+                    title=title,
+                    order=index,
+                    is_active=True,
+                )
+            )
+
+    db.session.commit()
+
+
+def get_donation_purpose_options(selected_purpose=''):
+    options = [
+        {
+            'value': 'General Support',
+            'label': 'General Support - Whole NGO',
+        }
+    ]
+    seen = {'General Support'}
+
+    sections = (
+        InitiativeSection.query
+        .filter_by(is_active=True)
+        .order_by(InitiativeSection.order.asc(), InitiativeSection.id.asc())
+        .all()
+    )
+
+    for section in sections:
+        active_subitems = [item.title for item in section.subitems if item.is_active]
+        option_value = active_subitems[0] if len(active_subitems) == 1 else section.title
+
+        if option_value not in seen:
+            options.append({
+                'value': option_value,
+                'label': option_value,
+            })
+            seen.add(option_value)
+
+    if selected_purpose and selected_purpose not in seen:
+        options.append({
+            'value': selected_purpose,
+            'label': selected_purpose,
+        })
+
+    return options
+
+
 @app.context_processor
 def inject_year():
     return {'current_year': datetime.now().year}
@@ -174,9 +542,32 @@ def home():
     return render_template('index.html', home_slides=home_slides)
 
 
-@app.route('/projects')
-def projects():
-    return render_template('projects.html')
+@app.route('/impacts')
+def impacts():
+    return render_template('impacts.html', impact_sections=IMPACT_PAGE_SECTIONS)
+
+
+@app.route('/join-member')
+def join_member():
+    return render_template('join_member.html', membership_sections=JOIN_MEMBER_HIGHLIGHTS)
+
+
+@app.route('/initiatives')
+def initiatives():
+    sections = (
+        InitiativeSection.query
+        .filter_by(is_active=True)
+        .order_by(InitiativeSection.order.asc(), InitiativeSection.id.asc())
+        .all()
+    )
+    featured_sections = [section for section in sections if section.display_style == 'feature']
+    list_sections = [section for section in sections if section.display_style == 'list']
+    return render_template(
+        'initiatives.html',
+        sections=sections,
+        featured_sections=featured_sections,
+        list_sections=list_sections,
+    )
 
 
 @app.route('/gallery')
@@ -218,7 +609,14 @@ def gallery():
 
 @app.route('/donate')
 def donate():
-    return render_template('donate.html', rzp_key=rzp_key_id)
+    donation_purpose = request.args.get('purpose', '').strip()
+    donation_options = get_donation_purpose_options(donation_purpose)
+    return render_template(
+        'donate.html',
+        rzp_key=rzp_key_id,
+        donation_purpose=donation_purpose,
+        donation_options=donation_options,
+    )
 
 
 @app.route('/cafe')
@@ -271,6 +669,61 @@ def verify_payment():
         return jsonify({'status': 'failure', 'error': 'Invalid payment signature'}), 400
     except Exception as e:
         return jsonify({'status': 'failure', 'error': str(e)}), 500
+
+
+# --- Admin Login / Logout ---
+
+
+@app.route('/admin-login', methods=['GET', 'POST'])
+def admin_login():
+    error = None
+    if request.method == 'POST':
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
+        
+        user = AdminUser.query.filter_by(username=username).first()
+        
+        if user and user.is_active and user.check_password(password):
+            session['admin_logged_in'] = True
+            session['admin_username'] = user.username
+            next_url = request.args.get('next', url_for('admin.index'))
+            return redirect(next_url)
+        error = 'Invalid credentials or inactive account.'
+    return render_template('admin_login.html', error=error)
+
+
+@app.route('/admin-logout')
+def admin_logout():
+    session.pop('admin_logged_in', None)
+    return redirect(url_for('home'))
+
+
+# Create tables
+with app.app_context():
+    db.create_all()
+    seed_default_initiatives()
+
+
+# --- CLI Commands ---
+import click
+
+@app.cli.command("create-admin")
+@click.argument("username")
+@click.argument("password")
+def create_admin(username, password):
+    """Create a new admin user or reset password for an existing one."""
+    with app.app_context():
+        user = AdminUser.query.filter_by(username=username).first()
+        if user:
+            user.set_password(password)
+            db.session.commit()
+            print(f"Password reset for admin: {username}")
+        else:
+            new_admin = AdminUser(username=username)
+            new_admin.set_password(password)
+            db.session.add(new_admin)
+            db.session.commit()
+            print(f"Created new admin user: {username}")
 
 
 if __name__ == '__main__':

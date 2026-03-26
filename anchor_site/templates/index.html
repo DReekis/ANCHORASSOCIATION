@@ -17,7 +17,7 @@
         <p class="hero__subtitle">
             Empowering West Bengal through holistic learning and environmental stewardship.
         </p>
-        <a href="#mission" class="hero__cta">Our Story</a>
+        <a href="#about-us" class="hero__cta">Our Story</a>
     </div>
 </section>
 
@@ -60,7 +60,7 @@
 
 
 <!-- SECTION 3: THE MISSION -->
-<section class="mission section" id="mission">
+<section class="mission section" id="about-us">
     <div class="container">
         <div class="mission__content">
             <h2 class="mission__title">Our Mission</h2>
@@ -82,7 +82,7 @@
 
         <div class="bento-grid">
             <!-- Card 1: Education (8 cols, 1 row) -->
-            <a href="/projects" class="bento-card card-edu">
+            <a href="{{ url_for('initiatives') }}" class="bento-card card-edu">
                 <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80"
                     alt="Students engaged in holistic learning at Anchor Association" class="bento-card__image">
                 <div class="bento-card__overlay">
@@ -232,9 +232,10 @@
                             d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                     </svg>
                 </div>
-                <p class="leader-card__quote">"True impact requires both vision and unwavering dedication to our
-                    community. Our strength lies in our ability to work together and uplift the most vulnerable among
-                    us."</p>
+                <p class="leader-card__quote">"We seek to create a space where children can grow, think freely, and
+                    thrive as human beings. Our aim is to nurture individuals who feel responsible not only for
+                    themselves, but also for the society and the natural world they are part of. True education, we
+                    believe, prepares a child to live with awareness, compassion, and purpose."</p>
                 <div class="leader-card__profile">
                     <img src="{{ url_for('static', filename='photos/Sumit.png') }}" alt="Sumit_Maiti"
                         class="leader-card__image">

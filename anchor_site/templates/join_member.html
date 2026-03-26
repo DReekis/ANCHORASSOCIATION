@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Join With US | Anchor Association{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/content-page.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="content-hero content-hero--warm">
+    <div class="container content-hero__inner">
+        <p class="content-hero__eyebrow">Join With US</p>
+        <h1 class="content-hero__title">Membership space is ready for your final process details.</h1>
+        <p class="content-hero__text">
+            The navigation now includes a dedicated member entry point. This page can hold your
+            final eligibility, fee structure, and onboarding workflow whenever you are ready.
+        </p>
+
+        <div class="content-hero__actions">
+            <a href="{{ url_for('donate') }}" class="content-button">Join us as Donor</a>
+            <a href="{{ url_for('initiatives') }}" class="content-button content-button--ghost">Explore Initiatives</a>
+        </div>
+    </div>
+</section>
+
+<section class="content-grid-section">
+    <div class="container content-grid">
+        {% for section in membership_sections %}
+        <article class="content-card">
+            <span class="content-card__eyebrow">{{ section.eyebrow }}</span>
+            <h2 class="content-card__title">{{ section.title }}</h2>
+            <p class="content-card__copy">{{ section.copy }}</p>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

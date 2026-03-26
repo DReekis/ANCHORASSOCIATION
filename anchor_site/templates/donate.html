@@ -49,6 +49,17 @@
             <!-- RIGHT: Donation Form -->
             <div class="donate-form-col">
                 <h2 class="form-title">Choose Your Impact</h2>
+                <div class="field field--selector">
+                    <label for="donationPurpose">Donation Purpose</label>
+                    <select id="donationPurpose" name="donationPurpose">
+                        {% for option in donation_options %}
+                        <option value="{{ option.value }}" {% if option.value == (donation_purpose or 'General Support') %}selected{% endif %}>
+                            {{ option.label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <p class="donate-purpose-note">Support the whole NGO or choose a specific initiative.</p>
 
                 <!-- Amount Pills -->
                 <div class="amount-pills">
@@ -149,6 +160,7 @@
         const customInput = document.getElementById('customAmount');
         const selectedAmt = document.getElementById('selectedAmount');
         const impactTitle = document.getElementById('impactTitle');
+        const purposeSelect = document.getElementById('donationPurpose');
         const nameInput = document.getElementById('donorName');
         const emailInput = document.getElementById('donorEmail');
         const phoneInput = document.getElementById('donorPhone');
@@ -228,6 +240,7 @@
         donateBtn.addEventListener('click', async () => {
             const amount = parseInt(selectedAmt.value);
             if (!amount || amount <= 0) return;
+            const donationPurpose = purposeSelect?.value || 'General Support';
 
             // 1. Create order (mock)
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -253,12 +266,18 @@
                 amount: orderData.amount,
                 currency: 'INR',
                 name: 'Anchor Association',
-                description: impactTitle.value,
+                description: donationPurpose === 'General Support'
+                    ? impactTitle.value
+                    : `${donationPurpose} - ${impactTitle.value}`,
                 order_id: orderData.order_id,
                 prefill: {
                     name: nameInput.value,
                     email: emailInput.value,
                     contact: phoneInput.value
+                },
+                notes: {
+                    donation_purpose: donationPurpose,
+                    donor_tier: impactTitle.value
                 },
                 theme: { color: '#B08968' },
                 handler: async function (response) {
@@ -293,6 +312,10 @@
         /* ---- Success modal ---- */
         function showSuccess(amount) {
             const { rank, tier } = getTier(amount);
+            const donationPurpose = purposeSelect?.value || 'General Support';
+            const purposeText = donationPurpose === 'General Support'
+                ? 'Anchor Association'
+                : donationPurpose;
             finalRank.textContent = rank;
             finalName.textContent = nameInput.value || 'Donor';
             finalAmount.textContent = '₹' + amount.toLocaleString('en-IN');
@@ -300,7 +323,7 @@
 
             // WhatsApp share
             const msg = encodeURIComponent(
-                `I just donated ₹${amount.toLocaleString('en-IN')} to Anchor Association and earned the "${rank}" Honor Card! 🎉 Join me: anchorassociation.org/donate` //change to the main website url
+                `I just donated ₹${amount.toLocaleString('en-IN')} to ${purposeText} through Anchor Association and earned the "${rank}" Honor Card! 🎉 Join me: anchorassociation.org/donate` //change to the main website url
             );
             shareBtn.href = 'https://wa.me/?text=' + msg;
 
