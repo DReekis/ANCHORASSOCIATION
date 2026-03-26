@@ -19,14 +19,20 @@ except ImportError:
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+PACKAGE_STATIC_DIR = os.path.join(BASE_DIR, 'static')
+PUBLIC_STATIC_DIR = os.path.join(PROJECT_DIR, 'public', 'static')
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 load_dotenv(os.path.join(PROJECT_DIR, '.env'))
 
-app = Flask(__name__, static_folder=None)
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=None)
 
 @app.route('/static/<path:filename>', endpoint='static')
 def static_files(filename):
-    return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
+    public_candidate = os.path.join(PUBLIC_STATIC_DIR, filename)
+    if os.path.exists(public_candidate):
+        return send_from_directory(PUBLIC_STATIC_DIR, filename)
+    return send_from_directory(PACKAGE_STATIC_DIR, filename)
 
 # Security Config
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-fallback-secret-key')
@@ -136,6 +142,12 @@ def _parse_positive_int(raw_value, default_value):
 
 LIVE_GALLERY_FOLDER = os.getenv('CLOUDINARY_LIVE_GALLERY_FOLDER', 'anchor/live-gallery')
 LIVE_GALLERY_LIMIT = _parse_positive_int(os.getenv('CLOUDINARY_LIVE_GALLERY_LIMIT'), 12)
+
+
+def should_bootstrap_database():
+    force_bootstrap = os.getenv('ANCHOR_BOOTSTRAP_DB', '').strip().lower() in {'1', 'true', 'yes'}
+    is_vercel_runtime = bool(os.getenv('VERCEL') or os.getenv('VERCEL_ENV'))
+    return force_bootstrap or not is_vercel_runtime
 
 
 def _donation_link(purpose):
@@ -698,10 +710,14 @@ def admin_logout():
     return redirect(url_for('home'))
 
 
-# Create tables
+# Create tables for local/dev runs. Skip automatic bootstrap on Vercel because
+# the deployed filesystem is read-only and import-time writes can crash startup.
 with app.app_context():
-    db.create_all()
-    seed_default_initiatives()
+    if should_bootstrap_database():
+        db.create_all()
+        seed_default_initiatives()
+    else:
+        app.logger.info('Skipping automatic database bootstrap in Vercel runtime.')
 
 
 # --- CLI Commands ---
