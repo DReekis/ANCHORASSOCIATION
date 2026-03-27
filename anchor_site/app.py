@@ -41,7 +41,10 @@ app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 # Database Config
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'anchor.db')
+db_url = os.environ.get('POSTGRES_URL', os.environ.get('DATABASE_URL'))
+if db_url and db_url.startswith('postgres://'):
+    db_url = db_url.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url or ('sqlite:///' + os.path.join(BASE_DIR, 'anchor.db'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # CSRF

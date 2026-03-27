@@ -84,7 +84,7 @@ class InitiativeSection(db.Model):
 
     subitems = db.relationship(
         'InitiativeSubitem',
-        backref='section',
+        back_populates='section',
         lazy='select',
         cascade='all, delete-orphan',
         order_by='InitiativeSubitem.order'
@@ -106,6 +106,7 @@ class InitiativeSubitem(db.Model):
         db.ForeignKey('initiative_sections.id'),
         nullable=False
     )
+    section = db.relationship('InitiativeSection', back_populates='subitems')
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)
     order = db.Column(db.Integer, default=0)
