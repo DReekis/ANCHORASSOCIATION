@@ -32,72 +32,74 @@
 {% set featured_subitem = active_subitems | first %}
 <section class="initiative-showcase initiative-reveal" id="{{ section.slug }}" data-theme="{{ section.theme or 'forest' }}">
     <div class="container">
-        <div class="initiative-copy initiative-copy--lead">
-            <div class="initiative-copy__heading">
-                <span class="initiative-copy__number">{{ '%02d'|format(section.order) }}</span>
-                <div>
-                    <h2 class="initiative-copy__title">{{ section.title }}</h2>
-                    {% if featured_subitem %}
-                    <p class="initiative-copy__project">{{ featured_subitem.title }}</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <div class="initiative-frame">
-            <div class="initiative-media">
-                <div class="initiative-media__stage">
-                    {% if section.media_url %}
-                    <img src="{{ section.media_url }}" alt="{{ section.media_alt or section.title }}" loading="lazy" decoding="async">
-                    {% else %}
-                    <div class="initiative-media__placeholder">{{ section.title }}</div>
-                    {% endif %}
-
-                    <div class="initiative-media__overlay">
-                        <span class="initiative-media__label">Programme Snapshot</span>
-                        <p>{{ section.summary }}</p>
+        <div class="initiative-shell">
+            <div class="initiative-copy initiative-copy--lead">
+                <div class="initiative-copy__heading">
+                    <span class="initiative-copy__number">{{ '%02d'|format(section.order) }}</span>
+                    <div>
+                        <h2 class="initiative-copy__title">{{ section.title }}</h2>
+                        {% if featured_subitem %}
+                        <p class="initiative-copy__project">{{ featured_subitem.title }}</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
 
-            <aside class="initiative-aside">
-                {% if section.cta_label and section.cta_url %}
-                <a href="{{ section.cta_url }}" class="initiative-action">{{ section.cta_label }}</a>
-                {% endif %}
+            <div class="initiative-frame">
+                <div class="initiative-media">
+                    <div class="initiative-media__stage">
+                        {% if section.media_url %}
+                        <img src="{{ section.media_url }}" alt="{{ section.media_alt or section.title }}" loading="lazy" decoding="async">
+                        {% else %}
+                        <div class="initiative-media__placeholder">{{ section.title }}</div>
+                        {% endif %}
 
-                <div class="initiative-impact">
-                    <span class="initiative-impact__label">{{ section.impact_label }}</span>
-                    <strong class="initiative-impact__value">{{ section.impact_value }}</strong>
+                        <div class="initiative-media__overlay">
+                            <span class="initiative-media__label">Programme Snapshot</span>
+                            <p>{{ section.summary }}</p>
+                        </div>
+                    </div>
                 </div>
 
-                {% if active_subitems %}
-                <div class="initiative-parts">
-                    <p class="initiative-parts__label">Part of this initiative</p>
-                    <div class="initiative-parts__chips">
+                <aside class="initiative-aside">
+                    {% if section.cta_label and section.cta_url %}
+                    <a href="{{ section.cta_url }}" class="initiative-action">{{ section.cta_label }}</a>
+                    {% endif %}
+
+                    <div class="initiative-impact">
+                        <span class="initiative-impact__label">{{ section.impact_label }}</span>
+                        <strong class="initiative-impact__value">{{ section.impact_value }}</strong>
+                    </div>
+
+                    {% if active_subitems %}
+                    <div class="initiative-parts">
+                        <p class="initiative-parts__label">Part of this initiative</p>
+                        <div class="initiative-parts__chips">
+                            {% for item in active_subitems %}
+                            <span>{{ item.title }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </aside>
+            </div>
+
+            <div class="initiative-copy__body initiative-copy__body--detail">
+                {% if section.description %}
+                <p>{{ section.description }}</p>
+                {% endif %}
+
+                {% if active_subitems|length > 1 %}
+                <div class="initiative-copy__nested">
+                    <h3>Included projects</h3>
+                    <ul>
                         {% for item in active_subitems %}
-                        <span>{{ item.title }}</span>
+                        <li>{{ item.title }}</li>
                         {% endfor %}
-                    </div>
+                    </ul>
                 </div>
                 {% endif %}
-            </aside>
-        </div>
-
-        <div class="initiative-copy__body initiative-copy__body--detail">
-            {% if section.description %}
-            <p>{{ section.description }}</p>
-            {% endif %}
-
-            {% if active_subitems|length > 1 %}
-            <div class="initiative-copy__nested">
-                <h3>Included projects</h3>
-                <ul>
-                    {% for item in active_subitems %}
-                    <li>{{ item.title }}</li>
-                    {% endfor %}
-                </ul>
             </div>
-            {% endif %}
         </div>
     </div>
 </section>

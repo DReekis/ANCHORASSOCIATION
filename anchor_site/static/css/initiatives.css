@@ -92,10 +92,22 @@
     background: #fcfbf7;
 }
 
+.initiative-shell {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(24px, 3vw, 40px);
+    border-radius: 38px;
+    background:
+        radial-gradient(circle at top right, var(--theme-soft, rgba(47, 107, 79, 0.12)), transparent 36%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.88) 100%);
+    border: 1px solid rgba(32, 52, 40, 0.08);
+    box-shadow: 0 26px 62px rgba(36, 44, 39, 0.08);
+}
+
 .initiative-frame {
     display: grid;
     grid-template-columns: minmax(0, 1.3fr) 280px;
-    gap: 28px;
+    gap: 30px;
     align-items: start;
 }
 
@@ -141,6 +153,7 @@
     padding: 18px 20px;
     border-radius: 24px;
     background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(32, 52, 40, 0.08);
     backdrop-filter: blur(16px);
     box-shadow: 0 16px 40px rgba(24, 35, 28, 0.12);
 }
@@ -172,7 +185,8 @@
 .initiative-impact,
 .initiative-parts {
     border-radius: 28px;
-    background: #ffffff;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.9) 100%);
     border: 1px solid rgba(32, 52, 40, 0.08);
     box-shadow: 0 18px 38px rgba(36, 44, 39, 0.08);
 }
@@ -212,8 +226,10 @@
 
 .initiative-impact__label {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.78rem;
     font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .initiative-impact__value {
@@ -238,21 +254,24 @@
 }
 
 .initiative-parts__chips {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 10px;
 }
 
 .initiative-parts__chips span {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     min-height: 40px;
     padding: 8px 14px;
-    border-radius: 999px;
-    background: rgba(47, 107, 79, 0.08);
+    border-radius: 18px;
+    background: var(--theme-soft, rgba(47, 107, 79, 0.08));
+    border: 1px solid rgba(32, 52, 40, 0.08);
     color: #203428;
     font-size: 0.92rem;
     font-weight: 600;
+    text-align: center;
 }
 
 .initiative-copy {
@@ -268,7 +287,7 @@
 
 .initiative-copy__heading {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     gap: 18px;
 }
 
@@ -278,9 +297,15 @@
 }
 
 .initiative-copy__project {
-    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    margin-top: 14px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: var(--theme-soft, rgba(47, 107, 79, 0.08));
     color: var(--primary);
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.02em;
 }
@@ -367,11 +392,26 @@
 }
 
 .initiative-collection-card {
+    position: relative;
+    overflow: hidden;
     padding: 28px;
     border-radius: 32px;
-    background: #ffffff;
+    background:
+        radial-gradient(circle at top right, var(--theme-soft, rgba(47, 107, 79, 0.1)), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 100%);
     border: 1px solid rgba(32, 52, 40, 0.08);
     box-shadow: 0 22px 50px rgba(36, 44, 39, 0.08);
+}
+
+.initiative-collection-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 28px;
+    width: min(120px, calc(100% - 56px));
+    height: 4px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--primary), transparent);
 }
 
 .initiative-collection-card__top {
@@ -433,26 +473,31 @@
 .initiative-showcase[data-theme="forest"],
 .initiative-collection-card[data-theme="forest"] {
     --primary: #2f6b4f;
+    --theme-soft: rgba(47, 107, 79, 0.12);
 }
 
 .initiative-showcase[data-theme="clay"],
 .initiative-collection-card[data-theme="clay"] {
     --primary: #8a5233;
+    --theme-soft: rgba(138, 82, 51, 0.13);
 }
 
 .initiative-showcase[data-theme="sage"],
 .initiative-collection-card[data-theme="sage"] {
     --primary: #4f6d5d;
+    --theme-soft: rgba(79, 109, 93, 0.13);
 }
 
 .initiative-showcase[data-theme="sunrise"],
 .initiative-collection-card[data-theme="sunrise"] {
     --primary: #b15e27;
+    --theme-soft: rgba(177, 94, 39, 0.13);
 }
 
 .initiative-showcase[data-theme="ink"],
 .initiative-collection-card[data-theme="ink"] {
     --primary: #314357;
+    --theme-soft: rgba(49, 67, 87, 0.14);
 }
 
 @media (max-width: 1024px) {
@@ -462,8 +507,13 @@
 
     .initiative-aside {
         position: static;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         align-items: stretch;
+    }
+
+    .initiative-action,
+    .initiative-parts {
+        grid-column: 1 / -1;
     }
 
     .initiative-copy__body {
@@ -495,17 +545,41 @@
         padding: 64px 0;
     }
 
-    .initiative-media__stage,
+    .initiative-shell {
+        padding: 22px;
+    }
+
+    .initiative-media__stage {
+        display: grid;
+        gap: 14px;
+        overflow: visible;
+        min-height: auto;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
+
     .initiative-media__stage img,
     .initiative-media__placeholder {
         min-height: 300px;
+        border-radius: 30px;
+        border: 1px solid rgba(32, 52, 40, 0.08);
+        box-shadow: 0 24px 56px rgba(25, 39, 30, 0.14);
     }
 
     .initiative-media__overlay {
-        right: 16px;
-        bottom: 16px;
-        left: 16px;
+        position: static;
+        right: auto;
+        bottom: auto;
+        left: auto;
         max-width: none;
+        padding: 18px 18px 20px;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: none;
+    }
+
+    .initiative-aside {
+        gap: 14px;
     }
 
     .initiative-aside {
@@ -522,7 +596,46 @@
         margin-bottom: 18px;
     }
 
+    .initiative-copy__project {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .initiative-impact {
+        min-height: 118px;
+    }
+
     .initiative-collection-card {
         padding: 24px 20px;
+    }
+}
+
+@media (max-width: 560px) {
+    .initiative-shell {
+        border-radius: 30px;
+        padding: 20px 16px;
+    }
+
+    .initiative-media__stage img,
+    .initiative-media__placeholder {
+        min-height: 250px;
+        border-radius: 26px;
+    }
+
+    .initiative-media__overlay {
+        border-radius: 24px;
+    }
+
+    .initiative-action {
+        min-height: 78px;
+    }
+
+    .initiative-impact__value {
+        font-size: clamp(1.8rem, 10vw, 2.4rem);
+    }
+
+    .initiative-parts__chips {
+        grid-template-columns: 1fr;
     }
 }

@@ -1,9 +1,9 @@
-from flask import request, redirect, url_for, session
-from flask_admin import Admin, AdminIndexView, expose
+from flask import request, redirect, url_for, session, flash
+from flask_admin import Admin, AdminIndexView, expose, BaseView
 from flask_admin.contrib.sqla import ModelView
-from wtforms import FileField, PasswordField, ValidationError
+from flask_wtf import FlaskForm
+from wtforms import FileField, PasswordField, ValidationError, SelectField, MultipleFileField, SubmitField
 import cloudinary.uploader
-
 try:
     from .models import (
         HeroSlide,
@@ -202,6 +202,51 @@ class AdminUserView(SecureModelView):
             model.set_password(form.new_password.data)
 
 
+class InitiativeGalleryForm(FlaskForm):
+    initiative = SelectField('Initiative Folder', choices=[])
+    photos = MultipleFileField('Select Photos')
+    submit = SubmitField('Upload Bulk Photos')
+
+
+class GalleryUploadView(AuthMixin, BaseView):
+    @expose('/', methods=['GET', 'POST'])
+    def index(self):
+        if not self._is_authenticated():
+            return redirect(url_for('admin_login', next=request.url))
+            
+        form = InitiativeGalleryForm()
+        sections = InitiativeSection.query.order_by(InitiativeSection.title).all()
+        form.initiative.choices = [(s.slug, s.title) for s in sections]
+        
+        if request.method == 'POST' and form.validate_on_submit():
+            uploaded_files = request.files.getlist(form.photos.name)
+            success_count = 0
+            initiative_slug = form.initiative.data
+            folder_path = f"anchor/initiatives/{initiative_slug}"
+            
+            for file in uploaded_files:
+                if file and file.filename:
+                    try:
+                        cloudinary.uploader.upload(
+                            file,
+                            folder=folder_path,
+                            resource_type='image',
+                            use_filename=True,
+                            unique_filename=True
+                        )
+                        success_count += 1
+                    except Exception as exc:
+                        flash(f'Failed to upload {file.filename}: {exc}', 'error')
+                        
+            if success_count > 0:
+                choice_label = dict(form.initiative.choices).get(initiative_slug, initiative_slug)
+                flash(f'Successfully uploaded {success_count} photos to {choice_label}.', 'success')
+                
+            return redirect(url_for('.index'))
+            
+        return self.render('admin/gallery_upload.html', form=form)
+
+
 def setup_admin(app, db):
     """Initialize Flask-Admin with secure model views."""
     admin = Admin(
@@ -215,3 +260,4 @@ def setup_admin(app, db):
     admin.add_view(InitiativeSectionView(InitiativeSection, db.session, name='Initiatives'))
     admin.add_view(InitiativeSubitemView(InitiativeSubitem, db.session, name='Initiative Items'))
     admin.add_view(AdminUserView(AdminUser, db.session, name='Admins'))
+    admin.add_view(GalleryUploadView(name='Bulk Photo Upload', endpoint='bulk_upload'))

@@ -11,6 +11,16 @@ console.log('Anchor Association - Site loaded');
     const dropdownTriggers = nav.querySelectorAll('[data-dropdown-trigger]');
     const dropdownItems = nav.querySelectorAll('.dropdown-item');
 
+    const setNavExpanded = (expanded) => {
+        nav.classList.toggle('is-expanded', expanded);
+        navLinks?.classList.toggle('active', expanded);
+        navToggle?.setAttribute('aria-expanded', String(expanded));
+
+        if (!expanded) {
+            closeDropdowns();
+        }
+    };
+
     const closeDropdowns = () => {
         nav.querySelectorAll('.nav-glass__dropdown-wrapper').forEach((wrapper) => {
             wrapper.classList.remove('is-open');
@@ -23,20 +33,11 @@ console.log('Anchor Association - Site loaded');
 
     navToggle?.addEventListener('click', () => {
         const expanded = navToggle.getAttribute('aria-expanded') === 'true';
-        navToggle.setAttribute('aria-expanded', String(!expanded));
-        navLinks?.classList.toggle('active');
-
-        if (expanded) {
-            closeDropdowns();
-        }
+        setNavExpanded(!expanded);
     });
 
     dropdownTriggers.forEach((trigger) => {
         trigger.addEventListener('click', (event) => {
-            if (window.innerWidth > 1080) {
-                event.preventDefault();
-            }
-
             const wrapper = trigger.closest('.nav-glass__dropdown-wrapper');
             if (!wrapper) {
                 return;
@@ -54,23 +55,26 @@ console.log('Anchor Association - Site loaded');
 
     dropdownItems.forEach((item) => {
         item.addEventListener('click', () => {
-            closeDropdowns();
-            navLinks?.classList.remove('active');
-            navToggle?.setAttribute('aria-expanded', 'false');
+            setNavExpanded(false);
         });
     });
 
     document.addEventListener('click', (event) => {
         if (!nav.contains(event.target)) {
-            closeDropdowns();
+            setNavExpanded(false);
         }
     });
 
     window.addEventListener('resize', () => {
         closeDropdowns();
         if (window.innerWidth > 1080) {
-            navLinks?.classList.remove('active');
-            navToggle?.setAttribute('aria-expanded', 'false');
+            setNavExpanded(false);
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            setNavExpanded(false);
         }
     });
 })();
