@@ -177,10 +177,18 @@
             if (slides.length > 1) {
                 let currentIndex = 0;
                 setInterval(() => {
-                    slides[currentIndex].classList.remove('is-active');
+                    const prevIndex = currentIndex;
+                    slides[prevIndex].classList.remove('is-active');
+                    slides[prevIndex].classList.add('was-active');
+                    
                     currentIndex = (currentIndex + 1) % slides.length;
                     slides[currentIndex].classList.add('is-active');
-                }, 3500);
+                    
+                    // Remove the previous slide after the new one has fully faded in
+                    setTimeout(() => {
+                        slides[prevIndex].classList.remove('was-active');
+                    }, 1200);
+                }, 4000);
             }
         });
     });
