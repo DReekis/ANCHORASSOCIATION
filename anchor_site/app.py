@@ -575,6 +575,16 @@ def initiatives():
         .order_by(InitiativeSection.order.asc(), InitiativeSection.id.asc())
         .all()
     )
+    
+    # Pre-fetch dynamic images from Cloudinary for all featured sections
+    initiative_images = {}
+    for section in sections:
+        if section.display_style == 'feature':
+            folder_path = f'anchor/initiatives/{section.slug}'
+            images = get_cloudinary_folder_images(folder_path, max_results=5)
+            if images:
+                initiative_images[section.slug] = images
+            
     featured_sections = [section for section in sections if section.display_style == 'feature']
     list_sections = [section for section in sections if section.display_style == 'list']
     return render_template(
@@ -582,6 +592,7 @@ def initiatives():
         sections=sections,
         featured_sections=featured_sections,
         list_sections=list_sections,
+        initiative_images=initiative_images,
     )
 
 

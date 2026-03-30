@@ -48,7 +48,14 @@
             <div class="initiative-frame">
                 <div class="initiative-media">
                     <div class="initiative-media__stage">
-                        {% if section.media_url %}
+                        {% set dynamic_images = initiative_images.get(section.slug) %}
+                        {% if dynamic_images %}
+                        <div class="initiative-media__slider">
+                            {% for img in dynamic_images %}
+                            <img src="{{ img.url }}" alt="{{ section.media_alt or section.title }}" class="initiative-media__slide {% if loop.first %}is-active{% endif %}" loading="lazy" decoding="async">
+                            {% endfor %}
+                        </div>
+                        {% elif section.media_url %}
                         <img src="{{ section.media_url }}" alt="{{ section.media_alt or section.title }}" loading="lazy" decoding="async">
                         {% else %}
                         <div class="initiative-media__placeholder">{{ section.title }}</div>
@@ -162,6 +169,20 @@
         });
 
         elements.forEach((element) => observer.observe(element));
+
+        // Slider logic for dynamic items
+        const sliders = document.querySelectorAll('.initiative-media__slider');
+        sliders.forEach((slider) => {
+            const slides = slider.querySelectorAll('.initiative-media__slide');
+            if (slides.length > 1) {
+                let currentIndex = 0;
+                setInterval(() => {
+                    slides[currentIndex].classList.remove('is-active');
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    slides[currentIndex].classList.add('is-active');
+                }, 3500);
+            }
+        });
     });
 </script>
 {% endblock %}
