@@ -22,41 +22,46 @@
 </section>
 
 
-<!-- SECTION 2: VIDEO MAP -->
-<section class="film-map">
-    <div class="container">
-        <div class="map-container">
-            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80"
-                alt="Map of West Bengal showing Anchor Association's impact areas" class="map-container__image">
-            <div class="map-container__overlay">
-                <button class="map-container__play-btn" aria-label="Watch the film" data-open-modal>
-                    <svg class="map-container__play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M8 5v14l11-7z" />
-                    </svg>
-                    <span>Watch the film</span>
+<!-- SECTION 2: HERO SLIDESHOW -->
+<section class="hero-slideshow section" id="featured-gallery">
+    <div class="hero-slideshow__container">
+        {% if hero_slides %}
+            {% for slide in hero_slides %}
+            <div class="hero-slide {% if loop.first %}is-active{% endif %}">
+                <!-- Blurred background layer to perfectly handle ANY image ratio -->
+                <div class="hero-slide__backdrop" style="background-image: url('{{ slide.image_url }}')"></div>
+                <!-- Crisp foreground layer -->
+                <img src="{{ slide.image_url }}" alt="{{ slide.title }}" class="hero-slide__image" loading="{% if loop.first %}eager{% else %}lazy{% endif %}" decoding="async">
+                {% if slide.title or slide.subtitle %}
+                <div class="hero-slide__content">
+                    <div class="hero-slide__content-inner">
+                        {% if slide.title %}<h2 class="hero-slide__title">{{ slide.title }}</h2>{% endif %}
+                        {% if slide.subtitle %}<p class="hero-slide__subtitle">{{ slide.subtitle }}</p>{% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="hero-slideshow__controls">
+                <button class="hero-slideshow__btn hero-slideshow__btn--prev" aria-label="Previous slide">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="hero-slideshow__btn hero-slideshow__btn--next" aria-label="Next slide">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
             </div>
-        </div>
+            <div class="hero-slideshow__indicators">
+                {% for slide in hero_slides %}
+                <button class="hero-slideshow__dot {% if loop.first %}is-active{% endif %}" aria-label="Go to slide {{ loop.index }}"></button>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="hero-slideshow__empty">
+                <p>No featured slides available. Add some in the Admin Panel!</p>
+            </div>
+        {% endif %}
     </div>
 </section>
-
-<!-- Video Modal -->
-<dialog class="video-modal" id="videoModal">
-    <div class="video-modal__content">
-        <button class="video-modal__close" aria-label="Close video" data-close-modal>
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path
-                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-            </svg>
-        </button>
-        <div class="video-modal__player">
-            <div class="video-modal__placeholder">
-                <p>Video Player Placeholder</p>
-                <p class="text-muted">Add your video embed URL here</p>
-            </div>
-        </div>
-    </div>
-</dialog>
 
 
 <!-- SECTION 3: THE MISSION -->
@@ -254,33 +259,72 @@
 
 {% block scripts %}
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Hero Slideshow Logic
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.hero-slideshow__dot');
+        const nextBtn = document.querySelector('.hero-slideshow__btn--next');
+        const prevBtn = document.querySelector('.hero-slideshow__btn--prev');
+        
+        if (slides.length > 1) {
+            let currentIndex = 0;
+            let slideInterval;
 
-    const modal = document.getElementById('videoModal');
-    const openBtn = document.querySelector('[data-open-modal]');
-    const closeBtn = document.querySelector('[data-close-modal]');
+            const goToSlide = (index) => {
+                const prevIndex = currentIndex;
+                currentIndex = (index + slides.length) % slides.length;
+                
+                slides[prevIndex].classList.remove('is-active');
+                slides[prevIndex].classList.add('was-active');
+                if (dots[prevIndex]) dots[prevIndex].classList.remove('is-active');
+                
+                slides[currentIndex].classList.add('is-active');
+                if (dots[currentIndex]) dots[currentIndex].classList.add('is-active');
+                
+                setTimeout(() => {
+                    slides[prevIndex].classList.remove('was-active');
+                }, 1000); // Wait for CSS transition
+            };
 
-    openBtn?.addEventListener('click', () => {
-        modal.showModal();
-        document.body.style.overflow = 'hidden';
-    });
+            const nextSlide = () => goToSlide(currentIndex + 1);
+            const prevSlide = () => goToSlide(currentIndex - 1);
 
-    closeBtn?.addEventListener('click', () => {
-        modal.close();
-        document.body.style.overflow = '';
-    });
+            const startAutoplay = () => {
+                stopAutoplay();
+                slideInterval = setInterval(nextSlide, 5000);
+            };
 
-    modal?.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.close();
-            document.body.style.overflow = '';
+            const stopAutoplay = () => {
+                if (slideInterval) clearInterval(slideInterval);
+            };
+
+            nextBtn?.addEventListener('click', () => {
+                nextSlide();
+                startAutoplay(); // Reset timer
+            });
+
+            prevBtn?.addEventListener('click', () => {
+                prevSlide();
+                startAutoplay(); // Reset timer
+            });
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    if (index !== currentIndex) {
+                        goToSlide(index);
+                        startAutoplay();
+                    }
+                });
+            });
+
+            startAutoplay();
+            
+            // Pause on hover
+            const container = document.querySelector('.hero-slideshow__container');
+            container?.addEventListener('mouseenter', stopAutoplay);
+            container?.addEventListener('mouseleave', startAutoplay);
         }
     });
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal?.open) {
-            modal.close();
-            document.body.style.overflow = '';
-        }
-    });
 </script>
 {% endblock %}

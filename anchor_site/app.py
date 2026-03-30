@@ -11,10 +11,10 @@ import cloudinary.api
 import razorpay
 
 try:
-    from .models import db, AdminUser, InitiativeSection, InitiativeSubitem
+    from .models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide
     from .admin_panel import setup_admin
 except ImportError:
-    from models import db, AdminUser, InitiativeSection, InitiativeSubitem
+    from models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide
     from admin_panel import setup_admin
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -554,7 +554,11 @@ def home():
         )
     except Exception as e:
         app.logger.warning('Failed to load home live-gallery images from Cloudinary: %s', e)
-    return render_template('index.html', home_slides=home_slides)
+        
+    # Fetch Hero Slides from DB
+    hero_slides_db = HeroSlide.query.filter_by(is_active=True).order_by(HeroSlide.order.asc()).all()
+        
+    return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides_db)
 
 
 @app.route('/impacts')
