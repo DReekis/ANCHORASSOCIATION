@@ -18,7 +18,7 @@
         rel="stylesheet">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}?v={{ range(1, 100000) | random }}">
     {% block styles %}{% endblock %}
 </head>
 
@@ -26,22 +26,86 @@
     <!-- Noise Texture Overlay -->
     <div class="noise-overlay"></div>
 
-    <!-- Glass Navigation -->
-    <nav class="nav-glass" role="navigation" aria-label="Main navigation">
-        <a href="{{ url_for('home') }}" class="nav-glass__logo">Anchor</a>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+    <!-- Off-Canvas Sidebar -->
+    <aside class="side-menu" id="sideMenu">
+        <div class="side-menu__header">
+            <a href="{{ url_for('home') }}" class="side-menu__logo">Anchor</a>
+            <button class="side-menu__close" id="sideMenuClose" aria-label="Close menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="side-menu__content">
+            <a href="{{ url_for('home') }}#about-us" class="side-menu__link">About Us</a>
+            <a href="{{ url_for('initiatives') }}" class="side-menu__link">Initiatives</a>
+            
+            <div class="side-menu__accordion">
+                <button class="side-menu__accordion-btn" aria-expanded="false">
+                    <span>Impacts</span>
+                    <svg class="accordion-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="side-menu__accordion-content">
+                    <div class="side-menu__accordion-content-inner">
+                        <a href="{{ url_for('impacts') }}#impacts-over-the-years" class="side-menu__sublink">Impacts Over the Years</a>
+                        <a href="{{ url_for('impacts') }}#success-stories" class="side-menu__sublink">Success Stories</a>
+                        <a href="{{ url_for('impacts') }}#awards-recognition" class="side-menu__sublink">Awards &amp; Recognitions</a>
+                        <a href="{{ url_for('impacts') }}#areas-communities" class="side-menu__sublink">Areas &amp; Communities</a>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{{ url_for('gallery') }}" class="side-menu__link">Gallery</a>
+            
+            <div class="side-menu__accordion">
+                <button class="side-menu__accordion-btn" aria-expanded="false">
+                    <span>Join With Us</span>
+                    <svg class="accordion-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="side-menu__accordion-content">
+                    <div class="side-menu__accordion-content-inner">
+                        <a href="{{ url_for('donate') }}" class="side-menu__sublink">As a Donor</a>
+                        <a href="{{ url_for('join_member') }}" class="side-menu__sublink">As a Member</a>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{{ url_for('donate') }}" class="side-menu__link side-menu__link--accent">Donate</a>
+            <a href="{{ url_for('home') }}#contact" class="side-menu__link">Contact Us</a>
+        </div>
+        <div class="side-menu__footer">
+            <p>Follow Us</p>
+            <div class="side-menu__socials">
+                <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.597 1.323-1.324V1.325C24 .597 23.403 0 22.675 0z"/></svg></a>
+                <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
+                <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+                <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Glass Navigation (Desktop) -->
+    <nav class="nav-glass desktop-only" role="navigation" aria-label="Main navigation">
         <button class="nav-glass__hamburger" type="button" aria-label="Toggle menu" aria-expanded="false" data-nav-toggle>
             <span></span>
             <span></span>
             <span></span>
         </button>
 
+        <a href="{{ url_for('home') }}" class="nav-glass__logo">Anchor</a>
+
+        <div class="nav-glass__mobile-actions">
+            <a href="{{ url_for('donate') }}" class="btn-donate-mobile">Donate</a>
+        </div>
+
         <div class="nav-glass__links" id="site-navigation">
             <a href="{{ url_for('home') }}" class="nav-glass__link {% if request.path == '/' %}active{% endif %}">Home</a>
 
-            <a href="{{ url_for('home') }}#about-us" class="nav-glass__link">About US</a>
+            <a href="{{ url_for('home') }}#about-us" class="nav-glass__link mobile-visible">About Us</a>
 
-            <a href="{{ url_for('initiatives') }}" class="nav-glass__link {% if request.path.startswith('/initiatives') %}active{% endif %}">Initiatives</a>
+            <a href="{{ url_for('initiatives') }}" class="nav-glass__link mobile-visible {% if request.path.startswith('/initiatives') %}active{% endif %}">Initiatives</a>
 
             <div class="nav-glass__dropdown-wrapper {% if request.path.startswith('/impacts') %}is-active{% endif %}">
                 <div class="nav-glass__compound">
@@ -84,6 +148,65 @@
             </div>
         </div>
     </nav>
+
+    <div class="nav-stack" id="mobileNavStack" data-nav-state="expanded">
+        <!-- Glass Mobile Navigation -->
+        <nav class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
+            <div class="mobile-nav__left">
+                <button class="mobile-nav__hamburger" type="button" aria-label="Toggle menu" data-nav-toggle>
+                    <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <a href="{{ url_for('home') }}" class="mobile-nav__logo">Anchor</a>
+            </div>
+
+            <div class="mobile-nav__actions">
+                <div class="mobile-nav__icons">
+                    <a href="{{ url_for('home') }}#about-us" class="expandable-icon" id="icon-about" aria-label="About Us">
+                        <span class="e-icon-btn" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </span>
+                        <span class="e-icon-text">About Us</span>
+                    </a>
+                    <a href="{{ url_for('initiatives') }}" class="expandable-icon" id="icon-initiatives" aria-label="Initiatives">
+                        <span class="e-icon-btn" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                        </span>
+                        <span class="e-icon-text">Initiatives</span>
+                    </a>
+                </div>
+
+                <a href="{{ url_for('donate') }}" class="mobile-nav__donate">Donate</a>
+            </div>
+        </nav>
+
+        <!-- Accreditation Bar (WOW Sub-Header) -->
+        <div class="accreditation-bar" id="accreditationBar" aria-label="Anchor accreditation details">
+            <div class="accreditation-bar__surface">
+                <div class="accreditation-bar__body">
+                    <div class="accreditation-bar__brand">
+                        <p class="accreditation-bar__title">ANCHOR</p>
+                        <p class="accreditation-bar__subtitle">
+                            Assemblage of Notable &amp; Charitable Help Over Resurrection
+                        </p>
+                    </div>
+                    <div class="accreditation-bar__details">
+                        <div class="accreditation-bar__badges">
+                            <span class="wow-badge iso-badge">ISO 9001:2015</span>
+                            <span class="wow-badge msme-badge">MSME REGISTERED</span>
+                        </div>
+                        <p class="wow-reg">Reg. No. S/2L/33948 · Est. 2015</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="nav-stack-spacer" id="mobileNavStackSpacer" aria-hidden="true"></div>
+
+    <!-- Floating Donate Button -->
+    <a href="{{ url_for('donate') }}" class="floating-donate" aria-label="Donate">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        Donate
+    </a>
 
     <!-- Main Content -->
     <main id="main-content">
@@ -134,6 +257,46 @@
             requestAnimationFrame(raf);
         }
         requestAnimationFrame(raf);
+
+        // Sidebar logic
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sideMenu = document.getElementById('sideMenu');
+        const sideMenuClose = document.getElementById('sideMenuClose');
+        const hamburgerBtns = document.querySelectorAll('.nav-glass__hamburger, .mobile-nav__hamburger');
+
+        function toggleSidebar() {
+            if (!sideMenu) return;
+            const isActive = sideMenu.classList.contains('active');
+            if (isActive) {
+                sideMenu.classList.remove('active');
+                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                sideMenu.classList.add('active');
+                if (sidebarOverlay) sidebarOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        hamburgerBtns.forEach(btn => btn.addEventListener('click', toggleSidebar));
+        if (sideMenuClose) sideMenuClose.addEventListener('click', toggleSidebar);
+        if (sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Accordion logic
+        const accordions = document.querySelectorAll('.side-menu__accordion-btn');
+        accordions.forEach(acc => {
+            acc.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                this.setAttribute('aria-expanded', !isExpanded);
+                
+                const content = this.nextElementSibling;
+                if (!isExpanded) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                } else {
+                    content.style.maxHeight = null;
+                }
+            });
+        });
     </script>
 </body>
 

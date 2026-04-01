@@ -21,7 +21,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 PACKAGE_STATIC_DIR = os.path.join(BASE_DIR, 'static')
-PUBLIC_STATIC_DIR = os.path.join(PROJECT_DIR, 'public', 'static')
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 load_dotenv(os.path.join(PROJECT_DIR, '.env'))
 
@@ -29,9 +28,6 @@ app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=None)
 
 @app.route('/static/<path:filename>', endpoint='static')
 def static_files(filename):
-    public_candidate = os.path.join(PUBLIC_STATIC_DIR, filename)
-    if os.path.exists(public_candidate):
-        return send_from_directory(PUBLIC_STATIC_DIR, filename)
     return send_from_directory(PACKAGE_STATIC_DIR, filename)
 
 # Security Config
