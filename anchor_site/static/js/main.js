@@ -6,17 +6,108 @@
 
     const navToggle = nav.querySelector('[data-nav-toggle]');
     const navLinks = nav.querySelector('.nav-glass__links');
-    const dropdownTriggers = nav.querySelectorAll('[data-dropdown-trigger]');
-    const dropdownItems = nav.querySelectorAll('.dropdown-item');
+    const dropdownWrappers = Array.from(nav.querySelectorAll('.nav-glass__dropdown-wrapper'));
+    const dropdownTriggers = dropdownWrappers
+        .map((wrapper) => wrapper.querySelector('[data-dropdown-trigger]'))
+        .filter(Boolean);
+    const dropdownItems = nav.querySelectorAll('a.dropdown-item');
+    const finePointerDesktop = window.matchMedia('(min-width: 1081px) and (hover: hover) and (pointer: fine)');
+    const openTimers = new WeakMap();
+    const closeTimers = new WeakMap();
+
+    const clearScheduled = (wrapper) => {
+        const openTimer = openTimers.get(wrapper);
+        if (openTimer) {
+            window.clearTimeout(openTimer);
+            openTimers.delete(wrapper);
+        }
+
+        const closeTimer = closeTimers.get(wrapper);
+        if (closeTimer) {
+            window.clearTimeout(closeTimer);
+            closeTimers.delete(wrapper);
+        }
+    };
+
+    const getTrigger = (wrapper) => wrapper.querySelector('[data-dropdown-trigger]');
+
+    const getLineage = (wrapper) => {
+        const lineage = [];
+        let current = wrapper;
+
+        while (current && current.classList.contains('nav-glass__dropdown-wrapper')) {
+            lineage.push(current);
+            current = current.parentElement?.closest('.nav-glass__dropdown-wrapper') || null;
+        }
+
+        return lineage;
+    };
 
     const closeDropdowns = () => {
-        nav.querySelectorAll('.nav-glass__dropdown-wrapper').forEach((wrapper) => {
+        dropdownWrappers.forEach((wrapper) => {
+            clearScheduled(wrapper);
             wrapper.classList.remove('is-open');
-            const trigger = wrapper.querySelector('[data-dropdown-trigger]');
+            const trigger = getTrigger(wrapper);
             if (trigger) {
                 trigger.setAttribute('aria-expanded', 'false');
             }
         });
+    };
+
+    const closeWrapper = (wrapper) => {
+        clearScheduled(wrapper);
+        wrapper.classList.remove('is-open');
+
+        const trigger = getTrigger(wrapper);
+        if (trigger) {
+            trigger.setAttribute('aria-expanded', 'false');
+        }
+
+        dropdownWrappers.forEach((candidate) => {
+            if (candidate !== wrapper && wrapper.contains(candidate)) {
+                clearScheduled(candidate);
+                candidate.classList.remove('is-open');
+                const nestedTrigger = getTrigger(candidate);
+                if (nestedTrigger) {
+                    nestedTrigger.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+    };
+
+    const openWrapper = (wrapper) => {
+        const lineage = new Set(getLineage(wrapper));
+
+        dropdownWrappers.forEach((candidate) => {
+            if (!lineage.has(candidate)) {
+                closeWrapper(candidate);
+            }
+        });
+
+        getLineage(wrapper).reverse().forEach((candidate) => {
+            clearScheduled(candidate);
+            candidate.classList.add('is-open');
+            const trigger = getTrigger(candidate);
+            if (trigger) {
+                trigger.setAttribute('aria-expanded', 'true');
+            }
+        });
+    };
+
+    const scheduleOpen = (wrapper, delay = 70) => {
+        clearScheduled(wrapper);
+        openTimers.set(wrapper, window.setTimeout(() => {
+            openTimers.delete(wrapper);
+            openWrapper(wrapper);
+        }, delay));
+    };
+
+    const scheduleClose = (wrapper, delay = 140) => {
+        clearScheduled(wrapper);
+        closeTimers.set(wrapper, window.setTimeout(() => {
+            closeTimers.delete(wrapper);
+            closeWrapper(wrapper);
+        }, delay));
     };
 
     const setNavExpanded = (expanded) => {
@@ -35,19 +126,55 @@
     });
 
     dropdownTriggers.forEach((trigger) => {
-        trigger.addEventListener('click', () => {
+        trigger.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
             const wrapper = trigger.closest('.nav-glass__dropdown-wrapper');
             if (!wrapper) {
                 return;
             }
 
             const isOpen = wrapper.classList.contains('is-open');
-            closeDropdowns();
-
             if (!isOpen) {
-                wrapper.classList.add('is-open');
-                trigger.setAttribute('aria-expanded', 'true');
+                openWrapper(wrapper);
+                return;
             }
+
+            closeWrapper(wrapper);
+        });
+
+        const wrapper = trigger.closest('.nav-glass__dropdown-wrapper');
+        if (!wrapper) {
+            return;
+        }
+
+        wrapper.addEventListener('focusin', () => {
+            openWrapper(wrapper);
+        });
+
+        wrapper.addEventListener('focusout', () => {
+            window.setTimeout(() => {
+                if (!wrapper.contains(document.activeElement)) {
+                    closeWrapper(wrapper);
+                }
+            }, 0);
+        });
+
+        wrapper.addEventListener('pointerenter', () => {
+            if (!finePointerDesktop.matches) {
+                return;
+            }
+
+            scheduleOpen(wrapper, wrapper.classList.contains('nav-glass__dropdown-wrapper--nested') ? 85 : 60);
+        });
+
+        wrapper.addEventListener('pointerleave', () => {
+            if (!finePointerDesktop.matches) {
+                return;
+            }
+
+            scheduleClose(wrapper, wrapper.classList.contains('nav-glass__dropdown-wrapper--nested') ? 150 : 130);
         });
     });
 
