@@ -110,9 +110,31 @@ class HeroSlideView(CloudinaryUploadView):
     upload_folder = 'anchor/admin/hero-slides'
     upload_required = True
     column_list = ['id', 'title', 'subtitle', 'order', 'is_active']
+    column_labels = {
+        'upload_file': 'Browse File',
+    }
     column_sortable_list = ['order', 'title', 'is_active']
     column_default_sort = 'order'
     form_columns = ['upload_file', 'title', 'subtitle', 'order', 'is_active']
+    form_args = {
+        'title': {
+            'description': 'Keep headlines concise. The hero clamps long titles to two lines on the site.',
+            'render_kw': {
+                'maxlength': 120,
+                'placeholder': 'Short headline for the slide',
+            },
+        },
+        'subtitle': {
+            'description': 'Optional supporting copy. Best around 120-160 characters. Recommended hero artwork ratio: 16:9.',
+            'render_kw': {
+                'maxlength': 220,
+                'placeholder': 'Optional supporting copy for the slide',
+            },
+        },
+        'order': {
+            'description': 'Lower numbers appear first in the slideshow.',
+        },
+    }
 
 
 class GalleryImageView(CloudinaryUploadView):

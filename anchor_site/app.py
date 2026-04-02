@@ -1,7 +1,8 @@
 
 import os
+import re
 from datetime import datetime
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urlsplit, urlunsplit
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify, send_from_directory, session, redirect, url_for
 from flask_talisman import Talisman
@@ -141,6 +142,17 @@ def _parse_positive_int(raw_value, default_value):
 
 LIVE_GALLERY_FOLDER = os.getenv('CLOUDINARY_LIVE_GALLERY_FOLDER', 'anchor/live-gallery')
 LIVE_GALLERY_LIMIT = _parse_positive_int(os.getenv('CLOUDINARY_LIVE_GALLERY_LIMIT'), 12)
+HERO_SLIDE_SRCSET_WIDTHS = (640, 960, 1280, 1600, 1920)
+_CLOUDINARY_TRANSFORM_MARKER = '/upload/'
+_HERO_OBJECT_POSITION_PATTERN = re.compile(
+    r'^\s*(?:'
+    r'(?:left|center|right|\d{1,3}(?:\.\d+)?%)'
+    r'(?:\s+(?:top|center|bottom|\d{1,3}(?:\.\d+)?%))?'
+    r'|'
+    r'(?:top|center|bottom)(?:\s+(?:left|center|right|\d{1,3}(?:\.\d+)?%))?'
+    r')\s*$',
+    re.IGNORECASE,
+)
 
 
 def should_bootstrap_database():
@@ -151,6 +163,103 @@ def should_bootstrap_database():
 
 def _donation_link(purpose):
     return f"/donate?purpose={quote_plus(purpose)}"
+
+
+def _is_cloudinary_image_url(image_url):
+    if not image_url:
+        return False
+
+    parsed = urlsplit(str(image_url))
+    return parsed.netloc.endswith('res.cloudinary.com') and _CLOUDINARY_TRANSFORM_MARKER in parsed.path
+
+
+def _cloudinary_responsive_url(image_url, width):
+    if not _is_cloudinary_image_url(image_url):
+        return image_url
+
+    parsed = urlsplit(str(image_url))
+    path_prefix, path_suffix = parsed.path.split(_CLOUDINARY_TRANSFORM_MARKER, 1)
+    first_segment, _, remainder = path_suffix.partition('/')
+    transform = f'c_limit,w_{int(width)},q_auto,f_auto,dpr_auto,fl_progressive'
+
+    if first_segment.startswith('v') and first_segment[1:].isdigit():
+        new_path = f'{path_prefix}{_CLOUDINARY_TRANSFORM_MARKER}{transform}/{path_suffix}'
+    elif remainder:
+        new_path = f'{path_prefix}{_CLOUDINARY_TRANSFORM_MARKER}{first_segment},{transform}/{remainder}'
+    else:
+        new_path = f'{path_prefix}{_CLOUDINARY_TRANSFORM_MARKER}{transform}/{path_suffix}'
+
+    return urlunsplit((parsed.scheme, parsed.netloc, new_path, parsed.query, parsed.fragment))
+
+
+def _build_cloudinary_srcset(image_url, widths):
+    if not _is_cloudinary_image_url(image_url):
+        return ''
+
+    return ', '.join(
+        f'{_cloudinary_responsive_url(image_url, width)} {int(width)}w'
+        for width in widths
+    )
+
+
+def _normalize_percent(value, fallback=50.0):
+    try:
+        return max(0.0, min(float(value), 100.0))
+    except (TypeError, ValueError):
+        return fallback
+
+
+def _normalize_object_position(raw_value):
+    value = ' '.join(str(raw_value or '').strip().split())
+    if not value or not _HERO_OBJECT_POSITION_PATTERN.fullmatch(value):
+        return '50% 50%'
+
+    normalized_tokens = []
+    for token in value.split():
+        lowered = token.lower()
+        if lowered in {'left', 'center', 'right', 'top', 'bottom'}:
+            normalized_tokens.append(lowered)
+        else:
+            normalized_tokens.append(f'{_normalize_percent(token.rstrip("%")):g}%')
+
+    if len(normalized_tokens) == 1:
+        if normalized_tokens[0] in {'top', 'center', 'bottom'}:
+            normalized_tokens.insert(0, '50%')
+        else:
+            normalized_tokens.append('50%')
+
+    return ' '.join(normalized_tokens[:2])
+
+
+def _hero_slide_object_position(slide):
+    explicit_position = (
+        getattr(slide, 'object_position', None)
+        or getattr(slide, 'focal_position', None)
+    )
+    if explicit_position:
+        return _normalize_object_position(explicit_position)
+
+    focal_x = getattr(slide, 'focal_x', None)
+    focal_y = getattr(slide, 'focal_y', None)
+    if focal_x is None and focal_y is None:
+        return '50% 50%'
+
+    return f'{_normalize_percent(focal_x):g}% {_normalize_percent(focal_y):g}%'
+
+
+def _serialize_hero_slide(slide):
+    title = (slide.title or '').strip()
+    subtitle = (slide.subtitle or '').strip()
+
+    return {
+        'title': title,
+        'subtitle': subtitle,
+        'image_url': _cloudinary_responsive_url(slide.image_url, 1600),
+        'image_srcset': _build_cloudinary_srcset(slide.image_url, HERO_SLIDE_SRCSET_WIDTHS),
+        'image_sizes': '100vw',
+        'alt_text': title or 'Anchor Association featured slide',
+        'object_position': _hero_slide_object_position(slide),
+    }
 
 
 IMPACT_PAGE_SECTIONS = [
@@ -551,10 +660,10 @@ def home():
     except Exception as e:
         app.logger.warning('Failed to load home live-gallery images from Cloudinary: %s', e)
         
-    # Fetch Hero Slides from DB
     hero_slides_db = HeroSlide.query.filter_by(is_active=True).order_by(HeroSlide.order.asc()).all()
-        
-    return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides_db)
+    hero_slides = [_serialize_hero_slide(slide) for slide in hero_slides_db]
+
+    return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides)
 
 
 @app.route('/impacts')

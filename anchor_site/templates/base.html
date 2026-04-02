@@ -86,101 +86,100 @@
         </div>
     </aside>
 
-    <!-- Glass Navigation (Desktop) -->
-    <nav class="nav-glass desktop-only" role="navigation" aria-label="Main navigation">
-        <button class="nav-glass__hamburger" type="button" aria-label="Toggle menu" aria-expanded="false" data-nav-toggle>
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+    <header class="header-system" id="headerSystem" data-header-state="expanded">
+        <div class="header-main" id="headerMain">
+            <nav class="nav-glass desktop-only" role="navigation" aria-label="Main navigation">
+                <button class="nav-glass__hamburger" type="button" aria-label="Toggle menu" aria-expanded="false" data-nav-toggle>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
 
-        <a href="{{ url_for('home') }}" class="nav-glass__logo">Anchor</a>
+                <a href="{{ url_for('home') }}" class="nav-glass__logo">Anchor</a>
 
-        <div class="nav-glass__mobile-actions">
-            <a href="{{ url_for('donate') }}" class="btn-donate-mobile">Donate</a>
+                <div class="nav-glass__mobile-actions">
+                    <a href="{{ url_for('donate') }}" class="btn-donate-mobile">Donate</a>
+                </div>
+
+                <div class="nav-glass__links" id="site-navigation">
+                    <a href="{{ url_for('home') }}" class="nav-glass__link {% if request.path == '/' %}active{% endif %}">Home</a>
+
+                    <a href="{{ url_for('home') }}#about-us" class="nav-glass__link mobile-visible">About Us</a>
+
+                    <a href="{{ url_for('initiatives') }}" class="nav-glass__link mobile-visible {% if request.path.startswith('/initiatives') %}active{% endif %}">Initiatives</a>
+
+                    <div class="nav-glass__dropdown-wrapper {% if request.path.startswith('/impacts') %}is-active{% endif %}">
+                        <div class="nav-glass__compound">
+                            <a href="{{ url_for('impacts') }}" class="nav-glass__link {% if request.path.startswith('/impacts') %}active{% endif %}">Impacts</a>
+                            <button class="nav-glass__toggle" type="button" aria-label="Toggle Impacts submenu" aria-expanded="false" aria-controls="nav-impacts-menu" data-dropdown-trigger>
+                                <svg class="dropdown-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M6 9l6 6 6-6"/></svg>
+                            </button>
+                        </div>
+                        <div class="nav-glass__dropdown" id="nav-impacts-menu">
+                            <a href="{{ url_for('impacts') }}#impacts-over-the-years" class="dropdown-item">Impacts Over the Years</a>
+                            <a href="{{ url_for('impacts') }}#success-stories" class="dropdown-item">Success &amp; Stories</a>
+                            <a href="{{ url_for('impacts') }}#awards-recognition" class="dropdown-item">Awards &amp; Recognition</a>
+                            <a href="{{ url_for('impacts') }}#areas-communities" class="dropdown-item">Areas &amp; Communities</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-glass__dropdown-wrapper {% if request.path.startswith('/cafe') %}is-active{% endif %}">
+                        <div class="nav-glass__compound">
+                            <a href="{{ url_for('cafe') }}" class="nav-glass__link {% if request.path.startswith('/cafe') %}active{% endif %}">Eco Project</a>
+                            <button class="nav-glass__toggle" type="button" aria-label="Toggle Eco Project submenu" aria-expanded="false" aria-controls="nav-eco-menu" data-dropdown-trigger>
+                                <svg class="dropdown-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M6 9l6 6 6-6"/></svg>
+                            </button>
+                        </div>
+                        <div class="nav-glass__dropdown" id="nav-eco-menu">
+                            <a href="{{ url_for('cafe') }}" class="dropdown-item">Bagan Bilash</a>
+                        </div>
+                    </div>
+
+                    <a href="{{ url_for('gallery') }}" class="nav-glass__link {% if request.path.startswith('/gallery') %}active{% endif %}">Gallery</a>
+
+                    <div class="nav-glass__dropdown-wrapper {% if request.path.startswith('/join-member') or request.path.startswith('/donate') %}is-active{% endif %}">
+                        <button class="nav-glass__link nav-glass__compound-button {% if request.path.startswith('/join-member') or request.path.startswith('/donate') %}active{% endif %}" type="button" aria-expanded="false" aria-controls="nav-join-menu" data-dropdown-trigger>
+                            <span>Join With US</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="nav-glass__dropdown" id="nav-join-menu">
+                            <a href="{{ url_for('donate') }}" class="dropdown-item">Join us as Donor</a>
+                            <a href="{{ url_for('join_member') }}" class="dropdown-item">Join us as Member</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <nav class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
+                <div class="mobile-nav__left">
+                    <button class="mobile-nav__hamburger" type="button" aria-label="Toggle menu" data-nav-toggle>
+                        <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <a href="{{ url_for('home') }}" class="mobile-nav__logo">Anchor</a>
+                </div>
+
+                <div class="mobile-nav__actions">
+                    <div class="mobile-nav__icons">
+                        <a href="{{ url_for('home') }}#about-us" class="expandable-icon" id="icon-about" aria-label="About Us">
+                            <span class="e-icon-btn" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </span>
+                            <span class="e-icon-text">About Us</span>
+                        </a>
+                        <a href="{{ url_for('initiatives') }}" class="expandable-icon" id="icon-initiatives" aria-label="Initiatives">
+                            <span class="e-icon-btn" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                            </span>
+                            <span class="e-icon-text">Initiatives</span>
+                        </a>
+                    </div>
+
+                    <a href="{{ url_for('donate') }}" class="mobile-nav__donate">Donate</a>
+                </div>
+            </nav>
         </div>
 
-        <div class="nav-glass__links" id="site-navigation">
-            <a href="{{ url_for('home') }}" class="nav-glass__link {% if request.path == '/' %}active{% endif %}">Home</a>
-
-            <a href="{{ url_for('home') }}#about-us" class="nav-glass__link mobile-visible">About Us</a>
-
-            <a href="{{ url_for('initiatives') }}" class="nav-glass__link mobile-visible {% if request.path.startswith('/initiatives') %}active{% endif %}">Initiatives</a>
-
-            <div class="nav-glass__dropdown-wrapper {% if request.path.startswith('/impacts') %}is-active{% endif %}">
-                <div class="nav-glass__compound">
-                    <a href="{{ url_for('impacts') }}" class="nav-glass__link {% if request.path.startswith('/impacts') %}active{% endif %}">Impacts</a>
-                    <button class="nav-glass__toggle" type="button" aria-label="Toggle Impacts submenu" aria-expanded="false" aria-controls="nav-impacts-menu" data-dropdown-trigger>
-                        <svg class="dropdown-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M6 9l6 6 6-6"/></svg>
-                    </button>
-                </div>
-                <div class="nav-glass__dropdown" id="nav-impacts-menu">
-                    <a href="{{ url_for('impacts') }}#impacts-over-the-years" class="dropdown-item">Impacts Over the Years</a>
-                    <a href="{{ url_for('impacts') }}#success-stories" class="dropdown-item">Success &amp; Stories</a>
-                    <a href="{{ url_for('impacts') }}#awards-recognition" class="dropdown-item">Awards &amp; Recognition</a>
-                    <a href="{{ url_for('impacts') }}#areas-communities" class="dropdown-item">Areas &amp; Communities</a>
-                </div>
-            </div>
-
-            <div class="nav-glass__dropdown-wrapper {% if request.path.startswith('/cafe') %}is-active{% endif %}">
-                <div class="nav-glass__compound">
-                    <a href="{{ url_for('cafe') }}" class="nav-glass__link {% if request.path.startswith('/cafe') %}active{% endif %}">Eco Project</a>
-                    <button class="nav-glass__toggle" type="button" aria-label="Toggle Eco Project submenu" aria-expanded="false" aria-controls="nav-eco-menu" data-dropdown-trigger>
-                        <svg class="dropdown-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M6 9l6 6 6-6"/></svg>
-                    </button>
-                </div>
-                <div class="nav-glass__dropdown" id="nav-eco-menu">
-                    <a href="{{ url_for('cafe') }}" class="dropdown-item">Bagan Bilash</a>
-                </div>
-            </div>
-
-            <a href="{{ url_for('gallery') }}" class="nav-glass__link {% if request.path.startswith('/gallery') %}active{% endif %}">Gallery</a>
-
-            <div class="nav-glass__dropdown-wrapper {% if request.path.startswith('/join-member') or request.path.startswith('/donate') %}is-active{% endif %}">
-                <button class="nav-glass__link nav-glass__compound-button {% if request.path.startswith('/join-member') or request.path.startswith('/donate') %}active{% endif %}" type="button" aria-expanded="false" aria-controls="nav-join-menu" data-dropdown-trigger>
-                    <span>Join With US</span>
-                    <svg class="dropdown-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M6 9l6 6 6-6"/></svg>
-                </button>
-                <div class="nav-glass__dropdown" id="nav-join-menu">
-                    <a href="{{ url_for('donate') }}" class="dropdown-item">Join us as Donor</a>
-                    <a href="{{ url_for('join_member') }}" class="dropdown-item">Join us as Member</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="nav-stack" id="mobileNavStack" data-nav-state="expanded">
-        <!-- Glass Mobile Navigation -->
-        <nav class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
-            <div class="mobile-nav__left">
-                <button class="mobile-nav__hamburger" type="button" aria-label="Toggle menu" data-nav-toggle>
-                    <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                </button>
-                <a href="{{ url_for('home') }}" class="mobile-nav__logo">Anchor</a>
-            </div>
-
-            <div class="mobile-nav__actions">
-                <div class="mobile-nav__icons">
-                    <a href="{{ url_for('home') }}#about-us" class="expandable-icon" id="icon-about" aria-label="About Us">
-                        <span class="e-icon-btn" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        </span>
-                        <span class="e-icon-text">About Us</span>
-                    </a>
-                    <a href="{{ url_for('initiatives') }}" class="expandable-icon" id="icon-initiatives" aria-label="Initiatives">
-                        <span class="e-icon-btn" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-                        </span>
-                        <span class="e-icon-text">Initiatives</span>
-                    </a>
-                </div>
-
-                <a href="{{ url_for('donate') }}" class="mobile-nav__donate">Donate</a>
-            </div>
-        </nav>
-
-        <!-- Accreditation Bar (WOW Sub-Header) -->
-        <div class="accreditation-bar" id="accreditationBar" aria-label="Anchor accreditation details">
+        <div class="header-accreditation" id="headerAccreditation" aria-label="Anchor accreditation details">
             <div class="accreditation-bar__surface">
                 <div class="accreditation-bar__body">
                     <div class="accreditation-bar__brand">
@@ -199,8 +198,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="nav-stack-spacer" id="mobileNavStackSpacer" aria-hidden="true"></div>
+    </header>
+    <div class="header-system-spacer" id="headerSystemSpacer" aria-hidden="true"></div>
 
     <!-- Floating Donate Button -->
     <a href="{{ url_for('donate') }}" class="floating-donate" aria-label="Donate">

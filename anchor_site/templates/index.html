@@ -24,14 +24,24 @@
 
 <!-- SECTION 2: HERO SLIDESHOW -->
 <section class="hero-slideshow section" id="featured-gallery">
-    <div class="hero-slideshow__container">
+    <div class="hero-slideshow__container" data-hero-slideshow>
         {% if hero_slides %}
             {% for slide in hero_slides %}
-            <div class="hero-slide {% if loop.first %}is-active{% endif %}">
-                <!-- Blurred background layer to perfectly handle ANY image ratio -->
-                <div class="hero-slide__backdrop" style="background-image: url('{{ slide.image_url }}')"></div>
-                <!-- Crisp foreground layer -->
-                <img src="{{ slide.image_url }}" alt="{{ slide.title }}" class="hero-slide__image" loading="{% if loop.first %}eager{% else %}lazy{% endif %}" decoding="async">
+            <article
+                class="hero-slide {% if loop.first %}is-active{% endif %}{% if not slide.title and not slide.subtitle %} hero-slide--media-only{% endif %}"
+                style="--hero-object-position: {{ slide.object_position }};"
+                aria-hidden="{% if loop.first %}false{% else %}true{% endif %}">
+                <div class="hero-slide__media">
+                    <img
+                        src="{{ slide.image_url }}"
+                        {% if slide.image_srcset %}srcset="{{ slide.image_srcset }}"{% endif %}
+                        sizes="{{ slide.image_sizes }}"
+                        alt="{{ slide.alt_text }}"
+                        class="hero-slide__image"
+                        loading="{% if loop.first %}eager{% else %}lazy{% endif %}"
+                        fetchpriority="{% if loop.first %}high{% else %}auto{% endif %}"
+                        decoding="async">
+                </div>
                 {% if slide.title or slide.subtitle %}
                 <div class="hero-slide__content">
                     <div class="hero-slide__content-inner">
@@ -40,21 +50,23 @@
                     </div>
                 </div>
                 {% endif %}
-            </div>
+            </article>
             {% endfor %}
+            {% if hero_slides|length > 1 %}
             <div class="hero-slideshow__controls">
-                <button class="hero-slideshow__btn hero-slideshow__btn--prev" aria-label="Previous slide">
+                <button class="hero-slideshow__btn hero-slideshow__btn--prev" type="button" aria-label="Previous slide" data-hero-prev>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
-                <button class="hero-slideshow__btn hero-slideshow__btn--next" aria-label="Next slide">
+                <button class="hero-slideshow__btn hero-slideshow__btn--next" type="button" aria-label="Next slide" data-hero-next>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
             </div>
             <div class="hero-slideshow__indicators">
                 {% for slide in hero_slides %}
-                <button class="hero-slideshow__dot {% if loop.first %}is-active{% endif %}" aria-label="Go to slide {{ loop.index }}"></button>
+                <button class="hero-slideshow__dot {% if loop.first %}is-active{% endif %}" type="button" aria-label="Go to slide {{ loop.index }}" data-hero-dot aria-current="{% if loop.first %}true{% else %}false{% endif %}"></button>
                 {% endfor %}
             </div>
+            {% endif %}
         {% else %}
             <div class="hero-slideshow__empty">
                 <p>No featured slides available. Add some in the Admin Panel!</p>
@@ -254,77 +266,4 @@
         </div>
     </div>
 </section>
-
-{% endblock %}
-
-{% block scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Hero Slideshow Logic
-        const slides = document.querySelectorAll('.hero-slide');
-        const dots = document.querySelectorAll('.hero-slideshow__dot');
-        const nextBtn = document.querySelector('.hero-slideshow__btn--next');
-        const prevBtn = document.querySelector('.hero-slideshow__btn--prev');
-        
-        if (slides.length > 1) {
-            let currentIndex = 0;
-            let slideInterval;
-
-            const goToSlide = (index) => {
-                const prevIndex = currentIndex;
-                currentIndex = (index + slides.length) % slides.length;
-                
-                slides[prevIndex].classList.remove('is-active');
-                slides[prevIndex].classList.add('was-active');
-                if (dots[prevIndex]) dots[prevIndex].classList.remove('is-active');
-                
-                slides[currentIndex].classList.add('is-active');
-                if (dots[currentIndex]) dots[currentIndex].classList.add('is-active');
-                
-                setTimeout(() => {
-                    slides[prevIndex].classList.remove('was-active');
-                }, 1000); // Wait for CSS transition
-            };
-
-            const nextSlide = () => goToSlide(currentIndex + 1);
-            const prevSlide = () => goToSlide(currentIndex - 1);
-
-            const startAutoplay = () => {
-                stopAutoplay();
-                slideInterval = setInterval(nextSlide, 5000);
-            };
-
-            const stopAutoplay = () => {
-                if (slideInterval) clearInterval(slideInterval);
-            };
-
-            nextBtn?.addEventListener('click', () => {
-                nextSlide();
-                startAutoplay(); // Reset timer
-            });
-
-            prevBtn?.addEventListener('click', () => {
-                prevSlide();
-                startAutoplay(); // Reset timer
-            });
-
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    if (index !== currentIndex) {
-                        goToSlide(index);
-                        startAutoplay();
-                    }
-                });
-            });
-
-            startAutoplay();
-            
-            // Pause on hover
-            const container = document.querySelector('.hero-slideshow__container');
-            container?.addEventListener('mouseenter', stopAutoplay);
-            container?.addEventListener('mouseleave', startAutoplay);
-        }
-    });
-
-</script>
 {% endblock %}
