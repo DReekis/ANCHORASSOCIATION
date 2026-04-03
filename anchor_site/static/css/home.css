@@ -65,6 +65,7 @@
 
 .hero-slideshow__container {
     position: relative;
+    display: grid;
     width: min(calc(100vw - 32px), 1440px);
     min-height: 500px;
     margin: 0 auto;
@@ -79,8 +80,10 @@
 
 /* --- Slide --- */
 .hero-slide {
-    position: absolute;
-    inset: 0;
+    position: relative;
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     opacity: 0;
@@ -692,7 +695,6 @@
    }
 
    .hero-slide {
-      position: relative;
       flex-direction: column;
    }
 
