@@ -497,7 +497,6 @@
     const dots = Array.from(container.querySelectorAll('[data-hero-dot]'));
     const nextButton = container.querySelector('[data-hero-next]');
     const prevButton = container.querySelector('[data-hero-prev]');
-    const mobileBreakpoint = window.matchMedia('(max-width: 768px)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     if (!slides.length) {
@@ -507,7 +506,6 @@
     const state = {
         currentIndex: Math.max(slides.findIndex((slide) => slide.classList.contains('is-active')), 0),
         autoplayId: null,
-        heightTicking: false,
         cleanupTimerId: null,
     };
 
@@ -523,35 +521,6 @@
             dot.classList.toggle('is-active', isCurrent);
             dot.setAttribute('aria-current', String(isCurrent));
         });
-    }
-
-    function syncContainerHeight(forceImmediate = false) {
-        if (!mobileBreakpoint.matches) {
-            container.style.removeProperty('height');
-            return;
-        }
-
-        const activeSlide = slides[state.currentIndex];
-        if (!activeSlide) {
-            return;
-        }
-
-        const applyHeight = () => {
-            state.heightTicking = false;
-            container.style.height = `${activeSlide.offsetHeight}px`;
-        };
-
-        if (forceImmediate) {
-            applyHeight();
-            return;
-        }
-
-        if (state.heightTicking) {
-            return;
-        }
-
-        state.heightTicking = true;
-        window.requestAnimationFrame(applyHeight);
     }
 
     function stopAutoplay() {
@@ -576,20 +545,17 @@
     function goToSlide(nextIndex) {
         const normalizedIndex = (nextIndex + slides.length) % slides.length;
         if (normalizedIndex === state.currentIndex) {
-            syncContainerHeight();
             return;
         }
 
         const previousSlide = slides[state.currentIndex];
-        const nextSlide = slides[normalizedIndex];
 
         previousSlide.classList.remove('is-active');
         previousSlide.classList.add('was-active');
 
-        nextSlide.classList.add('is-active');
         state.currentIndex = normalizedIndex;
+        slides[normalizedIndex].classList.add('is-active');
         setSlideAccessibility();
-        syncContainerHeight();
 
         if (state.cleanupTimerId) {
             window.clearTimeout(state.cleanupTimerId);
@@ -598,17 +564,6 @@
         state.cleanupTimerId = window.setTimeout(() => {
             previousSlide.classList.remove('was-active');
         }, reducedMotion.matches ? 0 : 820);
-    }
-
-    function bindMediaChange(mediaQueryList, handler) {
-        if (typeof mediaQueryList.addEventListener === 'function') {
-            mediaQueryList.addEventListener('change', handler);
-            return;
-        }
-
-        if (typeof mediaQueryList.addListener === 'function') {
-            mediaQueryList.addListener(handler);
-        }
     }
 
     nextButton?.addEventListener('click', () => {
@@ -649,26 +604,7 @@
         }
     });
 
-    bindMediaChange(mobileBreakpoint, () => syncContainerHeight(true));
-    bindMediaChange(reducedMotion, () => {
-        syncContainerHeight(true);
-        startAutoplay();
-    });
-
-    window.addEventListener('resize', () => syncContainerHeight());
-
-    if (typeof ResizeObserver === 'function') {
-        const resizeObserver = new ResizeObserver(() => {
-            syncContainerHeight();
-        });
-
-        slides.forEach((slide) => {
-            resizeObserver.observe(slide);
-        });
-    }
-
     setSlideAccessibility();
-    syncContainerHeight(true);
     startAutoplay();
 })();
 

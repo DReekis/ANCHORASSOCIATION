@@ -28,28 +28,26 @@
         {% if hero_slides %}
             {% for slide in hero_slides %}
             <article
-                class="hero-slide {% if loop.first %}is-active{% endif %}{% if not slide.title and not slide.subtitle %} hero-slide--media-only{% endif %}"
+                class="hero-slide {% if loop.first %}is-active{% endif %}"
                 style="--hero-object-position: {{ slide.object_position }};"
                 aria-hidden="{% if loop.first %}false{% else %}true{% endif %}">
                 <div class="hero-slide__media">
                     <img
                         src="{{ slide.image_url }}"
                         {% if slide.image_srcset %}srcset="{{ slide.image_srcset }}"{% endif %}
-                        sizes="{{ slide.image_sizes }}"
+                        sizes="(min-width: 769px) 58vw, 100vw"
                         alt="{{ slide.alt_text }}"
                         class="hero-slide__image"
                         loading="{% if loop.first %}eager{% else %}lazy{% endif %}"
                         fetchpriority="{% if loop.first %}high{% else %}auto{% endif %}"
                         decoding="async">
                 </div>
-                {% if slide.title or slide.subtitle %}
                 <div class="hero-slide__content">
                     <div class="hero-slide__content-inner">
                         {% if slide.title %}<h2 class="hero-slide__title">{{ slide.title }}</h2>{% endif %}
                         {% if slide.subtitle %}<p class="hero-slide__subtitle">{{ slide.subtitle }}</p>{% endif %}
                     </div>
                 </div>
-                {% endif %}
             </article>
             {% endfor %}
             {% if hero_slides|length > 1 %}
