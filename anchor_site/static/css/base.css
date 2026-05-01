@@ -39,6 +39,16 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+html.sidebar-open,
+body.sidebar-open,
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
 .noise-overlay {
     position: fixed;
     inset: 0;
@@ -214,17 +224,17 @@ button {
     height: 24px;
 }
 
-.nav-glass__dropdown-wrapper:hover .nav-glass__dropdown,
-.nav-glass__dropdown-wrapper:focus-within .nav-glass__dropdown,
-.nav-glass__dropdown-wrapper.is-open .nav-glass__dropdown {
+.nav-glass__dropdown-wrapper:hover > .nav-glass__dropdown,
+.nav-glass__dropdown-wrapper:focus-within > .nav-glass__dropdown,
+.nav-glass__dropdown-wrapper.is-open > .nav-glass__dropdown {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
 }
 
-.nav-glass__dropdown-wrapper:hover .dropdown-icon,
-.nav-glass__dropdown-wrapper:focus-within .dropdown-icon,
-.nav-glass__dropdown-wrapper.is-open .dropdown-icon {
+.nav-glass__dropdown-wrapper:hover > [data-dropdown-trigger] .dropdown-icon,
+.nav-glass__dropdown-wrapper:focus-within > [data-dropdown-trigger] .dropdown-icon,
+.nav-glass__dropdown-wrapper.is-open > [data-dropdown-trigger] .dropdown-icon {
     transform: rotate(180deg);
 }
 
@@ -395,12 +405,12 @@ button {
         margin: 0;
     }
 
-    .nav-glass__dropdown-wrapper:hover .nav-glass__dropdown,
-    .nav-glass__dropdown-wrapper:focus-within .nav-glass__dropdown {
+    .nav-glass__dropdown-wrapper:hover > .nav-glass__dropdown,
+    .nav-glass__dropdown-wrapper:focus-within > .nav-glass__dropdown {
         display: none;
     }
 
-    .nav-glass__dropdown-wrapper.is-open .nav-glass__dropdown {
+    .nav-glass__dropdown-wrapper.is-open > .nav-glass__dropdown {
         display: block;
         transform: none;
     }
@@ -819,37 +829,104 @@ button {
 }
 
 .accreditation-bar__badges {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    justify-items: stretch;
+    width: min(100%, 380px);
     min-width: 0;
 }
 
-.wow-badge {
+.credential-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 112px;
+    padding: 10px;
+    border-radius: 18px;
+    border: 1px solid rgba(20, 60, 48, 0.12);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 243, 236, 0.92));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.85),
+        0 14px 28px rgba(21, 35, 28, 0.08);
+    overflow: hidden;
+}
+
+.credential-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 5px;
+    border-radius: 18px 18px 0 0;
+    background: linear-gradient(90deg, rgba(26, 107, 90, 0.95), rgba(18, 73, 60, 0.62));
+}
+
+.credential-card--registration::before {
+    background: linear-gradient(90deg, rgba(194, 93, 44, 0.94), rgba(140, 57, 22, 0.64));
+}
+
+.credential-card__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 78px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(20, 60, 48, 0.08);
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.74)),
+        linear-gradient(180deg, rgba(250, 249, 245, 0.98), rgba(241, 239, 231, 0.92));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.92),
+        0 10px 20px rgba(21, 35, 28, 0.06);
+}
+
+.credential-card__media--fallback {
+    min-height: 74px;
+    padding: 8px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.credential-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: 72px;
+    object-fit: contain;
+    object-position: center;
+}
+
+.credential-card__icon {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 32px;
-    padding: 0 14px;
-    border-radius: 999px;
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    white-space: nowrap;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    color: #125346;
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.4)),
+        linear-gradient(180deg, rgba(26, 107, 90, 0.16), rgba(26, 107, 90, 0.08));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.92),
+        0 8px 16px rgba(26, 107, 90, 0.12);
+    flex-shrink: 0;
 }
 
-.iso-badge {
-    background: rgba(26, 107, 90, 0.1);
-    color: #1a6b5a;
-    border: 1px solid rgba(26, 107, 90, 0.2);
-}
-
-.msme-badge {
-    background: rgba(232, 99, 58, 0.1);
-    color: #e8633a;
-    border: 1px solid rgba(232, 99, 58, 0.2);
+.credential-card--registration .credential-card__icon {
+    color: #8d4a2b;
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.44)),
+        linear-gradient(180deg, rgba(217, 120, 55, 0.18), rgba(232, 99, 58, 0.08));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.92),
+        0 8px 16px rgba(174, 92, 40, 0.12);
 }
 
 .wow-reg {
@@ -884,9 +961,23 @@ button {
         max-width: 32ch;
     }
 
-    .wow-badge {
-        min-height: 30px;
-        padding-inline: 12px;
+    .credential-card {
+        min-height: 108px;
+        padding: 11px;
+    }
+
+    .credential-card__media {
+        min-height: 70px;
+        padding: 9px 10px;
+    }
+
+    .credential-card__image {
+        max-height: 64px;
+    }
+
+    .credential-card__icon {
+        width: 48px;
+        height: 48px;
     }
 }
 
@@ -921,6 +1012,9 @@ button {
     z-index: 2000;
     transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
     display: flex;
     flex-direction: column;
     box-shadow: 20px 0 40px rgba(0, 0, 0, 0.1);
@@ -967,6 +1061,7 @@ button {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    min-height: 100%;
 }
 
 .side-menu__link,
@@ -1011,6 +1106,7 @@ button {
 .side-menu__accordion {
     display: flex;
     flex-direction: column;
+    gap: 8px;
 }
 
 .accordion-icon {
@@ -1029,21 +1125,71 @@ button {
 }
 
 .side-menu__accordion-content-inner {
-    padding: 8px 16px 16px 24px;
+    padding: 4px 0 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+}
+
+.side-menu__accordion-content-inner--social {
+    padding: 8px 0 0 14px;
+}
+
+.side-menu__subgroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 0 4px 14px;
+    border-left: 1px solid rgba(47, 107, 79, 0.14);
+}
+
+.side-menu__subgroup-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(50, 84, 72, 0.68);
+    padding-left: 4px;
 }
 
 .side-menu__sublink {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    font-weight: 500;
-    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 0.9rem;
+    color: #325448;
+    font-weight: 550;
+    border-radius: 11px;
+    border: 1px solid rgba(47, 107, 79, 0.1);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 248, 245, 0.92));
+    transition: transform 0.22s ease, color 0.22s ease, border-color 0.22s ease, background 0.22s ease;
 }
 
 .side-menu__sublink:hover {
     color: var(--primary);
+    border-color: rgba(47, 107, 79, 0.18);
+    background: linear-gradient(180deg, rgba(247, 251, 248, 0.98), rgba(236, 245, 240, 0.95));
+    transform: translateX(2px);
+}
+
+.side-menu__sublink--social::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    flex-shrink: 0;
+    background: rgba(47, 107, 79, 0.4);
+    box-shadow: 0 0 0 5px rgba(47, 107, 79, 0.1);
+    transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+}
+
+.side-menu__sublink--social:hover::after {
+    transform: scale(1.12);
+    background: rgba(47, 107, 79, 0.72);
+    box-shadow: 0 0 0 6px rgba(47, 107, 79, 0.12);
 }
 
 .side-menu__footer {
@@ -1440,17 +1586,31 @@ button {
     }
 
     .accreditation-bar__badges {
-        width: 100%;
-        gap: 6px;
-        justify-content: flex-end;
+        width: min(100%, 314px);
+        gap: 8px;
+        justify-items: stretch;
     }
 
-    .wow-badge {
-        border-radius: 999px;
-        min-height: 24px;
-        padding: 0 9px;
-        font-size: 0.53rem;
-        letter-spacing: 0.12em;
+    .credential-card {
+        min-height: 100px;
+        padding: 10px;
+        border-radius: 16px;
+    }
+
+    .credential-card__media {
+        min-height: 62px;
+        padding: 8px 10px;
+        border-radius: 14px;
+    }
+
+    .credential-card__image {
+        max-height: 56px;
+    }
+
+    .credential-card__icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
     }
 
     .wow-reg {
@@ -1561,12 +1721,26 @@ button {
 
     .accreditation-bar__badges {
         justify-content: flex-start;
+        width: min(100%, 100%);
     }
 
-    .wow-badge {
-        min-height: 22px;
-        padding-inline: 8px;
-        font-size: 0.49rem;
+    .credential-card {
+        min-height: 94px;
+        padding: 9px;
+    }
+
+    .credential-card__media {
+        min-height: 56px;
+        padding: 8px 9px;
+    }
+
+    .credential-card__image {
+        max-height: 50px;
+    }
+
+    .credential-card__icon {
+        width: 38px;
+        height: 38px;
     }
 
     .wow-reg {
@@ -1845,7 +2019,7 @@ button {
     width: 100%;
 }
 
-.header-main .nav-glass__dropdown--nested {
+.header-main .nav-glass__dropdown-wrapper--nested > .nav-glass__dropdown--nested {
     top: -8px;
     left: calc(100% + 12px);
     min-width: 192px;
@@ -1853,22 +2027,13 @@ button {
     z-index: 24;
 }
 
-.header-main .nav-glass__dropdown-wrapper:hover .nav-glass__dropdown--nested,
-.header-main .nav-glass__dropdown-wrapper:focus-within .nav-glass__dropdown--nested,
-.header-main .nav-glass__dropdown-wrapper.is-open .nav-glass__dropdown--nested {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translate3d(-10px, 0, 0);
-}
-
-.header-main .nav-glass__dropdown-wrapper:hover > .nav-glass__dropdown--nested {
-    transform: translate3d(-10px, 0, 0);
-}
-
-.header-main .nav-glass__dropdown-wrapper.is-open > .nav-glass__dropdown--nested,
-.header-main .nav-glass__dropdown-wrapper:focus-within > .nav-glass__dropdown--nested {
+.header-main .nav-glass__dropdown-wrapper--nested.is-open > .nav-glass__dropdown--nested,
+.header-main .nav-glass__dropdown-wrapper--nested:focus-within > .nav-glass__dropdown--nested {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
     transform: translate3d(0, 0, 0);
+    transition-delay: 0s;
 }
 
 .header-main .nav-glass__dropdown--nested::before {
@@ -2185,14 +2350,27 @@ button {
 
     .header-accreditation .accreditation-bar__badges {
         justify-content: flex-start;
-        gap: 6px;
+        gap: 8px;
+        width: min(100%, 100%);
     }
 
-    .header-accreditation .wow-badge {
-        min-height: 22px;
-        padding: 0 8px;
-        font-size: 0.5rem;
-        letter-spacing: 0.12em;
+    .header-accreditation .credential-card {
+        min-height: 96px;
+        padding: 9px;
+    }
+
+    .header-accreditation .credential-card__media {
+        min-height: 58px;
+        padding: 8px 9px;
+    }
+
+    .header-accreditation .credential-card__image {
+        max-height: 52px;
+    }
+
+    .header-accreditation .credential-card__icon {
+        width: 38px;
+        height: 38px;
     }
 
     .header-accreditation .wow-reg {
@@ -2222,6 +2400,25 @@ button {
         font-size: 0.58rem;
     }
 
+    .header-accreditation .credential-card {
+        min-height: 88px;
+        padding: 8px;
+    }
+
+    .header-accreditation .credential-card__media {
+        min-height: 52px;
+        padding: 7px 8px;
+    }
+
+    .header-accreditation .credential-card__image {
+        max-height: 46px;
+    }
+
+    .header-accreditation .credential-card__icon {
+        width: 36px;
+        height: 36px;
+    }
+
     .header-main .mobile-nav__hamburger,
     .header-main .expandable-icon,
     .header-main .e-icon-btn,
@@ -2239,12 +2436,6 @@ button {
 
     .header-main .mobile-nav__logo {
         font-size: 1.04rem;
-    }
-
-    .header-accreditation .wow-badge {
-        min-height: 22px;
-        padding-inline: 8px;
-        font-size: 0.49rem;
     }
 
     .header-accreditation .wow-reg {

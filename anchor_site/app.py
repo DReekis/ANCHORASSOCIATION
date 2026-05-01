@@ -2,6 +2,7 @@
 import os
 import re
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import quote_plus, urlsplit, urlunsplit
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify, send_from_directory, session, redirect, url_for
@@ -22,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 PACKAGE_STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.webp', '.avif', '.svg'}
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 load_dotenv(os.path.join(PROJECT_DIR, '.env'))
 
@@ -30,6 +32,35 @@ app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=None)
 @app.route('/static/<path:filename>', endpoint='static')
 def static_files(filename):
     return send_from_directory(PACKAGE_STATIC_DIR, filename)
+
+
+def find_static_image_by_terms(*terms):
+    search_roots = (
+        Path(PACKAGE_STATIC_DIR) / 'photos',
+        Path(PACKAGE_STATIC_DIR) / 'images',
+        Path(PACKAGE_STATIC_DIR),
+    )
+    normalized_terms = tuple(term.lower() for term in terms if term)
+
+    for root in search_roots:
+        if not root.exists():
+            continue
+
+        matches = []
+        for path in root.rglob('*'):
+            if not path.is_file() or path.suffix.lower() not in STATIC_IMAGE_EXTENSIONS:
+                continue
+
+            stem = path.stem.lower()
+            if all(term in stem for term in normalized_terms):
+                relative_path = path.relative_to(PACKAGE_STATIC_DIR).as_posix()
+                matches.append((len(relative_path), relative_path))
+
+        if matches:
+            matches.sort()
+            return matches[0][1]
+
+    return None
 
 # Security Config
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-fallback-secret-key')
@@ -645,8 +676,14 @@ def get_donation_purpose_options(selected_purpose=''):
 
 
 @app.context_processor
-def inject_year():
-    return {'current_year': datetime.now().year}
+def inject_template_globals():
+    return {
+        'current_year': datetime.now().year,
+        'accreditation_assets': {
+            'iso': find_static_image_by_terms('iso'),
+            'msme': find_static_image_by_terms('msme'),
+        },
+    }
 
 
 @app.route('/')
