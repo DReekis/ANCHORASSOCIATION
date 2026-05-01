@@ -4,7 +4,10 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
 {% endblock %}
+
+{% from "components/ui.html" import member_story %}
 
 {% block content %}
 
@@ -142,126 +145,28 @@
 
 
 
-<!-- SECTION: LEADERSHIP -->
-<section class="leadership section">
+<!-- SECTION: GUIDED BY PURPOSE -->
+{% if member_stories %}
+<section class="guided-section" id="guided-purpose">
     <div class="container">
-        <div class="leadership__header">
-            <h2 class="leadership__title">Guided by Purpose.</h2>
-            <p class="leadership__subtitle">Hear from the voices steering the Anchor Association.</p>
-        </div>
-
-        <div class="leadership-grid">
-            <!-- Card 1 -->
-            <div class="leader-card">
-                <div class="leader-card__quote-icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" opacity="0.1">
-                        <path
-                            d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                    </svg>
-                </div>
-                <p class="leader-card__quote">"True empowerment begins when we bridge the gap between academic
-                    excellence and social responsibility.
-                    ​At the heart of every thriving community lies a strong anchor—a foundation of stability, growth,
-                    and collective responsibility.
-                    Our organization was founded on a simple yet profound belief: that progress is multidimensional.
-                    Through our social welfare programs, academic support centers, and community development
-                    initiatives, we are committed to uplifting every facet of society.
-
-                    ​Whether we are shaping young minds at Anchor Public School, providing critical resources through
-                    the Anchor Association, or fostering grassroots development, our goal remains the same: to empower
-                    the individual and strengthen the collective.
-                    Our work is not limited to a single field. We are building an integrated ecosystem where quality
-                    education, academic coaching, and social welfare programs work in harmony.
-                    We invite you to join us in this journey of service, excellence, and sustainable change as we work
-                    together to secure a brighter future for all.
-                    "</p>
-                <div class="leader-card__profile">
-                    <img src="{{ url_for('static', filename='photos/image_copy.png') }}" alt="Mousumi_Dey"
-                        class="leader-card__image">
-                    <div class="leader-card__info">
-                        <h3 class="leader-card__name">Mousumi Dey</h3>
-                        <p class="leader-card__title">President</p>
-                        <p class="leader-card__qualification">B.Sc.(Hons), LLB (Hons), MSW</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="leader-card">
-                <div class="leader-card__quote-icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" opacity="0.1">
-                        <path
-                            d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                    </svg>
-                </div>
-                <p class="leader-card__quote">"At the heart of ANCHOR Association lies a commitment to holistic
-                    community development.
-                    As Treasurer and Project Head, my role transcends mere numbers; it is about ensuring that every
-                    resource we mobilize is transformed into a tangible impact. From the foundational education at
-                    Anchor Public School and Minions Fun House to the economic empowerment driven by Nivedita SHG and
-                    Career Edge, our projects are designed to create a self-sustaining ecosystem of growth.
-                    Transparency is the cornerstone of our financial philosophy. Like any mission-driven organization,
-                    we face the ongoing challenge of rising operational costs and the need for more robust
-                    infrastructure to meet increasing demand. Scaling our charitable initiatives, such as CURE Homes and
-                    Learn and Shine, requires consistent capital and strategic fund-raising.
-
-                    We are currently navigating these hurdles by optimizing our internal expenses and diversifying our
-                    donor base to ensure that no project remains underfunded.
-
-                    Despite the challenges, our trajectory remains upward. We have seen remarkable success with our core
-                    projects:
-
-                    Education: Anchor Public School and Minions Fun House continue to set benchmarks in primary and
-                    kindergarten education.
-
-                    Empowerment: The Nivedita SHG has successfully integrated more women into the local economy.
-
-                    Employment: Career Edge is bridging the gap between talent and opportunity, providing vital job
-                    consultancy services.
-
-                    This steady progress is a testament to our disciplined financial management and the unwavering
-                    dedication of our project teams.
-
-                    The future of the ANCHOR Association is one of expansion and integration. We are looking toward
-                    digitizing our learning programs like ATMA Katha and expanding the reach of our charitable
-                    healthcare services. Our goal is to move from localized impact to a broader regional presence,
-                    ensuring that "Anchor" remains synonymous with stability, empowerment, and progress.
-                    We invite you to join us on this journey—whether as a partner, a donor, or a volunteer—as we build a
-                    future where every individual has the tools to shine."</p>
-                <div class="leader-card__profile">
-                    <img src="{{ url_for('static', filename='photos/Atanu.png') }}" alt="Atanu_Konar"
-                        class="leader-card__image">
-                    <div class="leader-card__info">
-                        <h3 class="leader-card__name">Atanu Konar</h3>
-                        <p class="leader-card__title">Treasurer & Project Head</p>
-                        <p class="leader-card__qualification">B.com (Hons.), PGD (HRM), MBA (Marketing)</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="leader-card">
-                <div class="leader-card__quote-icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" opacity="0.1">
-                        <path
-                            d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                    </svg>
-                </div>
-                <p class="leader-card__quote">"We seek to create a space where children can grow, think freely, and
-                    thrive as human beings. Our aim is to nurture individuals who feel responsible not only for
-                    themselves, but also for the society and the natural world they are part of. True education, we
-                    believe, prepares a child to live with awareness, compassion, and purpose."</p>
-                <div class="leader-card__profile">
-                    <img src="{{ url_for('static', filename='photos/Sumit.png') }}" alt="Sumit_Maiti"
-                        class="leader-card__image">
-                    <div class="leader-card__info">
-                        <h3 class="leader-card__name">Sumit Maiti</h3>
-                        <p class="leader-card__title">Vice President</p>
-                        <p class="leader-card__qualification">B-Tech (Electrical)</p>
-                    </div>
-                </div>
-            </div>
+        <div class="guided-section__header">
+            <h2 class="guided-section__title">Guided by Purpose.</h2>
+            <p class="guided-section__subtitle">Hear from the voices steering the Anchor Association.</p>
         </div>
     </div>
+
+    {% for story in member_stories %}
+    {{ member_story(
+        role_tag=story.role_tag,
+        name=story.name,
+        qualification=story.qualification,
+        body_html=story.body_html,
+        portrait_url=story.portrait_url,
+        section_id='member-story-' ~ story.id,
+        image_on_right=story.image_on_right
+    ) }}
+    {% endfor %}
 </section>
+{% endif %}
+
 {% endblock %}

@@ -13,10 +13,10 @@ import cloudinary.api
 import razorpay
 
 try:
-    from .models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide
+    from .models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide, MemberStory
     from .admin_panel import setup_admin
 except ImportError:
-    from models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide
+    from models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide, MemberStory
     from admin_panel import setup_admin
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -639,7 +639,9 @@ def seed_default_initiatives():
     db.session.commit()
 
 
+
 def get_donation_purpose_options(selected_purpose=''):
+
     options = [
         {
             'value': 'General Support',
@@ -700,7 +702,9 @@ def home():
     hero_slides_db = HeroSlide.query.filter_by(is_active=True).order_by(HeroSlide.order.asc()).all()
     hero_slides = [_serialize_hero_slide(slide) for slide in hero_slides_db]
 
-    return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides)
+    member_stories = MemberStory.query.filter_by(is_active=True).order_by(MemberStory.order.asc()).all()
+
+    return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides, member_stories=member_stories)
 
 
 @app.route('/impacts')
@@ -876,6 +880,7 @@ with app.app_context():
     if should_bootstrap_database():
         db.create_all()
         seed_default_initiatives()
+
     else:
         app.logger.info('Skipping automatic database bootstrap in Vercel runtime.')
 

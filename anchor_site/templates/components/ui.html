@@ -43,3 +43,46 @@
     {% endif %}
 </section>
 {% endmacro %}
+
+{#
+   Component: member_story
+   A premium 50/50 split-screen section with a solid-colour text column
+   (scrollable on desktop) and a full-bleed portrait photograph.
+   Part of the "Guided by Purpose" section on the homepage.
+
+   Parameters:
+     role_tag           — Uppercase eyebrow label (e.g. "Our Founder")
+     name               — Person's full name, shown as the large heading
+     qualification      — Shown directly under the name (e.g. "B.Sc.(Hons), LLB")
+     body_html          — Pre-rendered HTML body (multiple <p> blocks)
+     portrait_url       — URL to a high-res portrait photograph
+     portrait_alt       — Alt text for the portrait (optional)
+     section_id         — HTML id attribute (optional)
+     image_on_right     — Boolean to determine image position (default True)
+#}
+
+{% macro member_story(role_tag, name, qualification, body_html, portrait_url, portrait_alt="", section_id="", image_on_right=true) %}
+<section class="ui-member-story {% if not image_on_right %}ui-member-story--image-left{% endif %}"{% if section_id %} id="{{ section_id }}"{% endif %}>
+    <div class="ui-member-story__content" data-lenis-prevent>
+        <div class="ui-member-story__content-inner">
+            {% if role_tag %}
+            <span class="ui-member-story__tag">{{ role_tag }}</span>
+            {% endif %}
+            <h2 class="ui-member-story__title">{{ name }}</h2>
+            {% if qualification %}
+            <p class="ui-member-story__qualification">{{ qualification }}</p>
+            {% endif %}
+            <div class="ui-member-story__body">{{ body_html | safe }}</div>
+        </div>
+    </div>
+    <div class="ui-member-story__media">
+        <img
+            src="{{ portrait_url }}"
+            alt="{{ portrait_alt or (name ~ ' — Anchor Association') }}"
+            class="ui-member-story__portrait"
+            loading="lazy"
+            decoding="async">
+        <div class="ui-member-story__media-overlay"></div>
+    </div>
+</section>
+{% endmacro %}

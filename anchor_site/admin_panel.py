@@ -13,6 +13,7 @@ try:
         AdminUser,
         InitiativeSection,
         InitiativeSubitem,
+        MemberStory,
     )
 except ImportError:
     from models import (
@@ -22,6 +23,7 @@ except ImportError:
         AdminUser,
         InitiativeSection,
         InitiativeSubitem,
+        MemberStory,
     )
 
 
@@ -288,6 +290,64 @@ class GalleryUploadView(AuthMixin, BaseView):
         return self.render('admin/gallery_upload.html', form=form)
 
 
+class MemberStoryView(CloudinaryUploadView):
+    """Admin view for the 'Guided by Purpose' split-screen member cards."""
+    upload_column = 'portrait_url'
+    upload_folder = 'anchor/admin/member-stories'
+    column_list = ['id', 'order', 'name', 'role_tag', 'image_on_right', 'is_active']
+    column_labels = {
+        'name': 'Member Name',
+        'qualification': 'Qualification / Designation',
+        'role_tag': 'Eyebrow Label',
+        'body_html': 'Story Content (HTML)',
+        'portrait_url': 'Portrait Image URL',
+        'upload_file': 'Upload Portrait',
+        'order': 'Display Order',
+        'image_on_right': 'Image Position',
+    }
+    column_formatters = {
+        'image_on_right': _format_layout_direction,
+    }
+    column_sortable_list = ['order', 'name', 'is_active']
+    column_default_sort = 'order'
+    form_columns = [
+        'name',
+        'qualification',
+        'role_tag',
+        'body_html',
+        'upload_file',
+        'image_on_right',
+        'order',
+        'is_active',
+    ]
+    form_args = {
+        'name': {
+            'description': 'Full name shown as the large heading on the green panel (e.g. "Mousumi Dey").',
+            'render_kw': {'placeholder': 'e.g. Mousumi Dey'},
+        },
+        'qualification': {
+            'description': 'Appears directly under the name (e.g. "B.Sc.(Hons), LLB (Hons), MSW").',
+            'render_kw': {'placeholder': 'e.g. B.Sc.(Hons), LLB (Hons), MSW'},
+        },
+        'role_tag': {
+            'description': 'Small uppercase label above the name (e.g. "Our Founder", "Our Treasurer").',
+            'render_kw': {'placeholder': 'e.g. Our Founder'},
+        },
+        'body_html': {
+            'description': (
+                'Wrap each paragraph in <p>...</p> tags. '
+                'This text fills the scrollable green column beside the portrait.'
+            ),
+        },
+        'image_on_right': {
+            'description': 'Check this box to put the photo on the right. Leave unchecked for Image Left.',
+        },
+        'order': {
+            'description': 'Lower numbers appear first. Each entry becomes a full-width 50/50 split section.',
+        },
+    }
+
+
 def setup_admin(app, db):
     """Initialize Flask-Admin with secure model views."""
     admin = Admin(
@@ -301,4 +361,5 @@ def setup_admin(app, db):
     admin.add_view(InitiativeSectionView(InitiativeSection, db.session, name='Initiatives'))
     admin.add_view(InitiativeSubitemView(InitiativeSubitem, db.session, name='Initiative Items'))
     admin.add_view(AdminUserView(AdminUser, db.session, name='Admins'))
+    admin.add_view(MemberStoryView(MemberStory, db.session, name='Guided by Purpose'))
     admin.add_view(GalleryUploadView(name='Bulk Photo Upload', endpoint='bulk_upload'))

@@ -115,3 +115,25 @@ class InitiativeSubitem(db.Model):
 
     def __repr__(self):
         return f'<InitiativeSubitem {self.title}>'
+
+
+class MemberStory(db.Model):
+    """A 'Guided by Purpose' split-screen card shown on the homepage.
+
+    Each record renders as a 50/50 layout: scrollable green text column
+    on the left and a full-bleed portrait on the right.
+    """
+    __tablename__ = 'member_stories'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    qualification = db.Column(db.String(300), default='')
+    role_tag = db.Column(db.String(120), default='Our Member')
+    body_html = db.Column(db.Text, nullable=False, default='')
+    portrait_url = db.Column(db.String(500), default='')
+    order = db.Column(db.Integer, default=0)
+    is_active = db.Column(db.Boolean, default=True)
+    image_on_right = db.Column(db.Boolean, default=True)
+
+    def __repr__(self):
+        return f'<MemberStory {self.name}>'
