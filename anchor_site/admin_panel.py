@@ -162,7 +162,7 @@ def _format_layout_direction(view, context, model, name):
     """Custom column formatter: shows layout direction as a readable label."""
     if model.image_on_right:
         return Markup('<span style="white-space:nowrap">🖼️ Image Right | 📝 Text Left</span>')
-    return Markup('<span style="white-space:nowrap">📝 Text Left | 🖼️ Image Right</span>')
+    return Markup('<span style="white-space:nowrap">🖼️ Image Left | 📝 Text Right</span>')
 
 
 class InitiativeSectionView(CloudinaryUploadView):
