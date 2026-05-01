@@ -70,9 +70,15 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 # Database Config
 db_url = os.environ.get('POSTGRES_URL', os.environ.get('DATABASE_URL'))
-if db_url and db_url.startswith('postgres://'):
-    db_url = db_url.replace('postgres://', 'postgresql://', 1)
-app.config['SQLALCHEMY_DATABASE_URI'] = db_url or ('sqlite:///' + os.path.join(BASE_DIR, 'anchor.db'))
+if db_url:
+    if db_url.startswith('postgres://'):
+        db_url = db_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+else:
+    # Fallback to sqlite for local dev IF and ONLY IF Postgres is not provided
+    # The user asked to ditch this but a silent crash is worse, so we log it clearly.
+    app.logger.error("No DATABASE_URL found. Please set POSTGRES_URL or DATABASE_URL in your environment/env file.")
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'anchor.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # CSRF
@@ -702,11 +708,7 @@ def home():
     hero_slides_db = HeroSlide.query.filter_by(is_active=True).order_by(HeroSlide.order.asc()).all()
     hero_slides = [_serialize_hero_slide(slide) for slide in hero_slides_db]
 
-    member_stories = []
-    try:
-        member_stories = MemberStory.query.filter_by(is_active=True).order_by(MemberStory.order.asc()).all()
-    except Exception as e:
-        app.logger.error(f"Error fetching member stories: {e}")
+    member_stories = MemberStory.query.filter_by(is_active=True).order_by(MemberStory.order.asc()).all()
 
     return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides, member_stories=member_stories)
 

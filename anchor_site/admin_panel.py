@@ -48,6 +48,21 @@ class SecureAdminIndex(AuthMixin, AdminIndexView):
         return super().index()
 
 
+class SyncDatabaseView(AuthMixin, BaseView):
+    """Utility view to force sync database tables in production (Vercel)."""
+    @expose('/')
+    def index(self):
+        try:
+            # We import db here to avoid circular dependencies
+            from models import db
+            db.create_all()
+            flash("Database tables synchronized successfully.", "success")
+        except Exception as e:
+            flash(f"Error syncing database: {e}", "error")
+        
+        return redirect(url_for('admin.index'))
+
+
 class SecureModelView(AuthMixin, ModelView):
     pass
 
@@ -363,3 +378,4 @@ def setup_admin(app, db):
     admin.add_view(AdminUserView(AdminUser, db.session, name='Admins'))
     admin.add_view(MemberStoryView(MemberStory, db.session, name='Guided by Purpose'))
     admin.add_view(GalleryUploadView(name='Bulk Photo Upload', endpoint='bulk_upload'))
+    admin.add_view(SyncDatabaseView(name='Sync Database', endpoint='sync-db'))
