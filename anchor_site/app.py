@@ -708,7 +708,12 @@ def home():
     hero_slides_db = HeroSlide.query.filter_by(is_active=True).order_by(HeroSlide.order.asc()).all()
     hero_slides = [_serialize_hero_slide(slide) for slide in hero_slides_db]
 
-    member_stories = MemberStory.query.filter_by(is_active=True).order_by(MemberStory.order.asc()).all()
+    member_stories = []
+    try:
+        member_stories = MemberStory.query.filter_by(is_active=True).order_by(MemberStory.order.asc()).all()
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error fetching member stories: {e}")
 
     return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides, member_stories=member_stories)
 
