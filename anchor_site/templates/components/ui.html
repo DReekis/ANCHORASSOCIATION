@@ -1,0 +1,45 @@
+{#
+   Component: brochure_hero
+   A reusable 2-column brochure section driven by the `image_right` toggle.
+   When image_right is True  → Text Left  | Image Right
+   When image_right is False → Image Left | Text Right
+#}
+
+{% macro brochure_hero(tag, title, text_html, image_url, image_right=false) %}
+<section class="ui-brochure">
+    {% if image_right %}
+    {# — Text first, Image second — #}
+    <div class="ui-brochure__text">
+        {% if tag %}
+        <span class="ui-brochure__tag">{{ tag }}</span>
+        {% endif %}
+        <h2 class="ui-brochure__title">{{ title }}</h2>
+        <div class="ui-brochure__body">{{ text_html | safe }}</div>
+        <a href="/donate?purpose={{ title | urlencode }}" class="ui-brochure__cta">
+            Support Us
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+    </div>
+    <div class="ui-brochure__image">
+        <img src="{{ image_url }}" alt="{{ title }}" loading="lazy" decoding="async">
+    </div>
+
+    {% else %}
+    {# — Image first, Text second — #}
+    <div class="ui-brochure__image">
+        <img src="{{ image_url }}" alt="{{ title }}" loading="lazy" decoding="async">
+    </div>
+    <div class="ui-brochure__text">
+        {% if tag %}
+        <span class="ui-brochure__tag">{{ tag }}</span>
+        {% endif %}
+        <h2 class="ui-brochure__title">{{ title }}</h2>
+        <div class="ui-brochure__body">{{ text_html | safe }}</div>
+        <a href="/donate?purpose={{ title | urlencode }}" class="ui-brochure__cta">
+            Support Us
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+    </div>
+    {% endif %}
+</section>
+{% endmacro %}

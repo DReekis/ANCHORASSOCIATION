@@ -138,11 +138,36 @@
                             Assemblage of Notable &amp; Charitable Help Over Resurrection
                         </p>
                     </div>
-                    <div class="accreditation-bar__details">
-                        <div class="accreditation-bar__badges">
-                            <span class="wow-badge msme-badge">MSME REGISTERED</span>
+                    <div class="accreditation-bar__credentials">
+                        <div class="credential-tile">
+                            <span class="credential-tile__label">MSME<br>REGISTERED</span>
+                            <div class="credential-tile__icon-wrap">
+                                {% if accreditation_assets.msme %}
+                                <img src="{{ url_for('static', filename=accreditation_assets.msme) }}" alt="MSME Registered" class="credential-tile__img">
+                                {% else %}
+                                <svg class="credential-tile__svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                {% endif %}
+                            </div>
+                            <span class="credential-tile__sub">REG. NO.<br>S0008516</span>
                         </div>
-                        <p class="wow-reg">Reg. No. S0008516 · Est. 2019</p>
+                        <div class="credential-tile credential-tile--iso">
+                            <span class="credential-tile__label">ISO<br>CERTIFIED</span>
+                            <div class="credential-tile__icon-wrap">
+                                {% if accreditation_assets.iso %}
+                                <img src="{{ url_for('static', filename=accreditation_assets.iso) }}" alt="ISO 9001:2015 Certified" class="credential-tile__img">
+                                {% else %}
+                                <svg class="credential-tile__svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                {% endif %}
+                            </div>
+                            <span class="credential-tile__sub">QUALITY<br>STANDARDS</span>
+                        </div>
+                        <div class="credential-tile credential-tile--est">
+                            <span class="credential-tile__label">ESTABLISHED<br>2019</span>
+                            <div class="credential-tile__icon-wrap">
+                                <svg class="credential-tile__svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="8" y="14" width="3" height="3" rx="0.5"/><rect x="13" y="14" width="3" height="3" rx="0.5"/></svg>
+                            </div>
+                            <span class="credential-tile__sub">SINCE<br>2019</span>
+                        </div>
                     </div>
                 </div>
             </div>

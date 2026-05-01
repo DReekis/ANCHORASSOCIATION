@@ -81,6 +81,7 @@ class InitiativeSection(db.Model):
     display_style = db.Column(db.String(40), default='feature')
     order = db.Column(db.Integer, default=0)
     is_active = db.Column(db.Boolean, default=True)
+    image_on_right = db.Column(db.Boolean, default=False)
 
     subitems = db.relationship(
         'InitiativeSubitem',

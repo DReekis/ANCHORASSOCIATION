@@ -982,6 +982,136 @@ button {
 }
 
 /* --------------------------------------------------------------------------
+   Credential Tiles (3-col accreditation grid — matches mobile reference)
+   -------------------------------------------------------------------------- */
+.accreditation-bar__credentials {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.credential-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 14px 6px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(20, 60, 48, 0.1);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 245, 239, 0.94));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 6px 16px rgba(21, 35, 28, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.credential-tile::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: linear-gradient(90deg, #1c6b56, #2f8d6f);
+    border-radius: 16px 16px 0 0;
+}
+
+.credential-tile--iso::before {
+    background: linear-gradient(90deg, #1c6b56, #2aab85);
+}
+
+.credential-tile--est::before {
+    background: linear-gradient(90deg, #1c6b56, #367d68);
+}
+
+.credential-tile__label {
+    font-family: var(--font-head);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+    color: #1a3f34;
+    text-transform: uppercase;
+}
+
+.credential-tile__icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.96), rgba(244, 248, 245, 0.88));
+    border: 1px solid rgba(20, 60, 48, 0.08);
+    box-shadow: 0 4px 10px rgba(21, 35, 28, 0.06);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.credential-tile__img {
+    display: block;
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    object-position: center;
+}
+
+.credential-tile__svg {
+    width: 26px;
+    height: 26px;
+    color: #1c6b56;
+}
+
+.credential-tile__sub {
+    font-family: var(--font-body);
+    font-size: 0.56rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    color: rgba(43, 43, 43, 0.55);
+    text-transform: uppercase;
+}
+
+/* Desktop: tiles sit beside the brand block */
+@media (min-width: 901px) {
+    .accreditation-bar__credentials {
+        gap: 12px;
+        max-width: 420px;
+    }
+
+    .credential-tile {
+        padding: 16px 8px 14px;
+        gap: 8px;
+    }
+
+    .credential-tile__label {
+        font-size: 0.68rem;
+    }
+
+    .credential-tile__icon-wrap {
+        width: 64px;
+        height: 64px;
+    }
+
+    .credential-tile__img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .credential-tile__svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .credential-tile__sub {
+        font-size: 0.6rem;
+    }
+}
+
+/* --------------------------------------------------------------------------
    Off-Canvas Sidebar
    -------------------------------------------------------------------------- */
 .sidebar-overlay {
@@ -2266,9 +2396,13 @@ button {
 
 .header-accreditation .accreditation-bar__body {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.92fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     align-items: center;
-    gap: 12px 20px;
+    gap: 12px 18px;
+}
+
+.header-accreditation .accreditation-bar__brand {
+    text-align: left;
 }
 
 .header-accreditation .accreditation-bar__title {
@@ -2281,7 +2415,7 @@ button {
     font-size: 0.86rem;
 }
 
-.header-accreditation .accreditation-bar__details {
+.header-accreditation .accreditation-bar__credentials {
     gap: 8px;
 }
 
@@ -2323,13 +2457,17 @@ button {
     }
 
     .header-accreditation {
-        padding: 12px 16px 14px;
+        padding: 12px 14px 14px;
     }
 
     .header-accreditation .accreditation-bar__body {
-        grid-template-columns: minmax(0, 1fr);
-        align-items: start;
-        gap: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header-accreditation .accreditation-bar__brand {
+        text-align: center;
     }
 
     .header-accreditation .accreditation-bar__title {
@@ -2343,41 +2481,33 @@ button {
         line-height: 1.32;
     }
 
-    .header-accreditation .accreditation-bar__details {
-        align-items: flex-start;
-        gap: 7px;
+    .header-accreditation .credential-tile {
+        padding: 10px 4px 8px;
+        gap: 4px;
+        border-radius: 12px;
     }
 
-    .header-accreditation .accreditation-bar__badges {
-        justify-content: flex-start;
-        gap: 8px;
-        width: min(100%, 100%);
+    .header-accreditation .credential-tile__label {
+        font-size: 0.56rem;
     }
 
-    .header-accreditation .credential-card {
-        min-height: 96px;
-        padding: 9px;
+    .header-accreditation .credential-tile__icon-wrap {
+        width: 44px;
+        height: 44px;
     }
 
-    .header-accreditation .credential-card__media {
-        min-height: 58px;
-        padding: 8px 9px;
+    .header-accreditation .credential-tile__img {
+        width: 34px;
+        height: 34px;
     }
 
-    .header-accreditation .credential-card__image {
-        max-height: 52px;
+    .header-accreditation .credential-tile__svg {
+        width: 22px;
+        height: 22px;
     }
 
-    .header-accreditation .credential-card__icon {
-        width: 38px;
-        height: 38px;
-    }
-
-    .header-accreditation .wow-reg {
-        text-align: left;
-        font-size: 0.54rem;
-        line-height: 1.25;
-        letter-spacing: 0.04em;
+    .header-accreditation .credential-tile__sub {
+        font-size: 0.48rem;
     }
 }
 
@@ -2388,7 +2518,7 @@ button {
     }
 
     .header-accreditation {
-        padding: 10px 12px 12px;
+        padding: 10px 10px 12px;
     }
 
     .header-accreditation .accreditation-bar__title {
@@ -2400,23 +2530,37 @@ button {
         font-size: 0.58rem;
     }
 
-    .header-accreditation .credential-card {
-        min-height: 88px;
-        padding: 8px;
+    .header-accreditation .accreditation-bar__credentials {
+        gap: 6px;
     }
 
-    .header-accreditation .credential-card__media {
-        min-height: 52px;
-        padding: 7px 8px;
+    .header-accreditation .credential-tile {
+        padding: 8px 3px 7px;
+        gap: 3px;
+        border-radius: 10px;
     }
 
-    .header-accreditation .credential-card__image {
-        max-height: 46px;
+    .header-accreditation .credential-tile__label {
+        font-size: 0.5rem;
     }
 
-    .header-accreditation .credential-card__icon {
-        width: 36px;
-        height: 36px;
+    .header-accreditation .credential-tile__icon-wrap {
+        width: 38px;
+        height: 38px;
+    }
+
+    .header-accreditation .credential-tile__img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .header-accreditation .credential-tile__svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .header-accreditation .credential-tile__sub {
+        font-size: 0.44rem;
     }
 
     .header-main .mobile-nav__hamburger,
@@ -2436,10 +2580,6 @@ button {
 
     .header-main .mobile-nav__logo {
         font-size: 1.04rem;
-    }
-
-    .header-accreditation .wow-reg {
-        font-size: 0.5rem;
     }
 }
 

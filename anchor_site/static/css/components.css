@@ -1,0 +1,195 @@
+/* ==========================================================================
+   COMPONENT: .ui-brochure — Brochure Hero Layout
+   A premium 2-column brochure grid used on the Initiatives page.
+   Driven by the `image_on_right` toggle in Flask-Admin.
+   ========================================================================== */
+
+.ui-brochure {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    padding: 100px 0;
+    max-width: var(--container-width, 1240px);
+    margin: 0 auto;
+}
+
+/* Alternate background for visual rhythm */
+.ui-brochure:nth-child(even) {
+    background: rgba(47, 107, 79, 0.02);
+}
+
+/* --------------------------------------------------------------------------
+   TEXT BLOCK
+   -------------------------------------------------------------------------- */
+.ui-brochure__text {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.ui-brochure__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(47, 107, 79, 0.08);
+    border: 1px solid rgba(47, 107, 79, 0.12);
+    color: var(--primary, #2F6B4F);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.ui-brochure__title {
+    font-family: var(--font-head, 'Playfair Display', serif);
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #1a2f24;
+}
+
+.ui-brochure__body {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--text-muted, #6F6F6F);
+}
+
+.ui-brochure__body p {
+    margin-bottom: 12px;
+}
+
+.ui-brochure__body p:last-child {
+    margin-bottom: 0;
+}
+
+.ui-brochure__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: fit-content;
+    min-height: 56px;
+    padding: 14px 36px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent, #E07A3F) 0%, #ef9c69 100%);
+    color: #ffffff;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    box-shadow:
+        0 8px 24px rgba(224, 122, 63, 0.25),
+        0 2px 8px rgba(224, 122, 63, 0.15);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ui-brochure__cta:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 14px 36px rgba(224, 122, 63, 0.32),
+        0 4px 12px rgba(224, 122, 63, 0.2);
+}
+
+.ui-brochure__cta:active {
+    transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   IMAGE BLOCK
+   -------------------------------------------------------------------------- */
+.ui-brochure__image {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow:
+        0 28px 60px rgba(26, 47, 36, 0.12),
+        0 8px 20px rgba(26, 47, 36, 0.06);
+}
+
+.ui-brochure__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ui-brochure:hover .ui-brochure__image img {
+    transform: scale(1.04);
+}
+
+/* Decorative soft inner glow */
+.ui-brochure__image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   SCROLL REVEAL ANIMATION
+   -------------------------------------------------------------------------- */
+.ui-brochure {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.ui-brochure.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE: MOBILE (max-width: 900px)
+   Stack to 1 column. Image ALWAYS on top via order: -1.
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+    .ui-brochure {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding: 64px 24px;
+    }
+
+    /* Force image on top regardless of HTML source order */
+    .ui-brochure__image {
+        order: -1;
+    }
+
+    .ui-brochure__text {
+        order: 1;
+    }
+
+    .ui-brochure__title {
+        font-size: clamp(1.8rem, 6vw, 2.6rem);
+    }
+
+    .ui-brochure__cta {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 560px) {
+    .ui-brochure {
+        gap: 28px;
+        padding: 48px 16px;
+    }
+
+    .ui-brochure__image {
+        border-radius: 18px;
+    }
+
+    .ui-brochure__image::after {
+        border-radius: 18px;
+    }
+}

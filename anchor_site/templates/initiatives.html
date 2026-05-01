@@ -1,161 +1,45 @@
 {% extends 'base.html' %}
+{% from 'components/ui.html' import brochure_hero %}
 
 {% block title %}Initiatives | Anchor Association{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/initiatives.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
 {% endblock %}
 
 {% block content %}
+{# ── Hero Section ── #}
 <section class="initiatives-hero">
     <div class="container initiatives-hero__inner">
         <p class="initiatives-hero__eyebrow">Anchor Association</p>
-        <h1 class="initiatives-hero__title">Initiatives built around education, care, and community action.</h1>
+        <h1 class="initiatives-hero__title">Our Impact.</h1>
         <p class="initiatives-hero__text">
-            Explore the full initiative line-up, from Anchor Public School and Bagan Bilash to
-            regular outreach activities and past response programmes.
+            From education and eco-conscious livelihoods to healthcare and guided learning,
+            every initiative is built around real community needs.
         </p>
-
-        <div class="initiatives-roadmap">
-            {% for section in sections %}
-            <a href="#{{ section.slug }}" class="initiatives-roadmap__item">
-                <span class="initiatives-roadmap__number">{{ '%02d'|format(section.order) }}</span>
-                <span>{{ section.title }}</span>
-            </a>
-            {% endfor %}
-        </div>
     </div>
 </section>
 
-{% for section in featured_sections %}
-{% set active_subitems = section.subitems | selectattr('is_active') | list %}
-{% set featured_subitem = active_subitems | first %}
-<section class="initiative-showcase initiative-reveal" id="{{ section.slug }}" data-theme="{{ section.theme or 'forest' }}">
-    <div class="container">
-        <div class="initiative-shell">
-            <div class="initiative-copy initiative-copy--lead">
-                <div class="initiative-copy__heading">
-                    <span class="initiative-copy__number">{{ '%02d'|format(section.order) }}</span>
-                    <div>
-                        <h2 class="initiative-copy__title">{{ section.title }}</h2>
-                        {% if featured_subitem %}
-                        <p class="initiative-copy__project">{{ featured_subitem.title }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <div class="initiative-frame">
-                <div class="initiative-media">
-                    <div class="initiative-media__stage">
-                        {% set dynamic_images = initiative_images.get(section.slug) %}
-                        {% if dynamic_images %}
-                        <div class="initiative-media__slider">
-                            {% for img in dynamic_images %}
-                            <img src="{{ img.url }}" alt="{{ section.media_alt or section.title }}" class="initiative-media__slide {% if loop.first %}is-active{% endif %}" loading="lazy" decoding="async">
-                            {% endfor %}
-                        </div>
-                        {% elif section.media_url %}
-                        <img src="{{ section.media_url }}" alt="{{ section.media_alt or section.title }}" loading="lazy" decoding="async">
-                        {% else %}
-                        <div class="initiative-media__placeholder">{{ section.title }}</div>
-                        {% endif %}
-
-                        <div class="initiative-media__overlay">
-                            <span class="initiative-media__label">Programme Snapshot</span>
-                            <p>{{ section.summary }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <aside class="initiative-aside">
-                    {% if section.cta_label and section.cta_url %}
-                    <a href="{{ section.cta_url }}" class="initiative-action">{{ section.cta_label }}</a>
-                    {% endif %}
-
-                    <div class="initiative-impact">
-                        <span class="initiative-impact__label">{{ section.impact_label }}</span>
-                        <strong class="initiative-impact__value">{{ section.impact_value }}</strong>
-                    </div>
-
-                    {% if active_subitems %}
-                    <div class="initiative-parts">
-                        <p class="initiative-parts__label">Part of this initiative</p>
-                        <div class="initiative-parts__chips">
-                            {% for item in active_subitems %}
-                            <span>{{ item.title }}</span>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endif %}
-                </aside>
-            </div>
-
-            <div class="initiative-copy__body initiative-copy__body--detail">
-                {% if section.description %}
-                <p>{{ section.description }}</p>
-                {% endif %}
-
-                {% if active_subitems|length > 1 %}
-                <div class="initiative-copy__nested">
-                    <h3>Included projects</h3>
-                    <ul>
-                        {% for item in active_subitems %}
-                        <li>{{ item.title }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</section>
-{% endfor %}
-
-{% if list_sections %}
-<section class="initiative-collections">
-    <div class="container">
-        <div class="initiative-collections__header initiative-reveal">
-            <p class="initiatives-hero__eyebrow">More Initiative Tracks</p>
-            <h2 class="initiative-collections__title">Regular outreach and archived programme work.</h2>
-        </div>
-
-        <div class="initiative-collections__grid">
-            {% for section in list_sections %}
-            {% set active_subitems = section.subitems | selectattr('is_active') | list %}
-            <article class="initiative-collection-card initiative-reveal" id="{{ section.slug }}" data-theme="{{ section.theme or 'forest' }}">
-                <div class="initiative-collection-card__top">
-                    <span class="initiative-copy__number">{{ '%02d'|format(section.order) }}</span>
-                    <div class="initiative-impact initiative-impact--compact">
-                        <span class="initiative-impact__label">{{ section.impact_label }}</span>
-                        <strong class="initiative-impact__value">{{ section.impact_value }}</strong>
-                    </div>
-                </div>
-
-                <h3 class="initiative-collection-card__title">{{ section.title }}</h3>
-                <p class="initiative-collection-card__text">{{ section.description or section.summary }}</p>
-
-                <ul class="initiative-collection-card__list">
-                    {% for item in active_subitems %}
-                    <li>{{ item.title }}</li>
-                    {% endfor %}
-                </ul>
-
-                {% if section.cta_label and section.cta_url %}
-                <a href="{{ section.cta_url }}" class="initiative-collection-card__link">{{ section.cta_label }}</a>
-                {% endif %}
-            </article>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
+{# ── Brochure Loop — driven by database + image_on_right toggle ── #}
+<div class="container">
+    {% for section in sections %}
+    {{ brochure_hero(
+        tag='%02d'|format(section.order) ~ ' — ' ~ (section.display_style | capitalize),
+        title=section.title,
+        text_html='<p>' ~ (section.description or section.summary) ~ '</p>',
+        image_url=section.media_url or 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
+        image_right=section.image_on_right
+    ) }}
+    {% endfor %}
+</div>
 {% endblock %}
 
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const elements = document.querySelectorAll('.initiative-reveal');
+        /* Scroll-reveal for brochure blocks */
+        const brochures = document.querySelectorAll('.ui-brochure');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -164,33 +48,11 @@
                 }
             });
         }, {
-            threshold: 0.14,
+            threshold: 0.12,
             rootMargin: '0px 0px -40px 0px'
         });
 
-        elements.forEach((element) => observer.observe(element));
-
-        // Slider logic for dynamic items
-        const sliders = document.querySelectorAll('.initiative-media__slider');
-        sliders.forEach((slider) => {
-            const slides = slider.querySelectorAll('.initiative-media__slide');
-            if (slides.length > 1) {
-                let currentIndex = 0;
-                setInterval(() => {
-                    const prevIndex = currentIndex;
-                    slides[prevIndex].classList.remove('is-active');
-                    slides[prevIndex].classList.add('was-active');
-                    
-                    currentIndex = (currentIndex + 1) % slides.length;
-                    slides[currentIndex].classList.add('is-active');
-                    
-                    // Remove the previous slide after the new one has fully faded in
-                    setTimeout(() => {
-                        slides[prevIndex].classList.remove('was-active');
-                    }, 1200);
-                }, 4000);
-            }
-        });
+        brochures.forEach((el) => observer.observe(el));
     });
 </script>
 {% endblock %}

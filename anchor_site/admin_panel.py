@@ -1,3 +1,4 @@
+from markupsafe import Markup
 from flask import request, redirect, url_for, session, flash
 from flask_admin import Admin, AdminIndexView, expose, BaseView
 from flask_admin.contrib.sqla import ModelView
@@ -155,6 +156,13 @@ class TeamMemberView(CloudinaryUploadView):
     form_columns = ['name', 'position', 'upload_file', 'speech', 'is_leader', 'order']
 
 
+def _format_layout_direction(view, context, model, name):
+    """Custom column formatter: shows layout direction as a readable label."""
+    if model.image_on_right:
+        return Markup('<span style="white-space:nowrap">🖼️ Image Right | 📝 Text Left</span>')
+    return Markup('<span style="white-space:nowrap">📝 Text Left | 🖼️ Image Right</span>')
+
+
 class InitiativeSectionView(CloudinaryUploadView):
     upload_column = 'media_url'
     upload_folder = 'anchor/admin/initiatives'
@@ -163,6 +171,7 @@ class InitiativeSectionView(CloudinaryUploadView):
         'order',
         'title',
         'display_style',
+        'image_on_right',
         'impact_value',
         'cta_label',
         'is_active',
@@ -177,6 +186,10 @@ class InitiativeSectionView(CloudinaryUploadView):
         'media_url': 'Image / Media URL',
         'media_alt': 'Image Alt Text',
         'display_style': 'Layout Style',
+        'image_on_right': 'Image Position',
+    }
+    column_formatters = {
+        'image_on_right': _format_layout_direction,
     }
     column_sortable_list = ['order', 'title', 'display_style', 'is_active']
     column_default_sort = 'order'
@@ -195,7 +208,13 @@ class InitiativeSectionView(CloudinaryUploadView):
         'display_style',
         'order',
         'is_active',
+        'image_on_right',
     ]
+    form_args = {
+        'image_on_right': {
+            'description': 'Check this box to put the photo on the right. Leave unchecked for Image Left.',
+        },
+    }
 
 
 class InitiativeSubitemView(SecureModelView):
