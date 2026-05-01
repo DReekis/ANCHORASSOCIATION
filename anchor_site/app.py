@@ -730,12 +730,17 @@ def join_member():
 
 @app.route('/initiatives')
 def initiatives():
-    sections = (
-        InitiativeSection.query
-        .filter_by(is_active=True)
-        .order_by(InitiativeSection.order.asc(), InitiativeSection.id.asc())
-        .all()
-    )
+    sections = []
+    try:
+        sections = (
+            InitiativeSection.query
+            .filter_by(is_active=True)
+            .order_by(InitiativeSection.order.asc(), InitiativeSection.id.asc())
+            .all()
+        )
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error fetching initiatives: {e}")
     
     # Pre-fetch dynamic images from Cloudinary for all featured sections
     initiative_images = {}

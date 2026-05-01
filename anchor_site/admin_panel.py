@@ -57,8 +57,19 @@ class SyncDatabaseView(AuthMixin, BaseView):
     @expose('/')
     def index(self):
         try:
+            from sqlalchemy import text
             self.db.create_all()
-            flash("Database tables synchronized successfully.", "success")
+            
+            # Manually add missing columns to existing tables for Postgres
+            try:
+                self.db.session.execute(text('ALTER TABLE initiative_sections ADD COLUMN IF NOT EXISTS image_on_right BOOLEAN DEFAULT FALSE'))
+                self.db.session.commit()
+            except Exception as e:
+                self.db.session.rollback()
+                # If IF NOT EXISTS fails or is unsupported (like in some sqlite versions), we ignore
+                pass
+
+            flash("Database tables and columns synchronized successfully.", "success")
         except Exception as e:
             flash(f"Error syncing database: {e}", "error")
         
