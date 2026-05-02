@@ -247,12 +247,16 @@
         return Math.min(max, Math.max(min, value));
     }
 
-    function easeOutCubic(value) {
-        return 1 - Math.pow(1 - value, 3);
+    function easeInOutCubic(value) {
+        if (value < 0.5) {
+            return 4 * value * value * value;
+        }
+
+        return 1 - Math.pow(-2 * value + 2, 3) / 2;
     }
 
     function mapProgress(value) {
-        return reducedMotion.matches ? value : easeOutCubic(value);
+        return reducedMotion.matches ? value : easeInOutCubic(value);
     }
 
     function getStageProgress(progress, start, end) {

@@ -32,7 +32,9 @@
     <!-- Off-Canvas Sidebar -->
     <aside class="side-menu" id="sideMenu">
         <div class="side-menu__header">
-            <a href="{{ url_for('home') }}" class="side-menu__logo">Anchor Association</a>
+            <a href="{{ url_for('home') }}" class="side-menu__logo" aria-label="Anchor Association home">
+                <img src="{{ url_for('static', filename='photos/logo.png') }}" alt="Anchor Association" class="brand-logo brand-logo--sidebar">
+            </a>
             <button class="side-menu__close" id="sideMenuClose" aria-label="Close menu">
                 <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
@@ -63,7 +65,9 @@
                     <span></span>
                 </button>
 
-                <a href="{{ url_for('home') }}" class="nav-glass__logo">Anchor Association</a>
+                <a href="{{ url_for('home') }}" class="nav-glass__logo" aria-label="Anchor Association home">
+                    <img src="{{ url_for('static', filename='photos/logo.png') }}" alt="Anchor Association" class="brand-logo brand-logo--desktop">
+                </a>
 
                 <div class="nav-glass__links" id="site-navigation">
                     <a href="{{ url_for('home') }}" class="nav-glass__link {% if request.path == '/' %}active{% endif %}">Home</a>
@@ -105,7 +109,9 @@
                     <button class="mobile-nav__hamburger" type="button" aria-label="Toggle menu" data-nav-toggle>
                         <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                     </button>
-                    <a href="{{ url_for('home') }}" class="mobile-nav__logo">Anchor</a>
+                    <a href="{{ url_for('home') }}" class="mobile-nav__logo" aria-label="Anchor Association home">
+                        <img src="{{ url_for('static', filename='photos/logo.png') }}" alt="Anchor Association" class="brand-logo brand-logo--mobile">
+                    </a>
                 </div>
 
                 <div class="mobile-nav__actions">
@@ -133,7 +139,10 @@
             <div class="accreditation-bar__surface">
                 <div class="accreditation-bar__body">
                     <div class="accreditation-bar__brand">
-                        <p class="accreditation-bar__title">ANCHOR</p>
+                        <p class="accreditation-bar__title">
+                            ANCHOR
+                            <span class="accreditation-bar__title-mini">association</span>
+                        </p>
                         <p class="accreditation-bar__subtitle">
                             Assemblage of Notable &amp; Charitable Help Over Resurrection
                         </p>
@@ -189,7 +198,9 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer__content">
-            <div class="footer__logo">Anchor Association</div>
+            <a href="{{ url_for('home') }}" class="footer__logo" aria-label="Anchor Association home">
+                <img src="{{ url_for('static', filename='photos/logo.png') }}" alt="Anchor Association" class="brand-logo brand-logo--footer">
+            </a>
             <p class="footer__tagline">Rooted in Community. Growing Together.</p>
 
             <nav class="footer__links" aria-label="Footer navigation">
