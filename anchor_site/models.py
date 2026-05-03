@@ -137,3 +137,17 @@ class MemberStory(db.Model):
 
     def __repr__(self):
         return f'<MemberStory {self.name}>'
+
+
+class CommunityMember(db.Model):
+    """A small community member card shown in the queue section."""
+    __tablename__ = 'community_members'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    qualification = db.Column(db.String(300), default='')
+    photo_url = db.Column(db.String(500), default='')
+    is_active = db.Column(db.Boolean, default=True)
+
+    def __repr__(self):
+        return f'<CommunityMember {self.name}>'

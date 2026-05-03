@@ -14,6 +14,7 @@ try:
         InitiativeSection,
         InitiativeSubitem,
         MemberStory,
+        CommunityMember,
     )
 except ImportError:
     from models import (
@@ -24,6 +25,7 @@ except ImportError:
         InitiativeSection,
         InitiativeSubitem,
         MemberStory,
+        CommunityMember,
     )
 
 
@@ -380,6 +382,24 @@ class MemberStoryView(CloudinaryUploadView):
     }
 
 
+class CommunityMemberView(CloudinaryUploadView):
+    """Admin view for the community members queue."""
+    upload_column = 'photo_url'
+    upload_folder = 'anchor/admin/community-members'
+    column_list = ['id', 'name', 'qualification', 'is_active']
+    column_labels = {
+        'photo_url': 'Photo URL',
+        'upload_file': 'Upload Photo',
+    }
+    column_sortable_list = ['name', 'is_active']
+    form_columns = [
+        'name',
+        'qualification',
+        'upload_file',
+        'is_active',
+    ]
+
+
 def setup_admin(app, db):
     """Initialize Flask-Admin with secure model views."""
     admin = Admin(
@@ -394,5 +414,6 @@ def setup_admin(app, db):
     admin.add_view(InitiativeSubitemView(InitiativeSubitem, db.session, name='Initiative Items'))
     admin.add_view(AdminUserView(AdminUser, db.session, name='Admins'))
     admin.add_view(MemberStoryView(MemberStory, db.session, name='Guided by Purpose'))
+    admin.add_view(CommunityMemberView(CommunityMember, db.session, name='Community Members'))
     admin.add_view(GalleryUploadView(name='Bulk Photo Upload', endpoint='bulk_upload'))
     admin.add_view(SyncDatabaseView(db, name='Sync Database', endpoint='sync-db'))

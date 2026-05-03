@@ -13,10 +13,10 @@ import cloudinary.api
 import razorpay
 
 try:
-    from .models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide, MemberStory
+    from .models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide, MemberStory, CommunityMember
     from .admin_panel import setup_admin
 except ImportError:
-    from models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide, MemberStory
+    from models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide, MemberStory, CommunityMember
     from admin_panel import setup_admin
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -715,7 +715,24 @@ def home():
         db.session.rollback()
         app.logger.error(f"Error fetching member stories: {e}")
 
-    return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides, member_stories=member_stories)
+    community_members = []
+    try:
+        members_db = CommunityMember.query.filter_by(is_active=True).all()
+        import random
+        community_members = [
+            {
+                'id': m.id,
+                'name': m.name,
+                'qualification': m.qualification,
+                'photo_url': m.photo_url
+            } for m in members_db
+        ]
+        random.shuffle(community_members)
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error fetching community members: {e}")
+
+    return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides, member_stories=member_stories, community_members=community_members)
 
 
 @app.route('/impacts')

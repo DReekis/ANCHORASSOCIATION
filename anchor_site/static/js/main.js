@@ -632,3 +632,82 @@
         slides[current].classList.add('active');
     }, 3000);
 })();
+
+// ---- Community Members Queue (Home Page) ----
+(function () {
+    const gridContainer = document.getElementById('communityGrid');
+    if (!gridContainer) return;
+
+    let membersData = [];
+    try {
+        membersData = JSON.parse(gridContainer.getAttribute('data-members') || '[]');
+    } catch (e) {
+        console.error('Failed to parse community members data', e);
+        return;
+    }
+
+    if (membersData.length === 0) return;
+
+    const MAX_DISPLAY = Math.min(10, membersData.length);
+    let displayQueue = membersData.slice(0, MAX_DISPLAY);
+    let waitingQueue = membersData.slice(MAX_DISPLAY);
+
+    // Helper to generate HTML for a member
+    const createMemberHTML = (member) => `
+        <div class="community-member" data-id="${member.id}">
+            <div class="community-member__photo-wrapper">
+                <img src="${member.photo_url || '/static/photos/placeholder-user.png'}" alt="${member.name}" class="community-member__photo" loading="lazy">
+            </div>
+            <h3 class="community-member__name">${member.name}</h3>
+            <p class="community-member__qual">${member.qualification}</p>
+        </div>
+    `;
+
+    // Initialize grid
+    gridContainer.innerHTML = displayQueue.map(createMemberHTML).join('');
+
+    // If we have 10 or fewer members, no need to cycle
+    if (waitingQueue.length === 0) return;
+
+    let intervalId = null;
+
+    const cycleMember = () => {
+        // Pick a random currently displayed member to replace
+        const randomIndex = Math.floor(Math.random() * displayQueue.length);
+        const slotToReplace = gridContainer.children[randomIndex];
+        const oldMember = displayQueue[randomIndex];
+
+        // Pick the first person from the waiting queue
+        const newMember = waitingQueue.shift();
+
+        // Animate out
+        slotToReplace.classList.add('fade-out');
+
+        setTimeout(() => {
+            // Swap in memory
+            displayQueue[randomIndex] = newMember;
+            waitingQueue.push(oldMember); // put old member back in waiting line
+
+            // Update DOM
+            slotToReplace.outerHTML = createMemberHTML(newMember);
+            const newSlot = gridContainer.children[randomIndex];
+            
+            // Force reflow and animate in
+            void newSlot.offsetWidth;
+            newSlot.classList.add('fade-in');
+        }, 600); // Wait for fade-out to finish
+    };
+
+    // Intersection Observer to only run animation when visible
+    const observer = new IntersectionObserver((entries) => {
+        const isVisible = entries[0].isIntersecting;
+        if (isVisible && !intervalId) {
+            intervalId = setInterval(cycleMember, 4000); // Swap every 4 seconds
+        } else if (!isVisible && intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+    }, { threshold: 0.1 });
+
+    observer.observe(document.getElementById('community-queue'));
+})();
