@@ -29,7 +29,7 @@ class HeroSlide(db.Model):
     image_url = db.Column(db.String(500), nullable=False)
     title = db.Column(db.String(200), nullable=False)
     subtitle = db.Column(db.String(300))
-    order = db.Column(db.Integer, default=0)
+    order = db.Column('order', db.Integer, default=0, quote=True)
     is_active = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
@@ -57,7 +57,7 @@ class TeamMember(db.Model):
     image_url = db.Column(db.String(500))
     speech = db.Column(db.Text)
     is_leader = db.Column(db.Boolean, default=False)
-    order = db.Column(db.Integer, default=0)
+    order = db.Column('order', db.Integer, default=0, quote=True)
 
     def __repr__(self):
         return f'<TeamMember {self.name}>'
@@ -79,7 +79,7 @@ class InitiativeSection(db.Model):
     media_alt = db.Column(db.String(300))
     theme = db.Column(db.String(40), default='forest')
     display_style = db.Column(db.String(40), default='feature')
-    order = db.Column(db.Integer, default=0)
+    order = db.Column('order', db.Integer, default=0, quote=True)
     is_active = db.Column(db.Boolean, default=True)
     image_on_right = db.Column(db.Boolean, default=False)
 
@@ -110,7 +110,7 @@ class InitiativeSubitem(db.Model):
     section = db.relationship('InitiativeSection', back_populates='subitems')
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)
-    order = db.Column(db.Integer, default=0)
+    order = db.Column('order', db.Integer, default=0, quote=True)
     is_active = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
@@ -131,7 +131,7 @@ class MemberStory(db.Model):
     role_tag = db.Column(db.String(120), default='Our Member')
     body_html = db.Column(db.Text, nullable=False, default='')
     portrait_url = db.Column(db.String(500), default='')
-    order = db.Column(db.Integer, default=0)
+    order = db.Column('order', db.Integer, default=0, quote=True)
     is_active = db.Column(db.Boolean, default=True)
     image_on_right = db.Column(db.Boolean, default=True)
 

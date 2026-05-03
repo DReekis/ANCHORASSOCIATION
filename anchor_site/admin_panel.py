@@ -63,6 +63,10 @@ class SyncDatabaseView(AuthMixin, BaseView):
             # Manually add missing columns to existing tables for Postgres
             try:
                 self.db.session.execute(text('ALTER TABLE initiative_sections ADD COLUMN IF NOT EXISTS image_on_right BOOLEAN DEFAULT FALSE'))
+                self.db.session.execute(text('ALTER TABLE initiative_subitems ADD COLUMN IF NOT EXISTS description TEXT'))
+                self.db.session.execute(text('ALTER TABLE member_stories ADD COLUMN IF NOT EXISTS image_on_right BOOLEAN DEFAULT TRUE'))
+                self.db.session.execute(text('ALTER TABLE member_stories ADD COLUMN IF NOT EXISTS qualification VARCHAR(300) DEFAULT \'\''))
+                self.db.session.execute(text('ALTER TABLE member_stories ADD COLUMN IF NOT EXISTS role_tag VARCHAR(120) DEFAULT \'Our Member\''))
                 self.db.session.commit()
             except Exception as e:
                 self.db.session.rollback()
