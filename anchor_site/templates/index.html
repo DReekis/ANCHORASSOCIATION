@@ -4,6 +4,7 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home-tailwind.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
 {% endblock %}
 
@@ -88,6 +89,218 @@
                 progress and preservation, creating a generation of thoughtful leaders
                 who can shape a sustainable future for West Bengal and beyond.
             </p>
+        </div>
+    </div>
+</section>
+
+
+{% set initiative_galleries = [
+    {
+        'label': 'Education',
+        'title': 'Anchor Public School',
+        'description': 'Holistic education providing a stable, nurturing environment where children build confidence, discipline, and curiosity through daily classroom support and guided learning.',
+        'accent': '#1f4e79',
+        'soft': '#eaf1f8',
+        'details': ['Classroom learning', 'Foundation support', 'Student mentoring', 'School guidance'],
+        'logo': 'photos/About_Us/Academic_Programme/Anchor_Public_School_Logo.png',
+        'photos': [
+            {'file': 'photos/About_Us/Academic_Programme/Academic_Programme.png', 'alt': 'Academic programme classroom session'},
+            {'file': 'photos/About_Us/Academic_Programme/Academic_Programme2.png', 'alt': 'Students engaged in learning activities'},
+            {'file': 'photos/About_Us/Academic_Programme/Academic_Programme3.png', 'alt': 'School environment and campus'},
+            {'file': 'photos/About_Us/Academic_Programme/Anchor_Public_School.png', 'alt': 'Anchor Public School building'}
+        ]
+    },
+    {
+        'label': 'Eco & Sustainability',
+        'title': 'Eco Urban Project',
+        'description': 'Practical eco awareness, community spaces, local livelihood, and sustainable habits — bridging environmental consciousness with daily community life. Includes Bagan Bilash, our community café.',
+        'accent': '#2f6b4f',
+        'soft': '#edf6ef',
+        'details': ['Eco awareness', 'Green habits', 'Community livelihood', 'Bagan Bilash café'],
+        'logo': '',
+        'photos': [
+            {'file': 'photos/About_Us/Eco_Urban_Project/Eco_Urban_Project.png', 'alt': 'Eco Urban Project sustainability activities'},
+            {'file': 'photos/About_Us/Eco_Urban_Project/Eco_Urban_Project2.png', 'alt': 'Community eco awareness session'},
+            {'file': 'photos/About_Us/Eco_Urban_Project/Bagan_Bilash.png', 'alt': 'Bagan Bilash community café'},
+            {'file': 'photos/About_Us/Eco_Urban_Project/Bagan_Bilash2.png', 'alt': 'Bagan Bilash café interior'}
+        ]
+    },
+    {
+        'label': 'Women Empowerment',
+        'title': 'Nivedita SHG',
+        'description': 'Women-led self-help groups building household income support, savings discipline, and practical leadership in local communities through shared learning and collective action.',
+        'accent': '#8f4f3e',
+        'soft': '#f7ece8',
+        'details': ['Self-help meetings', 'Savings & records', 'Income support', 'Community awareness'],
+        'logo': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG_Logo.png',
+        'photos': [
+            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG1.png', 'alt': 'Nivedita SHG members in discussion'},
+            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG2.png', 'alt': 'Self-help group documentation'},
+            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG3.png', 'alt': 'Community women in awareness activity'},
+            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG4.png', 'alt': 'Group savings and planning session'},
+            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG5.png', 'alt': 'Women empowerment workshop'},
+            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG6.png', 'alt': 'SHG field documentation'}
+        ]
+    },
+    {
+        'label': 'Education Support',
+        'title': 'Learn & Shine',
+        'description': 'Guided independent learning, discipline habits, daily goal setting, and confidence-building support helping students take ownership of their academic journey.',
+        'accent': '#665533',
+        'soft': '#f4efdf',
+        'details': ['Independent study', 'Mentor guidance', 'Life skills', 'Confidence building'],
+        'logo': 'photos/About_Us/Learn&Shine/Learn&Shine_logo.png',
+        'photos': [
+            {'file': 'photos/About_Us/Learn&Shine/Learn&Shine1.png', 'alt': 'Students in guided study session'},
+            {'file': 'photos/About_Us/Learn&Shine/Learn&Shine2.png', 'alt': 'Independent learning activities'},
+            {'file': 'photos/About_Us/Learn&Shine/Learn&Shine3.png', 'alt': 'Mentor-student interaction'},
+            {'file': 'photos/About_Us/Learn&Shine/Learn&Shine4.png', 'alt': 'Confidence building workshop'}
+        ]
+    },
+    {
+        'label': 'Child Development',
+        'title': 'Minions Fun House',
+        'description': 'A playful, safe space for children featuring art, storytelling, play-based learning, and social development sessions that keep childhood energetic and expressive.',
+        'accent': '#b8841f',
+        'soft': '#fff6da',
+        'details': ['Creative workshops', 'Play & movement', 'Group interaction', 'Safe learning space'],
+        'logo': 'photos/About_Us/Minions_Fun School/Minions_Fun_House_Logo_Upperpart.png',
+        'photos': [
+            {'file': 'photos/About_Us/Minions_Fun School/Minions_Fun_House.png', 'alt': 'Children enjoying activities at Minions Fun House'},
+            {'file': 'photos/About_Us/Minions_Fun School/Minions_Fun_House2.png', 'alt': 'Kids in creative play session'}
+        ]
+    },
+    {
+        'label': 'Health Access',
+        'title': 'Finding Cures',
+        'description': 'Accessible healthcare through basic consultations, medicine support, preventive health awareness, and referral guidance for families in need.',
+        'accent': '#3f6571',
+        'soft': '#e9f2f3',
+        'details': ['Health camps', 'Basic check-ups', 'Medicine guidance', 'Referrals & follow-up'],
+        'logo': 'photos/About_Us/Finding_Cures/Finding_Cure_Logo.png',
+        'photos': [
+            {'file': 'photos/About_Us/Finding_Cures/Finding_cures1.png', 'alt': 'Community health camp consultation'},
+            {'file': 'photos/About_Us/Finding_Cures/Finding_Cures2.png', 'alt': 'Medical support and volunteer assistance'}
+        ]
+    },
+    {
+        'label': 'Language & Communication',
+        'title': 'Atma Katha',
+        'description': 'Spoken language practice, reading circles, writing support, and communication confidence for learners of all ages — building bridges to wider participation.',
+        'accent': '#6b4c8a',
+        'soft': '#f0eaf8',
+        'details': ['Reading circles', 'Spoken practice', 'Writing support', 'Communication confidence'],
+        'logo': 'photos/About_Us/Atma_Katha/Atma_Katha_Logo.png',
+        'photos': [
+            {'file': 'photos/About_Us/Atma_Katha/Atma_Katha1.png', 'alt': 'Language learning class in progress'},
+            {'file': 'photos/About_Us/Atma_Katha/Atma_Katha2.png', 'alt': 'Students practicing communication skills'}
+        ]
+    },
+    {
+        'label': 'Career Readiness',
+        'title': 'Career Edge',
+        'description': 'Career guidance, presentation skills, and direction — helping participants move from aspiration toward practical steps, employability, and economic confidence.',
+        'accent': '#2d5a45',
+        'soft': '#e8f2ed',
+        'details': ['Career counseling', 'Interview prep', 'Skill development', 'Employability support'],
+        'logo': 'photos/About_Us/Career_Edge/Career_Edge_Logo.png',
+        'photos': [
+            {'file': 'photos/About_Us/Career_Edge/Careet_Edge.png', 'alt': 'Career development workshop session'},
+            {'file': 'photos/About_Us/Career_Edge/Career_Edge1.png', 'alt': 'Young professionals in collaborative training'}
+        ]
+    }
+] %}
+
+{% set regular_activities = [
+    {'title': 'Awareness Programme', 'description': 'Women and children awareness sessions across communities.', 'image': 'photos/About_Us/Other Regular activities/Awareness_Programme_women and Childrean.png', 'accent': '#a85f46'},
+    {'title': 'Disaster Relief Programme', 'description': 'Urgent relief work and essential support during calamities.', 'image': 'photos/About_Us/Other Regular activities/Yaas Disaster Relief Programme_1.png', 'accent': '#b86d2f'},
+    {'title': 'Orphan Support Programme', 'description': 'Feeding, essentials, and continuing care for orphaned children.', 'image': 'photos/About_Us/Orphan Support Programme/image.png', 'accent': '#2f6b4f'},
+    {'title': 'Multi-Talent Development', 'description': 'Cultural, creative, and skill activities for all ages.', 'image': 'photos/About_Us/Multi Talent Development Competition/image.png', 'accent': '#b8841f'},
+    {'title': 'Blood Donation Camp', 'description': 'Community blood donation drives and local health action.', 'image': 'photos/About_Us/Other Regular activities/Blood_Donation_Camp.png', 'accent': '#9b3d33'},
+    {'title': 'Plantation Programme', 'description': 'Tree plantation and environmental stewardship initiatives.', 'image': 'photos/About_Us/Other Regular activities/Tree_Plantation.png', 'accent': '#2f6b4f'},
+    {'title': 'Cloth Distribution', 'description': 'Seasonal clothing and festival support for families.', 'image': 'photos/About_Us/Other Regular activities/Cloth Distribution Programme.png', 'accent': '#b86d2f'}
+] %}
+
+<!-- SECTION 4: ABOUT US / OUR INITIATIVES -->
+<section class="initiatives-story section" id="our-initiatives" aria-labelledby="initiatives-story-title">
+    <div class="container">
+        <header class="initiatives-story__header" data-reveal>
+            <span class="initiatives-story__eyebrow">About Us / Our Initiatives</span>
+            <h2 class="initiatives-story__title" id="initiatives-story-title">Our work in the community</h2>
+            <p class="initiatives-story__lead">
+                Anchor Association serves West Bengal through education, sustainability, women's empowerment, healthcare, and community development — one programme at a time.
+            </p>
+        </header>
+
+        <div class="ig-showcase-stack">
+            {% for item in initiative_galleries %}
+            <article class="ig-showcase {% if loop.index is even %}ig-showcase--reverse{% endif %}"
+                     data-initiative-gallery
+                     style="--ig-accent: {{ item.accent }}; --ig-soft: {{ item.soft }};"
+                     data-reveal>
+                <div class="ig-showcase__text">
+                    <div class="ig-showcase__head">
+                        <span class="initiative-chip">{{ item.label }}</span>
+                        {% if item.logo %}
+                        <img class="ig-showcase__logo" src="{{ url_for('static', filename=item.logo) }}" alt="{{ item.title }} logo" loading="lazy">
+                        {% endif %}
+                    </div>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description }}</p>
+                    <ul class="initiative-detail-list">
+                        {% for detail in item.details %}
+                        <li>{{ detail }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="ig-showcase__gallery">
+                    <div class="ig-showcase__main-wrap">
+                        <img class="ig-showcase__main-img"
+                             src="{{ url_for('static', filename=item.photos[0].file) }}"
+                             alt="{{ item.photos[0].alt }}"
+                             data-gallery-main
+                             loading="lazy" decoding="async">
+                    </div>
+                    {% if item.photos | length > 1 %}
+                    <div class="ig-showcase__thumbs">
+                        {% for photo in item.photos %}
+                        <button class="ig-showcase__thumb {% if loop.first %}is-active{% endif %}"
+                                type="button"
+                                data-gallery-thumb
+                                data-src="{{ url_for('static', filename=photo.file) }}"
+                                data-alt="{{ photo.alt }}"
+                                aria-label="View photo {{ loop.index }}">
+                            <img src="{{ url_for('static', filename=photo.file) }}" alt="{{ photo.alt }}" loading="lazy" decoding="async">
+                        </button>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="initiative-activity-band">
+        <div class="container">
+            <div class="initiative-section-heading initiative-section-heading--compact" data-reveal>
+                <span class="initiatives-story__eyebrow">Regular Activities</span>
+                <h3>Other ongoing and need-based activities</h3>
+            </div>
+            <div class="initiative-activity-grid tw-grid">
+                {% for item in regular_activities %}
+                <article class="initiative-activity-card" style="--initiative-accent: {{ item.accent }};" data-reveal>
+                    <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.title }}" loading="lazy" decoding="async">
+                    <div>
+                        <h4>{{ item.title }}</h4>
+                        <p>{{ item.description }}</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            <div class="initiatives-story__action" data-reveal>
+                <a href="{{ url_for('initiatives') }}" class="initiatives-story__button">View all initiatives</a>
+            </div>
         </div>
     </div>
 </section>

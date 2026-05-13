@@ -612,6 +612,82 @@
     startAutoplay();
 })();
 
+// ---- Scroll Reveal Blocks ----
+(function () {
+    const revealItems = Array.from(document.querySelectorAll('[data-reveal]'));
+    if (!revealItems.length) {
+        return;
+    }
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reducedMotion.matches || typeof IntersectionObserver !== 'function') {
+        revealItems.forEach((item) => item.classList.add('is-visible'));
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+                return;
+            }
+
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+        });
+    }, {
+        threshold: 0.14,
+        rootMargin: '0px 0px -48px 0px',
+    });
+
+    revealItems.forEach((item) => observer.observe(item));
+})();
+
+// ---- Initiative Gallery — Thumbnail Swap ----
+(function () {
+    const galleries = document.querySelectorAll('[data-initiative-gallery]');
+    if (!galleries.length) return;
+
+    galleries.forEach(function (gallery) {
+        const mainImg = gallery.querySelector('[data-gallery-main]');
+        const thumbs = Array.from(gallery.querySelectorAll('[data-gallery-thumb]'));
+        if (!mainImg || thumbs.length < 2) return;
+
+        thumbs.forEach(function (thumb) {
+            thumb.addEventListener('click', function () {
+                var newSrc = thumb.getAttribute('data-src');
+                var newAlt = thumb.getAttribute('data-alt') || '';
+
+                // Skip if already active
+                if (thumb.classList.contains('is-active')) return;
+
+                // Fade out current image
+                mainImg.classList.add('is-fading');
+
+                setTimeout(function () {
+                    mainImg.src = newSrc;
+                    mainImg.alt = newAlt;
+
+                    // Wait for image load then fade in
+                    mainImg.onload = function () {
+                        mainImg.classList.remove('is-fading');
+                        mainImg.onload = null;
+                    };
+
+                    // Fallback: remove fade if image already cached
+                    if (mainImg.complete) {
+                        mainImg.classList.remove('is-fading');
+                        mainImg.onload = null;
+                    }
+                }, 300);
+
+                // Update active states
+                thumbs.forEach(function (t) { t.classList.remove('is-active'); });
+                thumb.classList.add('is-active');
+            });
+        });
+    });
+})();
+
 // ---- Gallery Slideshow (Home Page) ----
 (function () {
     const slideshow = document.getElementById('gallerySlideshow');
