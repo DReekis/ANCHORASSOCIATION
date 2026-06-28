@@ -1033,24 +1033,6 @@ def inject_template_globals():
                 'subtitle': 'Registered organization',
                 'image': accreditation_assets.get('msme'),
             },
-            {
-                'key': '80g',
-                'title': '80G',
-                'subtitle': 'Donation compliance',
-                'image': None,
-            },
-            {
-                'key': '12a',
-                'title': '12A',
-                'subtitle': 'Non-profit registration',
-                'image': None,
-            },
-            {
-                'key': 'csr',
-                'title': 'CSR',
-                'subtitle': 'Partnership ready',
-                'image': None,
-            },
         ],
     }
 
@@ -1108,8 +1090,8 @@ def home():
         db.session.rollback()
         app.logger.error(f"Error fetching impact metrics: {e}")
 
-    if not impact_metrics and not impact_records_exist:
-        impact_metrics = DEFAULT_IMPACT_METRICS
+    # Impact metrics are intentionally left empty when no DB records exist.
+    # Users will fill them from the admin panel.
 
     home_gallery_images = []
     gallery_records_exist = _model_has_records(GalleryImage)

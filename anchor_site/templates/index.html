@@ -357,9 +357,7 @@
                 </article>
                 {% endfor %}
             </div>
-            <div class="initiatives-story__action" data-reveal>
-                <a href="{{ url_for('initiatives') }}" class="initiatives-story__button">View all initiatives</a>
-            </div>
+
         </div>
     </div>
 </section>
@@ -410,7 +408,7 @@
 {% endif %}
 
 
-<!-- SECTION: GALLERY -->
+<!-- SECTION: GALLERY (Screensaver Crossfade) -->
 {% if home_gallery_images %}
 <section class="home-gallery section" id="gallery" aria-labelledby="home-gallery-title">
     <div class="container">
@@ -422,27 +420,22 @@
             </p>
         </header>
 
-        <div class="home-gallery__grid" data-gallery-lightbox>
+        <div class="home-gallery__screensaver" data-gallery-screensaver data-gallery-lightbox>
             {% for image in home_gallery_images %}
-            <button
-                class="home-gallery__item home-gallery__item--{{ loop.index }}"
-                type="button"
-                data-lightbox-src="{{ image.url }}"
-                data-lightbox-alt="{{ image.alt }}"
-                data-reveal
-                style="--reveal-delay: {{ loop.index0 * 70 }}ms;"
-                aria-label="Open gallery image: {{ image.alt }}">
+            <div class="home-gallery__slide {% if loop.first %}is-active{% endif %}"
+                 data-lightbox-src="{{ image.url }}"
+                 data-lightbox-alt="{{ image.alt }}">
                 <img
                     src="{{ image.url }}"
                     {% if image.srcset %}srcset="{{ image.srcset }}"{% endif %}
-                    sizes="{{ image.sizes }}"
+                    sizes="100vw"
                     alt="{{ image.alt }}"
-                    loading="lazy"
+                    loading="{% if loop.first %}eager{% else %}lazy{% endif %}"
                     decoding="async">
                 {% if image.category %}
                 <span class="home-gallery__label">{{ image.category }}</span>
                 {% endif %}
-            </button>
+            </div>
             {% endfor %}
         </div>
     </div>

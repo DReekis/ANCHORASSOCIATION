@@ -781,47 +781,135 @@
     });
 })();
 
-// ---- Home Gallery Lightbox ----
+// ---- Home Gallery — Screensaver Crossfade + Lightbox ----
 (function () {
-    const gallery = document.querySelector('[data-gallery-lightbox]');
+    const screensaver = document.querySelector('[data-gallery-screensaver]');
     const dialog = document.getElementById('homeLightbox');
-    const image = document.getElementById('homeLightboxImage');
+    const lightboxImage = document.getElementById('homeLightboxImage');
     const closeButton = dialog?.querySelector('[data-home-lightbox-close]');
 
-    if (!gallery || !dialog || !image) {
+    if (!screensaver) {
         return;
     }
 
-    gallery.addEventListener('click', (event) => {
-        const item = event.target.closest('[data-lightbox-src]');
-        if (!item) {
+    const slides = Array.from(screensaver.querySelectorAll('.home-gallery__slide'));
+    if (!slides.length) {
+        return;
+    }
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const state = {
+        currentIndex: Math.max(slides.findIndex(function (s) { return s.classList.contains('is-active'); }), 0),
+        autoplayId: null,
+        cleanupTimerId: null,
+    };
+
+    function updateSlides() {
+        slides.forEach(function (slide, index) {
+            slide.classList.toggle('is-active', index === state.currentIndex);
+        });
+    }
+
+    function goToSlide(nextIndex) {
+        var normalizedIndex = (nextIndex + slides.length) % slides.length;
+        if (normalizedIndex === state.currentIndex) {
             return;
         }
 
-        image.src = item.getAttribute('data-lightbox-src') || '';
-        image.alt = item.getAttribute('data-lightbox-alt') || 'Anchor Association gallery image';
-        if (typeof dialog.showModal === 'function') {
-            dialog.showModal();
-        } else {
-            dialog.setAttribute('open', '');
-        }
-    });
+        var previousSlide = slides[state.currentIndex];
+        previousSlide.classList.remove('is-active');
+        previousSlide.classList.add('is-leaving');
 
-    function closeLightbox() {
-        if (typeof dialog.close === 'function') {
-            dialog.close();
-        } else {
-            dialog.removeAttribute('open');
+        state.currentIndex = normalizedIndex;
+        slides[normalizedIndex].classList.add('is-active');
+
+        if (state.cleanupTimerId) {
+            window.clearTimeout(state.cleanupTimerId);
         }
-        image.removeAttribute('src');
+
+        state.cleanupTimerId = window.setTimeout(function () {
+            previousSlide.classList.remove('is-leaving');
+        }, reducedMotion.matches ? 0 : 1500);
     }
 
-    closeButton?.addEventListener('click', closeLightbox);
-    dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) {
-            closeLightbox();
+    function stopAutoplay() {
+        if (state.autoplayId) {
+            window.clearInterval(state.autoplayId);
+            state.autoplayId = null;
+        }
+    }
+
+    function startAutoplay() {
+        stopAutoplay();
+        if (slides.length <= 1 || reducedMotion.matches) {
+            return;
+        }
+
+        state.autoplayId = window.setInterval(function () {
+            goToSlide(state.currentIndex + 1);
+        }, 5000);
+    }
+
+    // IntersectionObserver — only run when visible
+    if (typeof IntersectionObserver === 'function') {
+        var observer = new IntersectionObserver(function (entries) {
+            if (entries[0].isIntersecting) {
+                startAutoplay();
+            } else {
+                stopAutoplay();
+            }
+        }, { threshold: 0.15 });
+
+        observer.observe(screensaver);
+    } else {
+        startAutoplay();
+    }
+
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+            stopAutoplay();
+        } else {
+            startAutoplay();
         }
     });
+
+    // Lightbox click handler
+    if (dialog && lightboxImage) {
+        screensaver.addEventListener('click', function (event) {
+            var slide = event.target.closest('.home-gallery__slide');
+            if (!slide) {
+                return;
+            }
+
+            lightboxImage.src = slide.getAttribute('data-lightbox-src') || '';
+            lightboxImage.alt = slide.getAttribute('data-lightbox-alt') || 'Anchor Association gallery image';
+
+            if (typeof dialog.showModal === 'function') {
+                dialog.showModal();
+            } else {
+                dialog.setAttribute('open', '');
+            }
+        });
+
+        function closeLightbox() {
+            if (typeof dialog.close === 'function') {
+                dialog.close();
+            } else {
+                dialog.removeAttribute('open');
+            }
+            lightboxImage.removeAttribute('src');
+        }
+
+        closeButton?.addEventListener('click', closeLightbox);
+        dialog.addEventListener('click', function (event) {
+            if (event.target === dialog) {
+                closeLightbox();
+            }
+        });
+    }
+
+    updateSlides();
 })();
 
 // ---- Community Members Queue (Home Page) ----
