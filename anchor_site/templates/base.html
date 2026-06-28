@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=National+Park:wght@800&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
     <!-- Stylesheets -->
@@ -23,6 +23,8 @@
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
     <!-- Noise Texture Overlay -->
     <div class="noise-overlay"></div>
 
@@ -41,12 +43,16 @@
         </div>
         <div class="side-menu__content">
             <a href="{{ url_for('home') }}" class="side-menu__link {% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="{{ url_for('home') }}#about-us" class="side-menu__link">About Us</a>
-            <a href="{{ url_for('initiatives') }}" class="side-menu__link {% if request.path.startswith('/initiatives') %}active{% endif %}">Initiatives</a>
-            <a href="{{ url_for('impacts') }}" class="side-menu__link {% if request.path.startswith('/impacts') %}active{% endif %}">Impacts</a>
-            <a href="{{ url_for('gallery') }}" class="side-menu__link {% if request.path.startswith('/gallery') %}active{% endif %}">Gallery</a>
-            <a href="{{ url_for('join_member') }}" class="side-menu__link {% if request.path.startswith('/join-member') %}active{% endif %}">Join With Us</a>
-            <a href="{{ url_for('home') }}#contact" class="side-menu__link">Contact Us</a>
+            <a href="{{ url_for('home') }}#achievements" class="side-menu__link">Achievements</a>
+            <a href="{{ url_for('home') }}#mission" class="side-menu__link">Mission</a>
+            <a href="{{ url_for('home') }}#initiatives" class="side-menu__link">Initiatives</a>
+            <a href="{{ url_for('home') }}#impact" class="side-menu__link">Impact</a>
+            <a href="{{ url_for('home') }}#gallery" class="side-menu__link">Gallery</a>
+            <a href="{{ url_for('home') }}#guided-purpose" class="side-menu__link">Guided by Purpose</a>
+            <a href="{{ url_for('home') }}#community" class="side-menu__link">Community</a>
+            <a href="{{ url_for('home') }}#contact" class="side-menu__link">Contact</a>
+            <a href="{{ url_for('cafe') }}" class="side-menu__link {% if request.path.startswith('/cafe') %}active{% endif %}">Bagan Bilash Cafe</a>
+            <a href="{{ url_for('join_member') }}" class="side-menu__link {% if request.path.startswith('/join-member') %}active{% endif %}">Become a Member</a>
             <a href="#" class="side-menu__link">Instagram</a>
             <a href="#" class="side-menu__link">X (Twitter)</a>
             <a href="#" class="side-menu__link">Facebook</a>
@@ -65,17 +71,16 @@
                     <span></span>
                 </button>
 
-                <a href="{{ url_for('home') }}" class="nav-glass__logo" aria-label="Anchor Association home">
-                    <img src="{{ url_for('static', filename='photos/logo.png') }}" alt="Anchor Association" class="brand-logo brand-logo--desktop">
-                </a>
-
                 <div class="nav-glass__links" id="site-navigation">
                     <a href="{{ url_for('home') }}" class="nav-glass__link {% if request.path == '/' %}active{% endif %}">Home</a>
-                    <a href="{{ url_for('home') }}#about-us" class="nav-glass__link">About Us</a>
-                    <a href="{{ url_for('initiatives') }}" class="nav-glass__link {% if request.path.startswith('/initiatives') %}active{% endif %}">Initiatives</a>
-                    <a href="{{ url_for('impacts') }}" class="nav-glass__link {% if request.path.startswith('/impacts') %}active{% endif %}">Impacts</a>
-                    <a href="{{ url_for('gallery') }}" class="nav-glass__link {% if request.path.startswith('/gallery') %}active{% endif %}">Gallery</a>
-                    <a href="{{ url_for('join_member') }}" class="nav-glass__link {% if request.path.startswith('/join-member') %}active{% endif %}">Join With Us</a>
+                    <a href="{{ url_for('home') }}#achievements" class="nav-glass__link">Achievements</a>
+                    <a href="{{ url_for('home') }}#mission" class="nav-glass__link">Mission</a>
+                    <a href="{{ url_for('home') }}#initiatives" class="nav-glass__link">Initiatives</a>
+                    <a href="{{ url_for('home') }}#impact" class="nav-glass__link">Impact</a>
+                    <a href="{{ url_for('home') }}#gallery" class="nav-glass__link">Gallery</a>
+                    <a href="{{ url_for('home') }}#guided-purpose" class="nav-glass__link">Guided by Purpose</a>
+                    <a href="{{ url_for('home') }}#community" class="nav-glass__link">Community</a>
+                    <a href="{{ url_for('home') }}#contact" class="nav-glass__link">Contact</a>
 
                     <div class="nav-glass__dropdown-wrapper">
                         <button class="nav-glass__link nav-glass__compound-button" type="button" aria-expanded="false" aria-controls="nav-more-menu" data-dropdown-trigger>
@@ -83,7 +88,8 @@
                             <svg class="dropdown-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M6 9l6 6 6-6"/></svg>
                         </button>
                         <div class="nav-glass__dropdown" id="nav-more-menu">
-                            <a href="{{ url_for('home') }}#contact" class="dropdown-item">Contact Us</a>
+                            <a href="{{ url_for('cafe') }}" class="dropdown-item">Bagan Bilash Cafe</a>
+                            <a href="{{ url_for('join_member') }}" class="dropdown-item">Become a Member</a>
                             <div class="nav-glass__dropdown-wrapper nav-glass__dropdown-wrapper--nested">
                                 <button class="dropdown-item dropdown-item--submenu" type="button" aria-expanded="false" aria-controls="nav-follow-menu" data-dropdown-trigger>
                                     <span>Follow Us</span>
@@ -116,17 +122,17 @@
 
                 <div class="mobile-nav__actions">
                     <div class="mobile-nav__icons">
-                        <a href="{{ url_for('home') }}#about-us" class="expandable-icon" id="icon-about" aria-label="About Us">
+                        <a href="{{ url_for('home') }}#mission" class="expandable-icon" id="icon-mission" aria-label="Mission">
                             <span class="e-icon-btn" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             </span>
-                            <span class="e-icon-text">About Us</span>
+                            <span class="e-icon-text">Mission</span>
                         </a>
-                        <a href="{{ url_for('initiatives') }}" class="expandable-icon" id="icon-initiatives" aria-label="Initiatives">
+                        <a href="{{ url_for('home') }}#achievements" class="expandable-icon" id="icon-achievements" aria-label="Achievements">
                             <span class="e-icon-btn" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
                             </span>
-                            <span class="e-icon-text">Initiatives</span>
+                            <span class="e-icon-text">Achievements</span>
                         </a>
                     </div>
 
@@ -139,44 +145,30 @@
             <div class="accreditation-bar__surface">
                 <div class="accreditation-bar__body">
                     <div class="accreditation-bar__brand">
-                        <p class="accreditation-bar__title">
-                            ANCHOR
-                            <span class="accreditation-bar__title-mini">association</span>
-                        </p>
-                        <p class="accreditation-bar__subtitle">
-                            Assemblage of Notable &amp; Charitable Help Over Resurrection
-                        </p>
+                        <img src="{{ url_for('static', filename='photos/logo.png') }}" alt="Anchor Association official logo" class="accreditation-bar__logo">
+                        <div class="accreditation-bar__brand-copy">
+                            <p class="accreditation-bar__title">ANCHOR</p>
+                            <p class="accreditation-bar__subtitle">
+                                Assemblage of Notable &amp;<br>Charitable Help Over Resurrection
+                            </p>
+                        </div>
                     </div>
                     <div class="accreditation-bar__credentials">
-                        <div class="credential-tile">
-                            <span class="credential-tile__label">MSME<br>REGISTERED</span>
+                        {% for item in accreditation_items %}
+                        <div class="credential-tile credential-tile--{{ item.key }}">
                             <div class="credential-tile__icon-wrap">
-                                {% if accreditation_assets.msme %}
-                                <img src="{{ url_for('static', filename=accreditation_assets.msme) }}" alt="MSME Registered" class="credential-tile__img">
+                                {% if item.image %}
+                                <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.title }} certification" class="credential-tile__img">
                                 {% else %}
-                                <svg class="credential-tile__svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                <span class="credential-tile__fallback">{{ item.title }}</span>
                                 {% endif %}
                             </div>
-                            <span class="credential-tile__sub">REG. NO.<br>S0008516</span>
-                        </div>
-                        <div class="credential-tile credential-tile--iso">
-                            <span class="credential-tile__label">ISO<br>CERTIFIED</span>
-                            <div class="credential-tile__icon-wrap">
-                                {% if accreditation_assets.iso %}
-                                <img src="{{ url_for('static', filename=accreditation_assets.iso) }}" alt="ISO 9001:2015 Certified" class="credential-tile__img">
-                                {% else %}
-                                <svg class="credential-tile__svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                {% endif %}
+                            <div class="credential-tile__copy">
+                                <span class="credential-tile__label">{{ item.title }}</span>
+                                <span class="credential-tile__sub">{{ item.subtitle }}</span>
                             </div>
-                            <span class="credential-tile__sub">QUALITY<br>STANDARDS</span>
                         </div>
-                        <div class="credential-tile credential-tile--est">
-                            <span class="credential-tile__label">ESTABLISHED<br>2019</span>
-                            <div class="credential-tile__icon-wrap">
-                                <svg class="credential-tile__svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="8" y="14" width="3" height="3" rx="0.5"/><rect x="13" y="14" width="3" height="3" rx="0.5"/></svg>
-                            </div>
-                            <span class="credential-tile__sub">SINCE<br>2019</span>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -205,12 +197,16 @@
 
             <nav class="footer__links" aria-label="Footer navigation">
                 <a href="{{ url_for('home') }}" class="footer__link">Home</a>
-                <a href="{{ url_for('home') }}#about-us" class="footer__link">About US</a>
-                <a href="{{ url_for('initiatives') }}" class="footer__link">Initiatives</a>
-                <a href="{{ url_for('impacts') }}" class="footer__link">Impacts</a>
+                <a href="{{ url_for('home') }}#achievements" class="footer__link">Achievements</a>
+                <a href="{{ url_for('home') }}#mission" class="footer__link">Mission</a>
+                <a href="{{ url_for('home') }}#initiatives" class="footer__link">Initiatives</a>
+                <a href="{{ url_for('home') }}#impact" class="footer__link">Impact</a>
+                <a href="{{ url_for('home') }}#gallery" class="footer__link">Gallery</a>
+                <a href="{{ url_for('home') }}#guided-purpose" class="footer__link">Guided by Purpose</a>
+                <a href="{{ url_for('home') }}#community" class="footer__link">Community</a>
+                <a href="{{ url_for('home') }}#contact" class="footer__link">Contact</a>
                 <a href="{{ url_for('cafe') }}" class="footer__link">Eco Project</a>
-                <a href="{{ url_for('gallery') }}" class="footer__link">Gallery</a>
-                <a href="{{ url_for('join_member') }}" class="footer__link">Join With US</a>
+                <a href="{{ url_for('join_member') }}" class="footer__link">Join With Us</a>
             </nav>
 
             <div class="footer__divider"></div>
@@ -265,6 +261,15 @@
         hamburgerBtns.forEach(btn => btn.addEventListener('click', toggleSidebar));
         if (sideMenuClose) sideMenuClose.addEventListener('click', toggleSidebar);
         if (sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebar);
+        if (sideMenu) {
+            sideMenu.querySelectorAll('.side-menu__link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (sideMenu.classList.contains('active')) {
+                        toggleSidebar();
+                    }
+                });
+            });
+        }
 
         // Accordion logic
         const accordions = document.querySelectorAll('.side-menu__accordion-btn');

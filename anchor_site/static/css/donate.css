@@ -69,9 +69,9 @@
     overflow: hidden;
     transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 
-    /* Default: Green tier */
-    background: linear-gradient(135deg, #1b4332, #2d6a4f, #40916c);
-    box-shadow: 0 20px 60px rgba(27, 67, 50, 0.3);
+    /* Default: royal blue tier */
+    background: linear-gradient(135deg, #13294B, #2357D8, #5f7ff0);
+    box-shadow: 0 20px 60px rgba(35, 87, 216, 0.32);
 }
 
 .honor-card:hover {
@@ -181,10 +181,10 @@
     background-size: 200% 100%;
 }
 
-/* --- Tier: Green (Deep Forest) --- */
+/* --- Tier: Blue (Royal Anchor) --- */
 .honor-card--green {
-    background: linear-gradient(135deg, #1b4332, #2d6a4f, #40916c);
-    box-shadow: 0 20px 60px rgba(27, 67, 50, 0.3);
+    background: linear-gradient(135deg, #13294B, #2357D8, #5f7ff0);
+    box-shadow: 0 20px 60px rgba(35, 87, 216, 0.32);
 }
 
 .card-hint {

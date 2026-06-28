@@ -13,75 +13,134 @@
 {% block content %}
 
 <!-- SECTION 1: HERO -->
-<section class="hero">
+<section class="hero" id="home">
     <div class="hero__container container">
+        <span class="hero__eyebrow">Anchor Association</span>
         <h1 class="hero__title">
             Because Everyone Deserves Support <br>That Matters.
         </h1>
         <p class="hero__subtitle">
             Empowering West Bengal through holistic learning and environmental stewardship.
         </p>
-        <a href="#about-us" class="hero__cta">Our Story</a>
+        <div class="hero__actions">
+            <a href="#achievements" class="hero__cta">Explore our work</a>
+            <a href="{{ url_for('donate') }}" class="hero__cta hero__cta--solid">Donate</a>
+        </div>
     </div>
 </section>
 
 
 <!-- SECTION 2: HERO SLIDESHOW -->
+{% if hero_slides %}
 <section class="hero-slideshow section" id="featured-gallery">
     <div class="hero-slideshow__container" data-hero-slideshow>
-        {% if hero_slides %}
+        {% for slide in hero_slides %}
+        <article
+            class="hero-slide {% if loop.first %}is-active{% endif %}"
+            style="--hero-object-position: {{ slide.object_position }};"
+            aria-hidden="{% if loop.first %}false{% else %}true{% endif %}">
+            <div class="hero-slide__media">
+                <img
+                    src="{{ slide.image_url }}"
+                    {% if slide.image_srcset %}srcset="{{ slide.image_srcset }}"{% endif %}
+                    sizes="(min-width: 769px) 58vw, 100vw"
+                    alt="{{ slide.alt_text }}"
+                    class="hero-slide__image"
+                    loading="{% if loop.first %}eager{% else %}lazy{% endif %}"
+                    fetchpriority="{% if loop.first %}high{% else %}auto{% endif %}"
+                    decoding="async">
+            </div>
+            <div class="hero-slide__content">
+                <div class="hero-slide__content-inner">
+                    {% if slide.title %}<h2 class="hero-slide__title">{{ slide.title }}</h2>{% endif %}
+                    {% if slide.subtitle %}<p class="hero-slide__subtitle">{{ slide.subtitle }}</p>{% endif %}
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+        {% if hero_slides|length > 1 %}
+        <div class="hero-slideshow__controls">
+            <button class="hero-slideshow__btn hero-slideshow__btn--prev" type="button" aria-label="Previous slide" data-hero-prev>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="hero-slideshow__btn hero-slideshow__btn--next" type="button" aria-label="Next slide" data-hero-next>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        </div>
+        <div class="hero-slideshow__indicators">
             {% for slide in hero_slides %}
-            <article
-                class="hero-slide {% if loop.first %}is-active{% endif %}"
-                style="--hero-object-position: {{ slide.object_position }};"
-                aria-hidden="{% if loop.first %}false{% else %}true{% endif %}">
-                <div class="hero-slide__media">
-                    <img
-                        src="{{ slide.image_url }}"
-                        {% if slide.image_srcset %}srcset="{{ slide.image_srcset }}"{% endif %}
-                        sizes="(min-width: 769px) 58vw, 100vw"
-                        alt="{{ slide.alt_text }}"
-                        class="hero-slide__image"
-                        loading="{% if loop.first %}eager{% else %}lazy{% endif %}"
-                        fetchpriority="{% if loop.first %}high{% else %}auto{% endif %}"
-                        decoding="async">
-                </div>
-                <div class="hero-slide__content">
-                    <div class="hero-slide__content-inner">
-                        {% if slide.title %}<h2 class="hero-slide__title">{{ slide.title }}</h2>{% endif %}
-                        {% if slide.subtitle %}<p class="hero-slide__subtitle">{{ slide.subtitle }}</p>{% endif %}
-                    </div>
-                </div>
-            </article>
+            <button class="hero-slideshow__dot {% if loop.first %}is-active{% endif %}" type="button" aria-label="Go to slide {{ loop.index }}" data-hero-dot aria-current="{% if loop.first %}true{% else %}false{% endif %}"></button>
             {% endfor %}
-            {% if hero_slides|length > 1 %}
-            <div class="hero-slideshow__controls">
-                <button class="hero-slideshow__btn hero-slideshow__btn--prev" type="button" aria-label="Previous slide" data-hero-prev>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-                <button class="hero-slideshow__btn hero-slideshow__btn--next" type="button" aria-label="Next slide" data-hero-next>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
-            </div>
-            <div class="hero-slideshow__indicators">
-                {% for slide in hero_slides %}
-                <button class="hero-slideshow__dot {% if loop.first %}is-active{% endif %}" type="button" aria-label="Go to slide {{ loop.index }}" data-hero-dot aria-current="{% if loop.first %}true{% else %}false{% endif %}"></button>
-                {% endfor %}
-            </div>
-            {% endif %}
-        {% else %}
-            <div class="hero-slideshow__empty">
-                <p>No featured slides available. Add some in the Admin Panel!</p>
-            </div>
+        </div>
         {% endif %}
     </div>
 </section>
+{% endif %}
 
 
-<!-- SECTION 3: THE MISSION -->
-<section class="mission section" id="about-us">
+<!-- SECTION 3: ACHIEVEMENTS -->
+{% if achievement_slides %}
+<section class="achievements section" id="achievements" aria-labelledby="achievements-title">
+    <div class="container">
+        <header class="section-kicker" data-reveal>
+            <span class="section-kicker__eyebrow">Achievements</span>
+            <h2 class="section-kicker__title" id="achievements-title">Stories of progress, told with care.</h2>
+            <p class="section-kicker__lead">
+                A curated record of the moments, programs, and community outcomes that keep Anchor moving forward.
+            </p>
+        </header>
+    </div>
+
+    <div class="achievement-slider" data-achievement-slider>
+        {% for slide in achievement_slides %}
+        <article class="achievement-slide {% if loop.first %}is-active{% endif %}" aria-hidden="{% if loop.first %}false{% else %}true{% endif %}">
+            <div class="achievement-slide__media">
+                <img
+                    src="{{ slide.image_url }}"
+                    {% if slide.image_srcset %}srcset="{{ slide.image_srcset }}"{% endif %}
+                    sizes="{{ slide.image_sizes }}"
+                    alt="{{ slide.alt_text }}"
+                    loading="{% if loop.first %}eager{% else %}lazy{% endif %}"
+                    decoding="async">
+            </div>
+            <div class="achievement-slide__caption">
+                <span class="achievement-slide__count">{{ "%02d"|format(loop.index) }}</span>
+                <h3>{{ slide.title }}</h3>
+                {% if slide.description %}
+                <p>{{ slide.description }}</p>
+                {% endif %}
+                {% if slide.button_text and slide.button_link %}
+                <a href="{{ slide.button_link }}" class="achievement-slide__button">{{ slide.button_text }}</a>
+                {% endif %}
+            </div>
+        </article>
+        {% endfor %}
+
+        {% if achievement_slides|length > 1 %}
+        <div class="achievement-slider__controls" aria-label="Achievement slideshow controls">
+            <button type="button" class="achievement-slider__arrow" aria-label="Previous achievement" data-achievement-prev>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button type="button" class="achievement-slider__arrow" aria-label="Next achievement" data-achievement-next>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+        <div class="achievement-slider__pagination">
+            {% for slide in achievement_slides %}
+            <button type="button" class="achievement-slider__dot {% if loop.first %}is-active{% endif %}" aria-label="Go to achievement {{ loop.index }}" data-achievement-dot aria-current="{% if loop.first %}true{% else %}false{% endif %}"></button>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+
+<!-- SECTION 4: THE MISSION -->
+<section class="mission section" id="mission">
     <div class="container">
         <div class="mission__content">
+            <span class="section-kicker__eyebrow">Mission</span>
             <h2 class="mission__title">Our Mission</h2>
             <p class="mission__text">
                 Bridging the gap between traditional education and environmental consciousness.
@@ -114,8 +173,8 @@
         'label': 'Eco & Sustainability',
         'title': 'Eco Urban Project',
         'description': 'Practical eco awareness, community spaces, local livelihood, and sustainable habits — bridging environmental consciousness with daily community life. Includes Bagan Bilash, our community café.',
-        'accent': '#2f6b4f',
-        'soft': '#edf6ef',
+        'accent': '#2357D8',
+        'soft': '#eaf0ff',
         'details': ['Eco awareness', 'Green habits', 'Community livelihood', 'Bagan Bilash café'],
         'logo': '',
         'photos': [
@@ -129,8 +188,8 @@
         'label': 'Women Empowerment',
         'title': 'Nivedita SHG',
         'description': 'Women-led self-help groups building household income support, savings discipline, and practical leadership in local communities through shared learning and collective action.',
-        'accent': '#8f4f3e',
-        'soft': '#f7ece8',
+        'accent': '#B85C38',
+        'soft': '#fff0e8',
         'details': ['Self-help meetings', 'Savings & records', 'Income support', 'Community awareness'],
         'logo': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG_Logo.png',
         'photos': [
@@ -146,8 +205,8 @@
         'label': 'Education Support',
         'title': 'Learn & Shine',
         'description': 'Guided independent learning, discipline habits, daily goal setting, and confidence-building support helping students take ownership of their academic journey.',
-        'accent': '#665533',
-        'soft': '#f4efdf',
+        'accent': '#7B5E20',
+        'soft': '#fff6da',
         'details': ['Independent study', 'Mentor guidance', 'Life skills', 'Confidence building'],
         'logo': 'photos/About_Us/Learn&Shine/Learn&Shine_logo.png',
         'photos': [
@@ -174,8 +233,8 @@
         'label': 'Health Access',
         'title': 'Finding Cures',
         'description': 'Accessible healthcare through basic consultations, medicine support, preventive health awareness, and referral guidance for families in need.',
-        'accent': '#3f6571',
-        'soft': '#e9f2f3',
+        'accent': '#1F6D8C',
+        'soft': '#e8f5fb',
         'details': ['Health camps', 'Basic check-ups', 'Medicine guidance', 'Referrals & follow-up'],
         'logo': 'photos/About_Us/Finding_Cures/Finding_Cure_Logo.png',
         'photos': [
@@ -200,8 +259,8 @@
         'label': 'Career Readiness',
         'title': 'Career Edge',
         'description': 'Career guidance, presentation skills, and direction — helping participants move from aspiration toward practical steps, employability, and economic confidence.',
-        'accent': '#2d5a45',
-        'soft': '#e8f2ed',
+        'accent': '#2357D8',
+        'soft': '#eaf0ff',
         'details': ['Career counseling', 'Interview prep', 'Skill development', 'Employability support'],
         'logo': 'photos/About_Us/Career_Edge/Career_Edge_Logo.png',
         'photos': [
@@ -214,15 +273,15 @@
 {% set regular_activities = [
     {'title': 'Awareness Programme', 'description': 'Women and children awareness sessions across communities.', 'image': 'photos/About_Us/Other Regular activities/Awareness_Programme_women and Childrean.png', 'accent': '#a85f46'},
     {'title': 'Disaster Relief Programme', 'description': 'Urgent relief work and essential support during calamities.', 'image': 'photos/About_Us/Other Regular activities/Yaas Disaster Relief Programme_1.png', 'accent': '#b86d2f'},
-    {'title': 'Orphan Support Programme', 'description': 'Feeding, essentials, and continuing care for orphaned children.', 'image': 'photos/About_Us/Orphan Support Programme/image.png', 'accent': '#2f6b4f'},
+    {'title': 'Orphan Support Programme', 'description': 'Feeding, essentials, and continuing care for orphaned children.', 'image': 'photos/About_Us/Orphan Support Programme/image.png', 'accent': '#2357D8'},
     {'title': 'Multi-Talent Development', 'description': 'Cultural, creative, and skill activities for all ages.', 'image': 'photos/About_Us/Multi Talent Development Competition/image.png', 'accent': '#b8841f'},
     {'title': 'Blood Donation Camp', 'description': 'Community blood donation drives and local health action.', 'image': 'photos/About_Us/Other Regular activities/Blood_Donation_Camp.png', 'accent': '#9b3d33'},
-    {'title': 'Plantation Programme', 'description': 'Tree plantation and environmental stewardship initiatives.', 'image': 'photos/About_Us/Other Regular activities/Tree_Plantation.png', 'accent': '#2f6b4f'},
+    {'title': 'Plantation Programme', 'description': 'Tree plantation and environmental stewardship initiatives.', 'image': 'photos/About_Us/Other Regular activities/Tree_Plantation.png', 'accent': '#2357D8'},
     {'title': 'Cloth Distribution', 'description': 'Seasonal clothing and festival support for families.', 'image': 'photos/About_Us/Other Regular activities/Cloth Distribution Programme.png', 'accent': '#b86d2f'}
 ] %}
 
 <!-- SECTION 4: ABOUT US / OUR INITIATIVES -->
-<section class="initiatives-story section" id="our-initiatives" aria-labelledby="initiatives-story-title">
+<section class="initiatives-story section" id="initiatives" aria-labelledby="initiatives-story-title">
     <div class="container">
         <header class="initiatives-story__header" data-reveal>
             <span class="initiatives-story__eyebrow">About Us / Our Initiatives</span>
@@ -306,63 +365,96 @@
 </section>
 
 
-<!-- SECTION 4: BENTO GRID - DISCOVER ANCHOR -->
-<section class="discover section">
+<!-- SECTION: IMPACT -->
+{% if impact_metrics %}
+<section class="impact section" id="impact" aria-labelledby="impact-title">
     <div class="container">
-        <h2 class="discover__heading">Discover Anchor</h2>
+        <header class="section-kicker section-kicker--split" data-reveal>
+            <div>
+                <span class="section-kicker__eyebrow">Impact</span>
+                <h2 class="section-kicker__title" id="impact-title">Numbers with a human story behind them.</h2>
+            </div>
+            <p class="section-kicker__lead">
+                The work is measured in reach, continuity, and the practical confidence communities build over time.
+            </p>
+        </header>
 
-        <div class="bento-grid">
-            <!-- Card 1: Education (8 cols, 1 row) -->
-            <a href="{{ url_for('initiatives') }}" class="bento-card card-edu">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80"
-                    alt="Students engaged in holistic learning at Anchor Association" class="bento-card__image">
-                <div class="bento-card__overlay">
-                    <span class="bento-card__tag">Education</span>
-                    <h3 class="bento-card__title">Complete Learning</h3>
-                    <p class="bento-card__desc">Nurturing curious minds through innovative teaching methods</p>
-                </div>
-            </a>
-
-            <!-- Card 2: Bagan Bilash (4 cols, spans 2 rows - TALL PILLAR) -->
-            <a href="/cafe" class="bento-card card-resort">
-                <img src="{{ url_for('static', filename='photos/front_cafe.png') }}"
-                    alt="Bagan Bilash cafe — warm bamboo interiors at night" class="bento-card__image">
-                <div class="bento-card__overlay">
-                    <span class="bento-card__tag">The Cafe</span>
-                    <h3 class="bento-card__title">Bagan Bilash</h3>
-                    <p class="bento-card__desc">Where every meal makes an impact</p>
-                </div>
-            </a>
-
-            <!-- Card 3: Live Gallery Slideshow (8 cols, 1 row) -->
-            <a href="/gallery" class="bento-card card-gallery">
-                <div class="gallery-slideshow" id="gallerySlideshow">
-                    {% if home_slides %}
-                    {% for slide in home_slides %}
-                    <img src="{{ slide.url }}" alt="Life at Anchor moment"
-                        class="gallery-slide {% if loop.first %}active{% endif %}" loading="lazy" decoding="async">
-                    {% endfor %}
+        <div class="impact-grid">
+            {% for metric in impact_metrics %}
+            <article class="impact-card" data-reveal style="--reveal-delay: {{ loop.index0 * 90 }}ms;">
+                <div class="impact-card__icon" aria-hidden="true">
+                    {% if metric.icon == 'book-open' %}
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H22v18H4.5A2.5 2.5 0 0 0 2 22z"/><path d="M2 4.5v17"/><path d="M6 6h10"/></svg>
+                    {% elif metric.icon == 'heart' %}
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    {% elif metric.icon == 'leaf' %}
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 8-9 16-9 0 8-4 16-9 16z"/><path d="M4 13c2.5 0 5 1 7 3"/></svg>
+                    {% elif metric.icon == 'award' %}
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.48 12.89 17 22l-5-3-5 3 1.52-9.11"/></svg>
+                    {% elif metric.icon == 'briefcase' %}
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 12h20"/></svg>
                     {% else %}
-                    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80"
-                        alt="Community moments at Anchor" class="gallery-slide active">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     {% endif %}
                 </div>
-                <div class="bento-card__overlay">
-                    <span class="bento-card__tag">Live Moments</span>
-                    <h3 class="bento-card__title">Life at Anchor</h3>
-                </div>
-            </a>
+                <p class="impact-card__number">{{ metric.number }}</p>
+                <h3 class="impact-card__title">{{ metric.title }}</h3>
+                {% if metric.description %}
+                <p class="impact-card__description">{{ metric.description }}</p>
+                {% endif %}
+            </article>
+            {% endfor %}
         </div>
     </div>
 </section>
+{% endif %}
 
+
+<!-- SECTION: GALLERY -->
+{% if home_gallery_images %}
+<section class="home-gallery section" id="gallery" aria-labelledby="home-gallery-title">
+    <div class="container">
+        <header class="section-kicker" data-reveal>
+            <span class="section-kicker__eyebrow">Gallery</span>
+            <h2 class="section-kicker__title" id="home-gallery-title">Life at Anchor, framed editorially.</h2>
+            <p class="section-kicker__lead">
+                Community moments, classrooms, care work, eco projects, and shared milestones in one curated visual field.
+            </p>
+        </header>
+
+        <div class="home-gallery__grid" data-gallery-lightbox>
+            {% for image in home_gallery_images %}
+            <button
+                class="home-gallery__item home-gallery__item--{{ loop.index }}"
+                type="button"
+                data-lightbox-src="{{ image.url }}"
+                data-lightbox-alt="{{ image.alt }}"
+                data-reveal
+                style="--reveal-delay: {{ loop.index0 * 70 }}ms;"
+                aria-label="Open gallery image: {{ image.alt }}">
+                <img
+                    src="{{ image.url }}"
+                    {% if image.srcset %}srcset="{{ image.srcset }}"{% endif %}
+                    sizes="{{ image.sizes }}"
+                    alt="{{ image.alt }}"
+                    loading="lazy"
+                    decoding="async">
+                {% if image.category %}
+                <span class="home-gallery__label">{{ image.category }}</span>
+                {% endif %}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 
 
 <!-- SECTION: GUIDED BY PURPOSE -->
 {% if member_stories %}
 <section class="guided-section" id="guided-purpose">
     <div class="container">
-        <div class="guided-section__header">
+        <div class="guided-section__header" data-reveal>
             <h2 class="guided-section__title">Guided by Purpose.</h2>
             <p class="guided-section__subtitle">Hear from the voices steering the Anchor Association.</p>
         </div>
@@ -384,9 +476,9 @@
 
 <!-- SECTION: COMMUNITY QUEUE -->
 {% if community_members %}
-<section class="community-queue section" id="community-queue">
+<section class="community-queue section" id="community">
     <div class="container">
-        <div class="community-queue__header">
+        <div class="community-queue__header" data-reveal>
             <h2 class="community-queue__title">Our Community</h2>
             <p class="community-queue__subtitle">Meet the wonderful people who make Anchor Association possible.</p>
         </div>
@@ -398,5 +490,30 @@
     </div>
 </section>
 {% endif %}
+
+<!-- SECTION: CONTACT -->
+<section class="contact-section section" id="contact" aria-labelledby="contact-title">
+    <div class="container">
+        <div class="contact-panel" data-reveal>
+            <div class="contact-panel__copy">
+                <span class="section-kicker__eyebrow">Contact</span>
+                <h2 id="contact-title">Start a conversation with Anchor.</h2>
+                <p>
+                    For partnerships, volunteering, membership, program support, or donations, reach out and the team will guide the next step.
+                </p>
+            </div>
+            <div class="contact-panel__actions" aria-label="Contact actions">
+                <a href="mailto:info@anchorassociation.org" class="contact-panel__button">Email us</a>
+                <a href="{{ url_for('join_member') }}" class="contact-panel__button contact-panel__button--ghost">Become a member</a>
+                <a href="{{ url_for('donate') }}" class="contact-panel__button contact-panel__button--accent">Donate</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<dialog class="home-lightbox" id="homeLightbox" aria-label="Gallery image preview">
+    <button class="home-lightbox__close" type="button" data-home-lightbox-close aria-label="Close gallery preview">&times;</button>
+    <img class="home-lightbox__image" id="homeLightboxImage" src="" alt="">
+</dialog>
 
 {% endblock %}

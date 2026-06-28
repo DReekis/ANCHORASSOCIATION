@@ -4,7 +4,7 @@
     padding: 170px 0 88px;
     background:
         radial-gradient(circle at top left, rgba(224, 122, 63, 0.18), transparent 35%),
-        radial-gradient(circle at right center, rgba(47, 107, 79, 0.16), transparent 32%),
+        radial-gradient(circle at right center, rgba(35, 87, 216, 0.16), transparent 32%),
         linear-gradient(180deg, #f5f0e7 0%, #f6f5f1 100%);
 }
 
@@ -20,7 +20,7 @@
     padding: 8px 16px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(47, 107, 79, 0.15);
+    border: 1px solid rgba(35, 87, 216, 0.15);
     color: var(--primary);
     font-size: 0.78rem;
     font-weight: 700;
@@ -64,7 +64,7 @@
 
 .initiatives-roadmap__item:hover {
     transform: translateY(-2px);
-    border-color: rgba(47, 107, 79, 0.18);
+    border-color: rgba(35, 87, 216, 0.18);
 }
 
 .initiatives-roadmap__number,
@@ -76,7 +76,7 @@
     height: 48px;
     padding: 0 12px;
     border-radius: 999px;
-    background: rgba(47, 107, 79, 0.1);
+    background: rgba(35, 87, 216, 0.1);
     color: var(--primary);
     font-size: 0.9rem;
     font-weight: 700;
@@ -98,7 +98,7 @@
     padding: clamp(24px, 3vw, 40px);
     border-radius: 38px;
     background:
-        radial-gradient(circle at top right, var(--theme-soft, rgba(47, 107, 79, 0.12)), transparent 36%),
+        radial-gradient(circle at top right, var(--theme-soft, rgba(35, 87, 216, 0.12)), transparent 36%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.88) 100%);
     border: 1px solid rgba(32, 52, 40, 0.08);
     box-shadow: 0 26px 62px rgba(36, 44, 39, 0.08);
@@ -296,7 +296,7 @@
     min-height: 40px;
     padding: 8px 14px;
     border-radius: 18px;
-    background: var(--theme-soft, rgba(47, 107, 79, 0.08));
+    background: var(--theme-soft, rgba(35, 87, 216, 0.08));
     border: 1px solid rgba(32, 52, 40, 0.08);
     color: #203428;
     font-size: 0.92rem;
@@ -333,7 +333,7 @@
     margin-top: 14px;
     padding: 8px 16px;
     border-radius: 999px;
-    background: var(--theme-soft, rgba(47, 107, 79, 0.08));
+    background: var(--theme-soft, rgba(35, 87, 216, 0.08));
     color: var(--primary);
     font-size: 1rem;
     font-weight: 700;
@@ -400,7 +400,7 @@
 
 .initiative-collections {
     background:
-        radial-gradient(circle at top right, rgba(47, 107, 79, 0.08), transparent 30%),
+        radial-gradient(circle at top right, rgba(35, 87, 216, 0.08), transparent 30%),
         linear-gradient(180deg, #f9f8f4 0%, #f5f1e8 100%);
 }
 
@@ -427,7 +427,7 @@
     padding: 28px;
     border-radius: 32px;
     background:
-        radial-gradient(circle at top right, var(--theme-soft, rgba(47, 107, 79, 0.1)), transparent 34%),
+        radial-gradient(circle at top right, var(--theme-soft, rgba(35, 87, 216, 0.1)), transparent 34%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 100%);
     border: 1px solid rgba(32, 52, 40, 0.08);
     box-shadow: 0 22px 50px rgba(36, 44, 39, 0.08);
@@ -475,7 +475,7 @@
     margin-top: 26px;
     padding: 12px 20px;
     border-radius: 999px;
-    background: rgba(47, 107, 79, 0.1);
+    background: rgba(35, 87, 216, 0.1);
     color: var(--primary);
     font-weight: 700;
 }
@@ -496,14 +496,14 @@
 }
 
 .initiative-copy__body::-webkit-scrollbar-thumb {
-    background: rgba(47, 107, 79, 0.18);
+    background: rgba(35, 87, 216, 0.18);
     border-radius: 999px;
 }
 
 .initiative-showcase[data-theme="forest"],
 .initiative-collection-card[data-theme="forest"] {
-    --primary: #2f6b4f;
-    --theme-soft: rgba(47, 107, 79, 0.12);
+    --primary: #2357D8;
+    --theme-soft: rgba(35, 87, 216, 0.12);
 }
 
 .initiative-showcase[data-theme="clay"],

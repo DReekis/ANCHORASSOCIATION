@@ -1,7 +1,7 @@
 .content-hero {
     padding: 170px 0 84px;
     background:
-        radial-gradient(circle at top left, rgba(47, 107, 79, 0.16), transparent 28%),
+        radial-gradient(circle at top left, rgba(35, 87, 216, 0.16), transparent 28%),
         radial-gradient(circle at right center, rgba(224, 122, 63, 0.12), transparent 24%),
         linear-gradient(180deg, #f6f5f1 0%, #f9f6ef 100%);
 }
@@ -9,7 +9,7 @@
 .content-hero--warm {
     background:
         radial-gradient(circle at top left, rgba(224, 122, 63, 0.18), transparent 30%),
-        radial-gradient(circle at right center, rgba(47, 107, 79, 0.12), transparent 28%),
+        radial-gradient(circle at right center, rgba(35, 87, 216, 0.12), transparent 28%),
         linear-gradient(180deg, #faf4eb 0%, #f6f5f1 100%);
 }
 
@@ -22,7 +22,7 @@
     padding: 8px 14px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.82);
-    border: 1px solid rgba(47, 107, 79, 0.12);
+    border: 1px solid rgba(35, 87, 216, 0.12);
     color: var(--primary);
     font-size: 0.78rem;
     font-weight: 700;
@@ -64,7 +64,7 @@
 }
 
 .content-button--ghost {
-    background: rgba(47, 107, 79, 0.08);
+    background: rgba(35, 87, 216, 0.08);
     color: var(--primary);
 }
 

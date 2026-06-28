@@ -368,7 +368,7 @@
         const progress = clamp(currentScrollY / totalDistance, 0, 1);
         const collapseProgress = getStageProgress(progress, 0, metrics.collapseEnd);
         const morphProgress = getStageProgress(progress, metrics.collapseEnd, metrics.morphEnd);
-        const hideProgress = getStageProgress(progress, metrics.morphEnd, 1);
+        const hideProgress = 0;
 
         if (floatingDonate) {
             floatingDonate.classList.toggle(
@@ -382,11 +382,7 @@
         headerSystem.style.setProperty('--header-morph-progress', morphProgress.toFixed(4));
         headerSystem.style.setProperty('--header-hide-progress', hideProgress.toFixed(4));
 
-        if (hideProgress >= 0.995) {
-            setHeaderState('hidden');
-        } else if (hideProgress > 0.001) {
-            setHeaderState('hiding');
-        } else if (morphProgress >= 0.995) {
+        if (morphProgress >= 0.995) {
             setHeaderState('compact');
         } else if (morphProgress > 0.001) {
             setHeaderState('morphing');
@@ -612,6 +608,103 @@
     startAutoplay();
 })();
 
+// ---- Achievements Slideshow ----
+(function () {
+    const container = document.querySelector('[data-achievement-slider]');
+    if (!container) {
+        return;
+    }
+
+    const slides = Array.from(container.querySelectorAll('.achievement-slide'));
+    const dots = Array.from(container.querySelectorAll('[data-achievement-dot]'));
+    const nextButton = container.querySelector('[data-achievement-next]');
+    const prevButton = container.querySelector('[data-achievement-prev]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (!slides.length) {
+        return;
+    }
+
+    const state = {
+        currentIndex: Math.max(slides.findIndex((slide) => slide.classList.contains('is-active')), 0),
+        autoplayId: null,
+    };
+
+    function updateSlides() {
+        slides.forEach((slide, index) => {
+            const isCurrent = index === state.currentIndex;
+            slide.classList.toggle('is-active', isCurrent);
+            slide.setAttribute('aria-hidden', String(!isCurrent));
+        });
+
+        dots.forEach((dot, index) => {
+            const isCurrent = index === state.currentIndex;
+            dot.classList.toggle('is-active', isCurrent);
+            dot.setAttribute('aria-current', String(isCurrent));
+        });
+    }
+
+    function goToSlide(nextIndex) {
+        state.currentIndex = (nextIndex + slides.length) % slides.length;
+        updateSlides();
+    }
+
+    function stopAutoplay() {
+        if (state.autoplayId) {
+            window.clearInterval(state.autoplayId);
+            state.autoplayId = null;
+        }
+    }
+
+    function startAutoplay() {
+        stopAutoplay();
+        if (slides.length <= 1 || reducedMotion.matches) {
+            return;
+        }
+
+        state.autoplayId = window.setInterval(() => {
+            goToSlide(state.currentIndex + 1);
+        }, 6400);
+    }
+
+    nextButton?.addEventListener('click', () => {
+        goToSlide(state.currentIndex + 1);
+        startAutoplay();
+    });
+
+    prevButton?.addEventListener('click', () => {
+        goToSlide(state.currentIndex - 1);
+        startAutoplay();
+    });
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            goToSlide(index);
+            startAutoplay();
+        });
+    });
+
+    container.addEventListener('mouseenter', stopAutoplay);
+    container.addEventListener('mouseleave', startAutoplay);
+    container.addEventListener('focusin', stopAutoplay);
+    container.addEventListener('focusout', (event) => {
+        if (!container.contains(event.relatedTarget)) {
+            startAutoplay();
+        }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopAutoplay();
+        } else {
+            startAutoplay();
+        }
+    });
+
+    updateSlides();
+    startAutoplay();
+})();
+
 // ---- Scroll Reveal Blocks ----
 (function () {
     const revealItems = Array.from(document.querySelectorAll('[data-reveal]'));
@@ -688,25 +781,47 @@
     });
 })();
 
-// ---- Gallery Slideshow (Home Page) ----
+// ---- Home Gallery Lightbox ----
 (function () {
-    const slideshow = document.getElementById('gallerySlideshow');
-    if (!slideshow) {
+    const gallery = document.querySelector('[data-gallery-lightbox]');
+    const dialog = document.getElementById('homeLightbox');
+    const image = document.getElementById('homeLightboxImage');
+    const closeButton = dialog?.querySelector('[data-home-lightbox-close]');
+
+    if (!gallery || !dialog || !image) {
         return;
     }
 
-    const slides = slideshow.querySelectorAll('.gallery-slide');
-    if (slides.length <= 1) {
-        return;
+    gallery.addEventListener('click', (event) => {
+        const item = event.target.closest('[data-lightbox-src]');
+        if (!item) {
+            return;
+        }
+
+        image.src = item.getAttribute('data-lightbox-src') || '';
+        image.alt = item.getAttribute('data-lightbox-alt') || 'Anchor Association gallery image';
+        if (typeof dialog.showModal === 'function') {
+            dialog.showModal();
+        } else {
+            dialog.setAttribute('open', '');
+        }
+    });
+
+    function closeLightbox() {
+        if (typeof dialog.close === 'function') {
+            dialog.close();
+        } else {
+            dialog.removeAttribute('open');
+        }
+        image.removeAttribute('src');
     }
 
-    let current = 0;
-
-    window.setInterval(() => {
-        slides[current].classList.remove('active');
-        current = (current + 1) % slides.length;
-        slides[current].classList.add('active');
-    }, 3000);
+    closeButton?.addEventListener('click', closeLightbox);
+    dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) {
+            closeLightbox();
+        }
+    });
 })();
 
 // ---- Community Members Queue (Home Page) ----
@@ -728,14 +843,22 @@
     let displayQueue = membersData.slice(0, MAX_DISPLAY);
     let waitingQueue = membersData.slice(MAX_DISPLAY);
 
+    const escapeHTML = (value) => String(value || '').replace(/[&<>"']/g, (character) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+    }[character]));
+
     // Helper to generate HTML for a member
     const createMemberHTML = (member) => `
-        <div class="community-member" data-id="${member.id}">
+        <div class="community-member" data-id="${escapeHTML(member.id)}">
             <div class="community-member__photo-wrapper">
-                <img src="${member.photo_url || '/static/photos/placeholder-user.png'}" alt="${member.name}" class="community-member__photo" loading="lazy">
+                <img src="${escapeHTML(member.photo_url || '/static/photos/logo.png')}" alt="${escapeHTML(member.name)}" class="community-member__photo" loading="lazy">
             </div>
-            <h3 class="community-member__name">${member.name}</h3>
-            <p class="community-member__qual">${member.qualification}</p>
+            <h3 class="community-member__name">${escapeHTML(member.name)}</h3>
+            <p class="community-member__qual">${escapeHTML(member.qualification)}</p>
         </div>
     `;
 
@@ -785,5 +908,8 @@
         }
     }, { threshold: 0.1 });
 
-    observer.observe(document.getElementById('community-queue'));
+    const communitySection = document.getElementById('community');
+    if (communitySection) {
+        observer.observe(communitySection);
+    }
 })();

@@ -1,4 +1,5 @@
-from markupsafe import Markup
+import os
+from markupsafe import Markup, escape
 from flask import request, redirect, url_for, session, flash
 from flask_admin import Admin, AdminIndexView, expose, BaseView
 from flask_admin.contrib.sqla import ModelView
@@ -7,8 +8,10 @@ from wtforms import FileField, PasswordField, ValidationError, SelectField, Mult
 import cloudinary.uploader
 try:
     from .models import (
+        AchievementSlide,
         HeroSlide,
         GalleryImage,
+        ImpactMetric,
         TeamMember,
         AdminUser,
         InitiativeSection,
@@ -18,8 +21,10 @@ try:
     )
 except ImportError:
     from models import (
+        AchievementSlide,
         HeroSlide,
         GalleryImage,
+        ImpactMetric,
         TeamMember,
         AdminUser,
         InitiativeSection,
@@ -69,6 +74,8 @@ class SyncDatabaseView(AuthMixin, BaseView):
                 self.db.session.execute(text('ALTER TABLE member_stories ADD COLUMN IF NOT EXISTS image_on_right BOOLEAN DEFAULT TRUE'))
                 self.db.session.execute(text('ALTER TABLE member_stories ADD COLUMN IF NOT EXISTS qualification VARCHAR(300) DEFAULT \'\''))
                 self.db.session.execute(text('ALTER TABLE member_stories ADD COLUMN IF NOT EXISTS role_tag VARCHAR(120) DEFAULT \'Our Member\''))
+                self.db.session.execute(text('ALTER TABLE gallery_images ADD COLUMN IF NOT EXISTS "order" INTEGER DEFAULT 0'))
+                self.db.session.execute(text('ALTER TABLE gallery_images ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE'))
                 self.db.session.commit()
             except Exception as e:
                 self.db.session.rollback()
@@ -91,6 +98,8 @@ class CloudinaryUploadView(SecureModelView):
     upload_column = None
     upload_folder = None
     upload_required = False
+    upload_max_bytes = 10 * 1024 * 1024
+    upload_allowed_mimetypes = {'image/jpeg', 'image/png', 'image/webp', 'image/gif'}
     form_extra_fields = {
         'upload_file': FileField('Browse File')
     }
@@ -111,6 +120,18 @@ class CloudinaryUploadView(SecureModelView):
         return storage
 
     def _upload_to_cloudinary(self, storage):
+        mimetype = (getattr(storage, 'mimetype', '') or '').lower()
+        if mimetype and mimetype not in self.upload_allowed_mimetypes:
+            raise ValidationError('Please upload a JPG, PNG, WebP, or GIF image.')
+
+        if hasattr(storage, 'stream') and hasattr(storage.stream, 'seek'):
+            storage.stream.seek(0)
+            storage.stream.seek(0, os.SEEK_END)
+            size = storage.stream.tell()
+            storage.stream.seek(0)
+            if size > self.upload_max_bytes:
+                raise ValidationError('Please upload an image smaller than 10MB.')
+
         try:
             if hasattr(storage, 'stream') and hasattr(storage.stream, 'seek'):
                 storage.stream.seek(0)
@@ -121,6 +142,34 @@ class CloudinaryUploadView(SecureModelView):
                 resource_type='image',
                 use_filename=True,
                 unique_filename=True,
+                allowed_formats=['jpg', 'jpeg', 'png', 'webp', 'gif'],
+                eager=[
+                    {
+                        'width': 1920,
+                        'height': 1080,
+                        'crop': 'fill',
+                        'gravity': 'auto',
+                        'quality': 'auto:good',
+                        'fetch_format': 'auto',
+                    },
+                    {
+                        'width': 1200,
+                        'height': 800,
+                        'crop': 'fill',
+                        'gravity': 'auto',
+                        'quality': 'auto:good',
+                        'fetch_format': 'auto',
+                    },
+                    {
+                        'width': 720,
+                        'height': 540,
+                        'crop': 'fill',
+                        'gravity': 'auto',
+                        'quality': 'auto:good',
+                        'fetch_format': 'auto',
+                    },
+                ],
+                eager_async=False,
             )
         except Exception as exc:
             raise ValidationError(f'Cloudinary upload failed: {exc}')
@@ -140,6 +189,19 @@ class CloudinaryUploadView(SecureModelView):
             raise ValidationError('Please choose a file to upload before saving.')
 
         super().on_model_change(form, model, is_created)
+
+
+def _image_preview(view, context, model, name):
+    image_url = getattr(model, name, '') or getattr(model, 'image_url', '') or ''
+    if not image_url:
+        return ''
+
+    return Markup(
+        '<img src="{0}" alt="" style="width:72px;height:52px;object-fit:cover;'
+        'border-radius:10px;border:1px solid rgba(0,0,0,.08);'
+        'box-shadow:0 6px 14px rgba(0,0,0,.08)">'
+        .format(escape(image_url))
+    )
 
 
 class HeroSlideView(CloudinaryUploadView):
@@ -174,13 +236,135 @@ class HeroSlideView(CloudinaryUploadView):
     }
 
 
+class AchievementSlideView(CloudinaryUploadView):
+    upload_column = 'image_url'
+    upload_folder = 'anchor/admin/achievements'
+    upload_required = True
+    column_list = ['id', 'order', 'image_url', 'title', 'button_text', 'is_active']
+    column_labels = {
+        'image_url': 'Preview',
+        'upload_file': 'Achievement Image',
+        'button_text': 'Button Text',
+        'button_link': 'Button Link',
+        'is_active': 'Active',
+    }
+    column_formatters = {
+        'image_url': _image_preview,
+    }
+    column_sortable_list = ['order', 'title', 'is_active']
+    column_default_sort = 'order'
+    form_columns = [
+        'upload_file',
+        'title',
+        'description',
+        'button_text',
+        'button_link',
+        'order',
+        'is_active',
+    ]
+    form_args = {
+        'upload_file': {
+            'description': 'Recommended image: a wide photo at least 1600px wide. The site crops it intelligently for desktop and mobile.',
+        },
+        'title': {
+            'description': 'Short success-story headline.',
+            'render_kw': {
+                'maxlength': 120,
+                'placeholder': 'e.g. Learning support reached new villages',
+            },
+        },
+        'description': {
+            'description': 'Two or three calm sentences. Keep it easy for visitors to scan.',
+            'render_kw': {
+                'rows': 4,
+                'placeholder': 'Briefly describe the achievement.',
+            },
+        },
+        'button_text': {
+            'description': 'Optional. Leave blank to hide the button.',
+            'render_kw': {'placeholder': 'Read more'},
+        },
+        'button_link': {
+            'description': 'Optional. Use a full URL or a site path such as /donate.',
+            'render_kw': {'placeholder': '/donate'},
+        },
+        'order': {
+            'description': 'Lower numbers appear first in the slideshow.',
+        },
+    }
+
+
 class GalleryImageView(CloudinaryUploadView):
     upload_column = 'image_url'
     upload_folder = 'anchor/admin/gallery'
     upload_required = True
-    column_list = ['id', 'image_url', 'category', 'alt_text']
-    column_sortable_list = ['category']
-    form_columns = ['upload_file', 'category', 'alt_text']
+    column_list = ['id', 'order', 'image_url', 'category', 'alt_text', 'is_active']
+    column_labels = {
+        'image_url': 'Preview',
+        'upload_file': 'Gallery Image',
+        'alt_text': 'Alt Text',
+        'is_active': 'Visible',
+    }
+    column_formatters = {
+        'image_url': _image_preview,
+    }
+    column_sortable_list = ['order', 'category', 'is_active']
+    column_default_sort = 'order'
+    form_columns = ['upload_file', 'category', 'alt_text', 'order', 'is_active']
+    form_args = {
+        'category': {
+            'description': 'Optional grouping label, such as Education, Health, Community, or Events.',
+            'render_kw': {'placeholder': 'Community'},
+        },
+        'alt_text': {
+            'description': 'Describe what is in the photo for accessibility.',
+            'render_kw': {'placeholder': 'Students in an Anchor classroom session'},
+        },
+        'order': {
+            'description': 'Lower numbers appear earlier in the home gallery.',
+        },
+    }
+
+
+class ImpactMetricView(SecureModelView):
+    column_list = ['id', 'order', 'icon', 'number', 'title', 'is_active']
+    column_labels = {
+        'number': 'Number',
+        'is_active': 'Visible',
+    }
+    column_sortable_list = ['order', 'title', 'is_active']
+    column_default_sort = 'order'
+    form_columns = ['icon', 'number', 'title', 'description', 'order', 'is_active']
+    form_choices = {
+        'icon': [
+            ('users', 'Community / People'),
+            ('book-open', 'Education'),
+            ('heart', 'Care / Health'),
+            ('leaf', 'Environment'),
+            ('award', 'Recognition'),
+            ('briefcase', 'Livelihood'),
+        ],
+    }
+    form_args = {
+        'number': {
+            'description': 'The large value shown on the card, such as 1,000+ or 2019.',
+            'render_kw': {'placeholder': '1,000+'},
+        },
+        'title': {
+            'description': 'Short card title.',
+            'render_kw': {'placeholder': 'Learners supported'},
+        },
+        'description': {
+            'description': 'One concise sentence explaining the number.',
+            'render_kw': {
+                'rows': 3,
+                'placeholder': 'A short supporting line for this impact metric.',
+            },
+        },
+        'order': {
+            'description': 'Lower numbers appear first.',
+        },
+    }
 
 
 class TeamMemberView(CloudinaryUploadView):
@@ -408,6 +592,8 @@ def setup_admin(app, db):
         index_view=SecureAdminIndex()
     )
     admin.add_view(HeroSlideView(HeroSlide, db.session, name='Hero Slides'))
+    admin.add_view(AchievementSlideView(AchievementSlide, db.session, name='Achievements'))
+    admin.add_view(ImpactMetricView(ImpactMetric, db.session, name='Impact Metrics'))
     admin.add_view(GalleryImageView(GalleryImage, db.session, name='Gallery'))
     admin.add_view(TeamMemberView(TeamMember, db.session, name='Team'))
     admin.add_view(InitiativeSectionView(InitiativeSection, db.session, name='Initiatives'))

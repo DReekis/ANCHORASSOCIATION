@@ -13,10 +13,32 @@ import cloudinary.api
 import razorpay
 
 try:
-    from .models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide, MemberStory, CommunityMember
+    from .models import (
+        db,
+        AchievementSlide,
+        AdminUser,
+        GalleryImage,
+        ImpactMetric,
+        InitiativeSection,
+        InitiativeSubitem,
+        HeroSlide,
+        MemberStory,
+        CommunityMember,
+    )
     from .admin_panel import setup_admin
 except ImportError:
-    from models import db, AdminUser, InitiativeSection, InitiativeSubitem, HeroSlide, MemberStory, CommunityMember
+    from models import (
+        db,
+        AchievementSlide,
+        AdminUser,
+        GalleryImage,
+        ImpactMetric,
+        InitiativeSection,
+        InitiativeSubitem,
+        HeroSlide,
+        MemberStory,
+        CommunityMember,
+    )
     from admin_panel import setup_admin
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -180,6 +202,8 @@ def _parse_positive_int(raw_value, default_value):
 LIVE_GALLERY_FOLDER = os.getenv('CLOUDINARY_LIVE_GALLERY_FOLDER', 'anchor/live-gallery')
 LIVE_GALLERY_LIMIT = _parse_positive_int(os.getenv('CLOUDINARY_LIVE_GALLERY_LIMIT'), 12)
 HERO_SLIDE_SRCSET_WIDTHS = (640, 960, 1280, 1600, 1920)
+ACHIEVEMENT_SLIDE_SRCSET_WIDTHS = (640, 960, 1280, 1600)
+GALLERY_IMAGE_SRCSET_WIDTHS = (420, 640, 960, 1280)
 _CLOUDINARY_TRANSFORM_MARKER = '/upload/'
 _HERO_OBJECT_POSITION_PATTERN = re.compile(
     r'^\s*(?:'
@@ -229,12 +253,44 @@ def _cloudinary_responsive_url(image_url, width):
     return urlunsplit((parsed.scheme, parsed.netloc, new_path, parsed.query, parsed.fragment))
 
 
+def _cloudinary_fill_url(image_url, width, height, gravity='auto'):
+    if not _is_cloudinary_image_url(image_url):
+        return image_url
+
+    parsed = urlsplit(str(image_url))
+    path_prefix, path_suffix = parsed.path.split(_CLOUDINARY_TRANSFORM_MARKER, 1)
+    first_segment, _, remainder = path_suffix.partition('/')
+    transform = (
+        f'c_fill,g_{gravity},w_{int(width)},h_{int(height)},'
+        'q_auto:good,f_auto,dpr_auto,fl_progressive'
+    )
+
+    if first_segment.startswith('v') and first_segment[1:].isdigit():
+        new_path = f'{path_prefix}{_CLOUDINARY_TRANSFORM_MARKER}{transform}/{path_suffix}'
+    elif remainder:
+        new_path = f'{path_prefix}{_CLOUDINARY_TRANSFORM_MARKER}{first_segment},{transform}/{remainder}'
+    else:
+        new_path = f'{path_prefix}{_CLOUDINARY_TRANSFORM_MARKER}{transform}/{path_suffix}'
+
+    return urlunsplit((parsed.scheme, parsed.netloc, new_path, parsed.query, parsed.fragment))
+
+
 def _build_cloudinary_srcset(image_url, widths):
     if not _is_cloudinary_image_url(image_url):
         return ''
 
     return ', '.join(
         f'{_cloudinary_responsive_url(image_url, width)} {int(width)}w'
+        for width in widths
+    )
+
+
+def _build_cloudinary_fill_srcset(image_url, widths, ratio_width=16, ratio_height=10):
+    if not _is_cloudinary_image_url(image_url):
+        return ''
+
+    return ', '.join(
+        f'{_cloudinary_fill_url(image_url, width, max(1, round(width * ratio_height / ratio_width)))} {int(width)}w'
         for width in widths
     )
 
@@ -268,16 +324,22 @@ def _normalize_object_position(raw_value):
     return ' '.join(normalized_tokens[:2])
 
 
+def _read_record_field(record, name, default=''):
+    if isinstance(record, dict):
+        return record.get(name, default)
+    return getattr(record, name, default)
+
+
 def _hero_slide_object_position(slide):
     explicit_position = (
-        getattr(slide, 'object_position', None)
-        or getattr(slide, 'focal_position', None)
+        _read_record_field(slide, 'object_position', None)
+        or _read_record_field(slide, 'focal_position', None)
     )
     if explicit_position:
         return _normalize_object_position(explicit_position)
 
-    focal_x = getattr(slide, 'focal_x', None)
-    focal_y = getattr(slide, 'focal_y', None)
+    focal_x = _read_record_field(slide, 'focal_x', None)
+    focal_y = _read_record_field(slide, 'focal_y', None)
     if focal_x is None and focal_y is None:
         return '50% 50%'
 
@@ -285,18 +347,59 @@ def _hero_slide_object_position(slide):
 
 
 def _serialize_hero_slide(slide):
-    title = (slide.title or '').strip()
-    subtitle = (slide.subtitle or '').strip()
+    title = (_read_record_field(slide, 'title') or '').strip()
+    subtitle = (_read_record_field(slide, 'subtitle') or '').strip()
+    image_url = _read_record_field(slide, 'image_url') or ''
 
     return {
         'title': title,
         'subtitle': subtitle,
-        'image_url': _cloudinary_responsive_url(slide.image_url, 1600),
-        'image_srcset': _build_cloudinary_srcset(slide.image_url, HERO_SLIDE_SRCSET_WIDTHS),
+        'image_url': _cloudinary_responsive_url(image_url, 1600),
+        'image_srcset': _build_cloudinary_srcset(image_url, HERO_SLIDE_SRCSET_WIDTHS),
         'image_sizes': '100vw',
         'alt_text': title or 'Anchor Association featured slide',
         'object_position': _hero_slide_object_position(slide),
     }
+
+
+def _serialize_achievement_slide(slide):
+    title = (_read_record_field(slide, 'title') or '').strip()
+    image_url = _read_record_field(slide, 'image_url') or ''
+    return {
+        'title': title,
+        'description': (_read_record_field(slide, 'description') or '').strip(),
+        'button_text': (_read_record_field(slide, 'button_text') or '').strip(),
+        'button_link': (_read_record_field(slide, 'button_link') or '').strip(),
+        'image_url': _cloudinary_fill_url(image_url, 1400, 920),
+        'image_srcset': _build_cloudinary_fill_srcset(image_url, ACHIEVEMENT_SLIDE_SRCSET_WIDTHS, 16, 10),
+        'image_sizes': '(min-width: 900px) 58vw, 100vw',
+        'alt_text': title or 'Anchor Association achievement story',
+    }
+
+
+def _serialize_gallery_image(image):
+    image_url = _read_record_field(image, 'image_url') or _read_record_field(image, 'url') or ''
+    alt_text = (
+        _read_record_field(image, 'alt_text')
+        or _read_record_field(image, 'alt')
+        or ''
+    ).strip() or 'Anchor Association community moment'
+    return {
+        'url': _cloudinary_fill_url(image_url, 1000, 760),
+        'srcset': _build_cloudinary_fill_srcset(image_url, GALLERY_IMAGE_SRCSET_WIDTHS, 4, 3),
+        'sizes': '(min-width: 1024px) 28vw, (min-width: 640px) 44vw, 100vw',
+        'alt': alt_text,
+        'category': (_read_record_field(image, 'category') or '').strip(),
+    }
+
+
+def _model_has_records(model):
+    try:
+        return db.session.query(model.id).first() is not None
+    except Exception as exc:
+        db.session.rollback()
+        app.logger.warning('Could not check records for %s: %s', model.__name__, exc)
+        return False
 
 
 IMPACT_PAGE_SECTIONS = [
@@ -362,6 +465,149 @@ JOIN_MEMBER_HIGHLIGHTS = [
             'This page is ready for your exact eligibility, fee, and application workflow once '
             'those details are confirmed.'
         ),
+    },
+]
+
+DEFAULT_HERO_SLIDES = [
+    {
+        'image_url': '/static/photos/About_Us/Academic_Programme/Academic_Programme.png',
+        'title': 'Education that keeps children moving forward.',
+        'subtitle': 'A stable, caring academic environment shaped around confidence, dignity, and daily encouragement.',
+        'order': 1,
+        'is_active': True,
+    },
+    {
+        'image_url': '/static/photos/About_Us/Nivedita_SHG/Nivedita_SHG1.png',
+        'title': 'Community work built through trust.',
+        'subtitle': 'Women-led groups, local action, and practical support systems that strengthen everyday resilience.',
+        'order': 2,
+        'is_active': True,
+    },
+    {
+        'image_url': '/static/photos/About_Us/Eco_Urban_Project/Bagan_Bilash.png',
+        'title': 'Sustainability with a public face.',
+        'subtitle': 'Eco Urban Project and Bagan Bilash connect livelihood, gathering, and environmental awareness.',
+        'order': 3,
+        'is_active': True,
+    },
+]
+
+DEFAULT_ACHIEVEMENTS = [
+    {
+        'title': 'Classroom support that grows confidence.',
+        'description': (
+            'Anchor Public School creates a steady learning environment where children receive '
+            'daily guidance, encouragement, and a stronger foundation for long-term education.'
+        ),
+        'button_text': 'Support education',
+        'button_link': _donation_link('Anchor Public School'),
+        'image_url': '/static/photos/About_Us/Academic_Programme/Academic_Programme.png',
+        'order': 1,
+        'is_active': True,
+    },
+    {
+        'title': 'Women-led groups building local resilience.',
+        'description': (
+            'Nivedita SHG helps women organize, learn together, and strengthen self-reliance '
+            'through collective action and practical community participation.'
+        ),
+        'button_text': 'Support SHG work',
+        'button_link': _donation_link('Nivedita SHG'),
+        'image_url': '/static/photos/About_Us/Nivedita_SHG/Nivedita_SHG1.png',
+        'order': 2,
+        'is_active': True,
+    },
+    {
+        'title': 'Health access brought closer to families.',
+        'description': (
+            'Finding Cures supports families with basic consultation, preventive awareness, '
+            'medicine guidance, and a more compassionate path to care.'
+        ),
+        'button_text': 'Support care',
+        'button_link': _donation_link('Finding Cures'),
+        'image_url': '/static/photos/About_Us/Finding_Cures/Finding_cures1.png',
+        'order': 3,
+        'is_active': True,
+    },
+]
+
+DEFAULT_IMPACT_METRICS = [
+    {
+        'icon': 'users',
+        'number': '1,000+',
+        'title': 'Community members reached',
+        'description': 'Education, care, livelihood, and awareness initiatives serve families across local communities.',
+        'order': 1,
+        'is_active': True,
+    },
+    {
+        'icon': 'book-open',
+        'number': '8+',
+        'title': 'Active initiatives',
+        'description': 'Programs span school education, language learning, child development, career readiness, and support services.',
+        'order': 2,
+        'is_active': True,
+    },
+    {
+        'icon': 'leaf',
+        'number': '2019',
+        'title': 'Rooted in local action',
+        'description': 'Anchor has grown through consistent, practical work shaped around real community needs.',
+        'order': 3,
+        'is_active': True,
+    },
+    {
+        'icon': 'heart',
+        'number': '365',
+        'title': 'Days of commitment',
+        'description': 'The team works toward dependable support rather than isolated one-time moments.',
+        'order': 4,
+        'is_active': True,
+    },
+]
+
+DEFAULT_GALLERY_IMAGES = [
+    {
+        'image_url': '/static/photos/About_Us/Academic_Programme/Academic_Programme2.png',
+        'category': 'Education',
+        'alt_text': 'Students participating in an Anchor classroom session',
+        'order': 1,
+        'is_active': True,
+    },
+    {
+        'image_url': '/static/photos/About_Us/Nivedita_SHG/Nivedita_SHG4.png',
+        'category': 'Community',
+        'alt_text': 'Women in a self help group planning session',
+        'order': 2,
+        'is_active': True,
+    },
+    {
+        'image_url': '/static/photos/About_Us/Minions_Fun School/Minions_Fun_House.png',
+        'category': 'Children',
+        'alt_text': 'Children enjoying activity-based learning',
+        'order': 3,
+        'is_active': True,
+    },
+    {
+        'image_url': '/static/photos/About_Us/Eco_Urban_Project/Bagan_Bilash.png',
+        'category': 'Eco Project',
+        'alt_text': 'Bagan Bilash community cafe and eco project',
+        'order': 4,
+        'is_active': True,
+    },
+    {
+        'image_url': '/static/photos/About_Us/Other Regular activities/Blood_Donation_Camp.png',
+        'category': 'Health',
+        'alt_text': 'Community blood donation camp activity',
+        'order': 5,
+        'is_active': True,
+    },
+    {
+        'image_url': '/static/photos/About_Us/Learn&Shine/Learn&Shine1.png',
+        'category': 'Learning',
+        'alt_text': 'Learners in a guided study session',
+        'order': 6,
+        'is_active': True,
     },
 ]
 
@@ -645,6 +891,87 @@ def seed_default_initiatives():
     db.session.commit()
 
 
+def seed_default_hero_slides():
+    if HeroSlide.query.first():
+        return
+
+    for slide_data in DEFAULT_HERO_SLIDES:
+        db.session.add(HeroSlide(**slide_data))
+
+    db.session.commit()
+
+
+def seed_default_achievements():
+    if AchievementSlide.query.first():
+        return
+
+    for slide_data in DEFAULT_ACHIEVEMENTS:
+        db.session.add(AchievementSlide(**slide_data))
+
+    db.session.commit()
+
+
+def seed_default_impact_metrics():
+    if ImpactMetric.query.first():
+        return
+
+    for metric_data in DEFAULT_IMPACT_METRICS:
+        db.session.add(ImpactMetric(**metric_data))
+
+    db.session.commit()
+
+
+def seed_default_gallery_images():
+    if GalleryImage.query.first():
+        return
+
+    for image_data in DEFAULT_GALLERY_IMAGES:
+        db.session.add(GalleryImage(**image_data))
+
+    db.session.commit()
+
+
+def _table_column_exists(table_name, column_name):
+    try:
+        from sqlalchemy import inspect
+        inspector = inspect(db.engine)
+        return any(column['name'] == column_name for column in inspector.get_columns(table_name))
+    except Exception as exc:
+        app.logger.warning('Could not inspect column %s.%s: %s', table_name, column_name, exc)
+        return True
+
+
+def _add_column_if_missing(table_name, column_name, ddl):
+    if _table_column_exists(table_name, column_name):
+        return
+
+    from sqlalchemy import text
+    db.session.execute(text(f'ALTER TABLE {table_name} ADD COLUMN {ddl}'))
+
+
+def sync_database_schema():
+    db.create_all()
+
+    boolean_true = 'TRUE' if db.engine.dialect.name != 'sqlite' else '1'
+    schema_additions = [
+        ('initiative_sections', 'image_on_right', 'image_on_right BOOLEAN DEFAULT FALSE'),
+        ('initiative_subitems', 'description', 'description TEXT'),
+        ('member_stories', 'image_on_right', f'image_on_right BOOLEAN DEFAULT {boolean_true}'),
+        ('member_stories', 'qualification', "qualification VARCHAR(300) DEFAULT ''"),
+        ('member_stories', 'role_tag', "role_tag VARCHAR(120) DEFAULT 'Our Member'"),
+        ('gallery_images', 'order', '"order" INTEGER DEFAULT 0'),
+        ('gallery_images', 'is_active', f'is_active BOOLEAN DEFAULT {boolean_true}'),
+    ]
+
+    for table_name, column_name, ddl in schema_additions:
+        try:
+            _add_column_if_missing(table_name, column_name, ddl)
+            db.session.commit()
+        except Exception as exc:
+            db.session.rollback()
+            app.logger.warning('Could not add column %s.%s: %s', table_name, column_name, exc)
+
+
 
 def get_donation_purpose_options(selected_purpose=''):
 
@@ -685,12 +1012,46 @@ def get_donation_purpose_options(selected_purpose=''):
 
 @app.context_processor
 def inject_template_globals():
+    accreditation_assets = {
+        'iso': find_static_image_by_terms('iso'),
+        'msme': find_static_image_by_terms('msme'),
+    }
+
     return {
         'current_year': datetime.now().year,
-        'accreditation_assets': {
-            'iso': find_static_image_by_terms('iso'),
-            'msme': find_static_image_by_terms('msme'),
-        },
+        'accreditation_assets': accreditation_assets,
+        'accreditation_items': [
+            {
+                'key': 'iso',
+                'title': 'ISO',
+                'subtitle': 'Quality standards',
+                'image': accreditation_assets.get('iso'),
+            },
+            {
+                'key': 'msme',
+                'title': 'MSME',
+                'subtitle': 'Registered organization',
+                'image': accreditation_assets.get('msme'),
+            },
+            {
+                'key': '80g',
+                'title': '80G',
+                'subtitle': 'Donation compliance',
+                'image': None,
+            },
+            {
+                'key': '12a',
+                'title': '12A',
+                'subtitle': 'Non-profit registration',
+                'image': None,
+            },
+            {
+                'key': 'csr',
+                'title': 'CSR',
+                'subtitle': 'Partnership ready',
+                'image': None,
+            },
+        ],
     }
 
 
@@ -705,8 +1066,78 @@ def home():
     except Exception as e:
         app.logger.warning('Failed to load home live-gallery images from Cloudinary: %s', e)
         
-    hero_slides_db = HeroSlide.query.filter_by(is_active=True).order_by(HeroSlide.order.asc()).all()
-    hero_slides = [_serialize_hero_slide(slide) for slide in hero_slides_db]
+    hero_slides = []
+    hero_records_exist = _model_has_records(HeroSlide)
+    try:
+        hero_slides_db = HeroSlide.query.filter_by(is_active=True).order_by(HeroSlide.order.asc()).all()
+        hero_slides = [_serialize_hero_slide(slide) for slide in hero_slides_db]
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error fetching hero slides: {e}")
+
+    if not hero_slides and not hero_records_exist:
+        hero_slides = [_serialize_hero_slide(slide) for slide in DEFAULT_HERO_SLIDES]
+
+    achievement_slides = []
+    achievement_records_exist = _model_has_records(AchievementSlide)
+    try:
+        achievement_slides_db = (
+            AchievementSlide.query
+            .filter_by(is_active=True)
+            .order_by(AchievementSlide.order.asc(), AchievementSlide.id.asc())
+            .all()
+        )
+        achievement_slides = [_serialize_achievement_slide(slide) for slide in achievement_slides_db]
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error fetching achievement slides: {e}")
+
+    if not achievement_slides and not achievement_records_exist:
+        achievement_slides = [_serialize_achievement_slide(slide) for slide in DEFAULT_ACHIEVEMENTS]
+
+    impact_metrics = []
+    impact_records_exist = _model_has_records(ImpactMetric)
+    try:
+        impact_metrics = (
+            ImpactMetric.query
+            .filter_by(is_active=True)
+            .order_by(ImpactMetric.order.asc(), ImpactMetric.id.asc())
+            .all()
+        )
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error fetching impact metrics: {e}")
+
+    if not impact_metrics and not impact_records_exist:
+        impact_metrics = DEFAULT_IMPACT_METRICS
+
+    home_gallery_images = []
+    gallery_records_exist = _model_has_records(GalleryImage)
+    try:
+        gallery_images_db = (
+            GalleryImage.query
+            .filter_by(is_active=True)
+            .order_by(GalleryImage.order.asc(), GalleryImage.id.asc())
+            .limit(12)
+            .all()
+        )
+        home_gallery_images = [_serialize_gallery_image(image) for image in gallery_images_db]
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error fetching gallery images: {e}")
+
+    if not home_gallery_images and not gallery_records_exist and home_slides:
+        home_gallery_images = [
+            _serialize_gallery_image({
+                'image_url': slide.get('url'),
+                'alt_text': 'Anchor Association community moment',
+                'category': 'Live Moment',
+            })
+            for slide in home_slides[:12]
+        ]
+
+    if not home_gallery_images and not gallery_records_exist:
+        home_gallery_images = [_serialize_gallery_image(image) for image in DEFAULT_GALLERY_IMAGES]
 
     member_stories = []
     try:
@@ -732,7 +1163,16 @@ def home():
         db.session.rollback()
         app.logger.error(f"Error fetching community members: {e}")
 
-    return render_template('index.html', home_slides=home_slides, hero_slides=hero_slides, member_stories=member_stories, community_members=community_members)
+    return render_template(
+        'index.html',
+        home_slides=home_slides,
+        hero_slides=hero_slides,
+        achievement_slides=achievement_slides,
+        impact_metrics=impact_metrics,
+        home_gallery_images=home_gallery_images,
+        member_stories=member_stories,
+        community_members=community_members,
+    )
 
 
 @app.route('/impacts')
@@ -783,6 +1223,25 @@ def initiatives():
 def gallery():
     folder_path = 'anchor/gallery'
     images = []
+    gallery_records_exist = _model_has_records(GalleryImage)
+    try:
+        gallery_images_db = (
+            GalleryImage.query
+            .filter_by(is_active=True)
+            .order_by(GalleryImage.order.asc(), GalleryImage.id.asc())
+            .all()
+        )
+        images = [_serialize_gallery_image(image) for image in gallery_images_db]
+    except Exception as e:
+        db.session.rollback()
+        app.logger.warning('Failed to load curated gallery images: %s', e)
+
+    if images:
+        return render_template('gallery.html', images=images)
+
+    if gallery_records_exist:
+        return render_template('gallery.html', images=[])
+
     try:
         result = {}
         if hasattr(cloudinary.api, 'resources_by_asset_folder'):
@@ -803,10 +1262,11 @@ def gallery():
             ) or {}
 
         for r in result.get('resources', []):
-            images.append({
-                'url': r['secure_url'],
-                'public_id': r['public_id']
-            })
+            images.append(_serialize_gallery_image({
+                'image_url': r['secure_url'],
+                'alt_text': 'Anchor Association community moment',
+                'category': 'Gallery',
+            }))
     except Exception as e:
         app.logger.warning('Failed to load Cloudinary gallery: %s', e)
 
@@ -911,8 +1371,12 @@ def admin_logout():
 # the deployed filesystem is read-only and import-time writes can crash startup.
 with app.app_context():
     if should_bootstrap_database():
-        db.create_all()
+        sync_database_schema()
         seed_default_initiatives()
+        seed_default_hero_slides()
+        seed_default_achievements()
+        seed_default_impact_metrics()
+        seed_default_gallery_images()
 
     else:
         app.logger.info('Skipping automatic database bootstrap in Vercel runtime.')
@@ -944,8 +1408,13 @@ def create_admin(username, password):
 def sync_db():
     """Manually sync database tables (useful for Vercel/Postgres)."""
     with app.app_context():
-        db.create_all()
-        print("Database tables created/synced successfully.")
+        sync_database_schema()
+        seed_default_initiatives()
+        seed_default_hero_slides()
+        seed_default_achievements()
+        seed_default_impact_metrics()
+        seed_default_gallery_images()
+        print("Database tables and homepage defaults synced successfully.")
 
 
 if __name__ == '__main__':

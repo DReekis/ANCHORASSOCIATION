@@ -16,7 +16,7 @@
 
 /* Alternate background for visual rhythm */
 .ui-brochure:nth-child(even) {
-    background: rgba(47, 107, 79, 0.02);
+    background: rgba(35, 87, 216, 0.02);
 }
 
 /* --------------------------------------------------------------------------
@@ -35,9 +35,9 @@
     width: fit-content;
     padding: 8px 18px;
     border-radius: 999px;
-    background: rgba(47, 107, 79, 0.08);
-    border: 1px solid rgba(47, 107, 79, 0.12);
-    color: var(--primary, #2F6B4F);
+    background: rgba(35, 87, 216, 0.08);
+    border: 1px solid rgba(35, 87, 216, 0.12);
+    color: var(--primary, #2357D8);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.72rem;
     font-weight: 700;
@@ -50,7 +50,7 @@
     font-size: clamp(2rem, 3.5vw, 3.2rem);
     font-weight: 700;
     line-height: 1.1;
-    color: #1a2f24;
+    color: var(--dark, #13294B);
 }
 
 .ui-brochure__body {
@@ -197,7 +197,7 @@
 
 /* ==========================================================================
    COMPONENT: .ui-member-story — 50/50 Split-Screen Member Narrative
-   A premium fixed-height section with a scrollable green text column
+   A premium fixed-height section with a scrollable text column
    and a full-bleed portrait photograph. Fully generalised — no individual
    profile elements. Driven by the member_story() Jinja macro.
    ========================================================================== */
@@ -230,7 +230,7 @@
     height: 100%;
     overflow-y: auto;
     overscroll-behavior-y: contain;
-    background: var(--primary, #2f6b4f);
+    background: var(--primary, #2357D8);
     color: rgba(255, 255, 255, 0.92);
     scroll-behavior: smooth;
 }
@@ -352,7 +352,7 @@
     inset: 0;
     background:
         linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.10) 100%),
-        linear-gradient(270deg, rgba(0, 0, 0, 0) 80%, rgba(47, 107, 79, 0.06) 100%);
+        linear-gradient(270deg, rgba(0, 0, 0, 0) 80%, rgba(35, 87, 216, 0.06) 100%);
     pointer-events: none;
 }
 

@@ -36,6 +36,22 @@ class HeroSlide(db.Model):
         return f'<HeroSlide {self.title}>'
 
 
+class AchievementSlide(db.Model):
+    __tablename__ = 'achievement_slides'
+
+    id = db.Column(db.Integer, primary_key=True)
+    image_url = db.Column(db.String(500), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    button_text = db.Column(db.String(80))
+    button_link = db.Column(db.String(300))
+    order = db.Column('order', db.Integer, default=0, quote=True)
+    is_active = db.Column(db.Boolean, default=True)
+
+    def __repr__(self):
+        return f'<AchievementSlide {self.title}>'
+
+
 class GalleryImage(db.Model):
     __tablename__ = 'gallery_images'
 
@@ -43,9 +59,26 @@ class GalleryImage(db.Model):
     image_url = db.Column(db.String(500), nullable=False)
     category = db.Column(db.String(100), default='general')
     alt_text = db.Column(db.String(300))
+    order = db.Column('order', db.Integer, default=0, quote=True)
+    is_active = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
         return f'<GalleryImage {self.id} - {self.category}>'
+
+
+class ImpactMetric(db.Model):
+    __tablename__ = 'impact_metrics'
+
+    id = db.Column(db.Integer, primary_key=True)
+    icon = db.Column(db.String(80), default='users')
+    number = db.Column(db.String(80), nullable=False)
+    title = db.Column(db.String(160), nullable=False)
+    description = db.Column(db.Text)
+    order = db.Column('order', db.Integer, default=0, quote=True)
+    is_active = db.Column(db.Boolean, default=True)
+
+    def __repr__(self):
+        return f'<ImpactMetric {self.title}>'
 
 
 class TeamMember(db.Model):

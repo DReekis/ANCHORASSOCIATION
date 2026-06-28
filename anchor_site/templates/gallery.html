@@ -28,7 +28,13 @@
 
             {% for img in images %}
             <div class="masonry-item">
-                <img src="{{ img.url }}" alt="Anchor moment" loading="lazy" decoding="async">
+                <img
+                    src="{{ img.url }}"
+                    {% if img.srcset %}srcset="{{ img.srcset }}"{% endif %}
+                    {% if img.sizes %}sizes="{{ img.sizes }}"{% endif %}
+                    alt="{{ img.alt or 'Anchor Association community moment' }}"
+                    loading="lazy"
+                    decoding="async">
             </div>
             {% endfor %}
 
