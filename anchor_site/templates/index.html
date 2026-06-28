@@ -420,22 +420,25 @@
             </p>
         </header>
 
-        <div class="home-gallery__screensaver" data-gallery-screensaver data-gallery-lightbox>
-            {% for image in home_gallery_images %}
-            <div class="home-gallery__slide {% if loop.first %}is-active{% endif %}"
-                 data-lightbox-src="{{ image.url }}"
-                 data-lightbox-alt="{{ image.alt }}">
+        <div class="home-gallery__grid" id="homeGalleryGrid" data-gallery-images='{{ home_gallery_images | tojson | forceescape }}' data-gallery-lightbox>
+            {% for image in home_gallery_images[:5] %}
+            <button
+                class="home-gallery__item home-gallery__item--{{ loop.index }}"
+                type="button"
+                data-lightbox-src="{{ image.url }}"
+                data-lightbox-alt="{{ image.alt }}"
+                aria-label="Open gallery image: {{ image.alt }}">
                 <img
                     src="{{ image.url }}"
                     {% if image.srcset %}srcset="{{ image.srcset }}"{% endif %}
                     sizes="100vw"
                     alt="{{ image.alt }}"
-                    loading="{% if loop.first %}eager{% else %}lazy{% endif %}"
+                    loading="lazy"
                     decoding="async">
                 {% if image.category %}
                 <span class="home-gallery__label">{{ image.category }}</span>
                 {% endif %}
-            </div>
+            </button>
             {% endfor %}
         </div>
     </div>

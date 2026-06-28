@@ -499,8 +499,6 @@ DEFAULT_ACHIEVEMENTS = [
             'Anchor Public School creates a steady learning environment where children receive '
             'daily guidance, encouragement, and a stronger foundation for long-term education.'
         ),
-        'button_text': 'Support education',
-        'button_link': _donation_link('Anchor Public School'),
         'image_url': '/static/photos/About_Us/Academic_Programme/Academic_Programme.png',
         'order': 1,
         'is_active': True,
@@ -511,8 +509,6 @@ DEFAULT_ACHIEVEMENTS = [
             'Nivedita SHG helps women organize, learn together, and strengthen self-reliance '
             'through collective action and practical community participation.'
         ),
-        'button_text': 'Support SHG work',
-        'button_link': _donation_link('Nivedita SHG'),
         'image_url': '/static/photos/About_Us/Nivedita_SHG/Nivedita_SHG1.png',
         'order': 2,
         'is_active': True,
@@ -523,8 +519,6 @@ DEFAULT_ACHIEVEMENTS = [
             'Finding Cures supports families with basic consultation, preventive awareness, '
             'medicine guidance, and a more compassionate path to care.'
         ),
-        'button_text': 'Support care',
-        'button_link': _donation_link('Finding Cures'),
         'image_url': '/static/photos/About_Us/Finding_Cures/Finding_cures1.png',
         'order': 3,
         'is_active': True,

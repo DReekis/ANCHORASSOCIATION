@@ -781,74 +781,122 @@
     });
 })();
 
-// ---- Home Gallery — Screensaver Crossfade + Lightbox ----
+// ---- Home Gallery — Grid Swapper + Lightbox ----
 (function () {
-    const screensaver = document.querySelector('[data-gallery-screensaver]');
+    const grid = document.getElementById('homeGalleryGrid');
     const dialog = document.getElementById('homeLightbox');
     const lightboxImage = document.getElementById('homeLightboxImage');
     const closeButton = dialog?.querySelector('[data-home-lightbox-close]');
 
-    if (!screensaver) {
+    if (!grid) {
         return;
     }
 
-    const slides = Array.from(screensaver.querySelectorAll('.home-gallery__slide'));
-    if (!slides.length) {
+    let galleryData = [];
+    try {
+        galleryData = JSON.parse(grid.getAttribute('data-gallery-images') || '[]');
+    } catch (e) {
+        console.error('Failed to parse gallery images data', e);
         return;
     }
 
+    // Need more than 5 images to cycle
+    const MAX_DISPLAY = Math.min(5, galleryData.length);
+    let displayQueue = galleryData.slice(0, MAX_DISPLAY);
+    let waitingQueue = galleryData.slice(MAX_DISPLAY);
+
+    let intervalId = null;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    const state = {
-        currentIndex: Math.max(slides.findIndex(function (s) { return s.classList.contains('is-active'); }), 0),
-        autoplayId: null,
-        cleanupTimerId: null,
+    const escapeHTML = function (value) {
+        return String(value || '').replace(/[&<>"']/g, function(character) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;',
+            }[character];
+        });
     };
 
-    function updateSlides() {
-        slides.forEach(function (slide, index) {
-            slide.classList.toggle('is-active', index === state.currentIndex);
-        });
-    }
+    const cycleImage = function () {
+        if (waitingQueue.length === 0 || grid.children.length === 0) return;
 
-    function goToSlide(nextIndex) {
-        var normalizedIndex = (nextIndex + slides.length) % slides.length;
-        if (normalizedIndex === state.currentIndex) {
-            return;
+        // Pick a random currently displayed slot to replace
+        const randomIndex = Math.floor(Math.random() * grid.children.length);
+        const slotToReplace = grid.children[randomIndex];
+        const oldImage = displayQueue[randomIndex];
+        const newImage = waitingQueue.shift();
+
+        const imgElement = slotToReplace.querySelector('img');
+        const labelElement = slotToReplace.querySelector('.home-gallery__label');
+
+        // Fade out
+        slotToReplace.classList.add('is-fading');
+
+        setTimeout(function () {
+            // Swap in memory
+            displayQueue[randomIndex] = newImage;
+            waitingQueue.push(oldImage);
+
+            // Update DOM attributes
+            slotToReplace.setAttribute('data-lightbox-src', newImage.url);
+            slotToReplace.setAttribute('data-lightbox-alt', newImage.alt || '');
+            slotToReplace.setAttribute('aria-label', 'Open gallery image: ' + escapeHTML(newImage.alt));
+
+            if (imgElement) {
+                imgElement.src = newImage.url;
+                if (newImage.srcset) {
+                    imgElement.srcset = newImage.srcset;
+                } else {
+                    imgElement.removeAttribute('srcset');
+                }
+                imgElement.alt = newImage.alt || '';
+                
+                // Remove fade when image is loaded
+                imgElement.onload = function() {
+                    slotToReplace.classList.remove('is-fading');
+                    imgElement.onload = null;
+                };
+                
+                // Fallback if cached
+                if (imgElement.complete) {
+                    slotToReplace.classList.remove('is-fading');
+                    imgElement.onload = null;
+                }
+            }
+
+            // Handle label
+            if (labelElement) {
+                if (newImage.category) {
+                    labelElement.textContent = newImage.category;
+                    labelElement.style.display = '';
+                } else {
+                    labelElement.style.display = 'none';
+                }
+            } else if (newImage.category) {
+                const newLabel = document.createElement('span');
+                newLabel.className = 'home-gallery__label';
+                newLabel.textContent = newImage.category;
+                slotToReplace.appendChild(newLabel);
+            }
+
+        }, reducedMotion.matches ? 0 : 600); // Wait for fade-out CSS transition
+    };
+
+    function startAutoplay() {
+        if (intervalId) return;
+        if (waitingQueue.length > 0 && !reducedMotion.matches) {
+            intervalId = setInterval(cycleImage, 4500); // Swap every 4.5 seconds
         }
-
-        var previousSlide = slides[state.currentIndex];
-        previousSlide.classList.remove('is-active');
-        previousSlide.classList.add('is-leaving');
-
-        state.currentIndex = normalizedIndex;
-        slides[normalizedIndex].classList.add('is-active');
-
-        if (state.cleanupTimerId) {
-            window.clearTimeout(state.cleanupTimerId);
-        }
-
-        state.cleanupTimerId = window.setTimeout(function () {
-            previousSlide.classList.remove('is-leaving');
-        }, reducedMotion.matches ? 0 : 1500);
     }
 
     function stopAutoplay() {
-        if (state.autoplayId) {
-            window.clearInterval(state.autoplayId);
-            state.autoplayId = null;
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
         }
-    }
-
-    function startAutoplay() {
-        stopAutoplay();
-        if (slides.length <= 1 || reducedMotion.matches) {
-            return;
-        }
-
-        state.autoplayId = window.setInterval(function () {
-            goToSlide(state.currentIndex + 1);
-        }, 5000);
     }
 
     // IntersectionObserver — only run when visible
@@ -859,9 +907,9 @@
             } else {
                 stopAutoplay();
             }
-        }, { threshold: 0.15 });
+        }, { threshold: 0.1 });
 
-        observer.observe(screensaver);
+        observer.observe(grid);
     } else {
         startAutoplay();
     }
@@ -876,14 +924,14 @@
 
     // Lightbox click handler
     if (dialog && lightboxImage) {
-        screensaver.addEventListener('click', function (event) {
-            var slide = event.target.closest('.home-gallery__slide');
-            if (!slide) {
+        grid.addEventListener('click', function (event) {
+            var item = event.target.closest('.home-gallery__item');
+            if (!item) {
                 return;
             }
 
-            lightboxImage.src = slide.getAttribute('data-lightbox-src') || '';
-            lightboxImage.alt = slide.getAttribute('data-lightbox-alt') || 'Anchor Association gallery image';
+            lightboxImage.src = item.getAttribute('data-lightbox-src') || '';
+            lightboxImage.alt = item.getAttribute('data-lightbox-alt') || 'Anchor Association gallery image';
 
             if (typeof dialog.showModal === 'function') {
                 dialog.showModal();
@@ -908,8 +956,6 @@
             }
         });
     }
-
-    updateSlides();
 })();
 
 // ---- Community Members Queue (Home Page) ----
