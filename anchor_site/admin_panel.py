@@ -3,6 +3,7 @@ from markupsafe import Markup, escape
 from flask import request, redirect, url_for, session, flash
 from flask_admin import Admin, AdminIndexView, expose, BaseView
 from flask_admin.contrib.sqla import ModelView
+from flask_admin.menu import MenuLink
 from flask_wtf import FlaskForm
 from wtforms import FileField, PasswordField, ValidationError, SelectField, MultipleFileField, SubmitField
 import cloudinary.uploader
@@ -611,3 +612,4 @@ def setup_admin(app, db):
     admin.add_view(CommunityMemberView(CommunityMember, db.session, name='Community Members'))
     admin.add_view(GalleryUploadView(name='Bulk Photo Upload', endpoint='bulk_upload'))
     admin.add_view(SyncDatabaseView(db, name='Sync Database', endpoint='sync-db'))
+    admin.add_link(MenuLink(name='Logout', url='/admin-logout'))
