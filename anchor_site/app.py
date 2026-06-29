@@ -443,10 +443,10 @@ IMPACT_PAGE_SECTIONS = [
 
 JOIN_MEMBER_HIGHLIGHTS = [
     {
-        'eyebrow': 'Membership',
+        'eyebrow': 'Volunteer',
         'title': 'Become part of the working community.',
         'copy': (
-            'Join as a member to contribute your time, perspective, and commitment to the '
+            'Join as a volunteer to contribute your time, perspective, and commitment to the '
             'organization’s long-term social work.'
         ),
     },
@@ -454,15 +454,15 @@ JOIN_MEMBER_HIGHLIGHTS = [
         'eyebrow': 'Contribution',
         'title': 'Support programs beyond one-time moments.',
         'copy': (
-            'Members help strengthen continuity across education, healthcare, awareness work, '
+            'Volunteers help strengthen continuity across education, healthcare, awareness work, '
             'eco projects, and future local partnerships.'
         ),
     },
     {
         'eyebrow': 'Next Step',
-        'title': 'Membership information can be finalized by the Anchor team.',
+        'title': 'Volunteer information can be finalized by the Anchor team.',
         'copy': (
-            'This page is ready for your exact eligibility, fee, and application workflow once '
+            'This page is ready for your exact eligibility and application workflow once '
             'those details are confirmed.'
         ),
     },

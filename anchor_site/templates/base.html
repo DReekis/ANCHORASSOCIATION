@@ -52,7 +52,7 @@
             <a href="{{ url_for('home') }}#community" class="side-menu__link">Community</a>
             <a href="{{ url_for('home') }}#contact" class="side-menu__link">Contact</a>
             <a href="{{ url_for('cafe') }}" class="side-menu__link {% if request.path.startswith('/cafe') %}active{% endif %}">Bagan Bilash Cafe</a>
-            <a href="{{ url_for('join_member') }}" class="side-menu__link {% if request.path.startswith('/join-member') %}active{% endif %}">Become a Member</a>
+            <a href="{{ url_for('join_member') }}" class="side-menu__link {% if request.path.startswith('/join-member') %}active{% endif %}">Volunteer</a>
             <a href="#" class="side-menu__link">Instagram</a>
             <a href="#" class="side-menu__link">X (Twitter)</a>
             <a href="#" class="side-menu__link">Facebook</a>
@@ -89,7 +89,7 @@
                         </button>
                         <div class="nav-glass__dropdown" id="nav-more-menu">
                             <a href="{{ url_for('cafe') }}" class="dropdown-item">Bagan Bilash Cafe</a>
-                            <a href="{{ url_for('join_member') }}" class="dropdown-item">Become a Member</a>
+                            <a href="{{ url_for('join_member') }}" class="dropdown-item">Volunteer</a>
                             <div class="nav-glass__dropdown-wrapper nav-glass__dropdown-wrapper--nested">
                                 <button class="dropdown-item dropdown-item--submenu" type="button" aria-expanded="false" aria-controls="nav-follow-menu" data-dropdown-trigger>
                                     <span>Follow Us</span>
@@ -206,7 +206,7 @@
                 <a href="{{ url_for('home') }}#community" class="footer__link">Community</a>
                 <a href="{{ url_for('home') }}#contact" class="footer__link">Contact</a>
                 <a href="{{ url_for('cafe') }}" class="footer__link">Eco Project</a>
-                <a href="{{ url_for('join_member') }}" class="footer__link">Join With Us</a>
+                <a href="{{ url_for('join_member') }}" class="footer__link">Volunteer</a>
             </nav>
 
             <div class="footer__divider"></div>
