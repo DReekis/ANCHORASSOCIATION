@@ -35,20 +35,14 @@
 <section class="hero-slideshow section" id="featured-gallery">
     <div class="hero-slideshow__container" data-hero-slideshow>
         {% for slide in hero_slides %}
-        <article
-            class="hero-slide {% if loop.first %}is-active{% endif %}"
+        <article class="hero-slide {% if loop.first %}is-active{% endif %}"
             style="--hero-object-position: {{ slide.object_position }};"
             aria-hidden="{% if loop.first %}false{% else %}true{% endif %}">
             <div class="hero-slide__media">
-                <img
-                    src="{{ slide.image_url }}"
-                    {% if slide.image_srcset %}srcset="{{ slide.image_srcset }}"{% endif %}
-                    sizes="(min-width: 769px) 58vw, 100vw"
-                    alt="{{ slide.alt_text }}"
-                    class="hero-slide__image"
+                <img src="{{ slide.image_url }}" {% if slide.image_srcset %}srcset="{{ slide.image_srcset }}" {% endif
+                    %} sizes="(min-width: 769px) 58vw, 100vw" alt="{{ slide.alt_text }}" class="hero-slide__image"
                     loading="{% if loop.first %}eager{% else %}lazy{% endif %}"
-                    fetchpriority="{% if loop.first %}high{% else %}auto{% endif %}"
-                    decoding="async">
+                    fetchpriority="{% if loop.first %}high{% else %}auto{% endif %}" decoding="async">
             </div>
             <div class="hero-slide__content">
                 <div class="hero-slide__content-inner">
@@ -60,16 +54,26 @@
         {% endfor %}
         {% if hero_slides|length > 1 %}
         <div class="hero-slideshow__controls">
-            <button class="hero-slideshow__btn hero-slideshow__btn--prev" type="button" aria-label="Previous slide" data-hero-prev>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <button class="hero-slideshow__btn hero-slideshow__btn--prev" type="button" aria-label="Previous slide"
+                data-hero-prev>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
             </button>
-            <button class="hero-slideshow__btn hero-slideshow__btn--next" type="button" aria-label="Next slide" data-hero-next>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <button class="hero-slideshow__btn hero-slideshow__btn--next" type="button" aria-label="Next slide"
+                data-hero-next>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
             </button>
         </div>
         <div class="hero-slideshow__indicators">
             {% for slide in hero_slides %}
-            <button class="hero-slideshow__dot {% if loop.first %}is-active{% endif %}" type="button" aria-label="Go to slide {{ loop.index }}" data-hero-dot aria-current="{% if loop.first %}true{% else %}false{% endif %}"></button>
+            <button class="hero-slideshow__dot {% if loop.first %}is-active{% endif %}" type="button"
+                aria-label="Go to slide {{ loop.index }}" data-hero-dot
+                aria-current="{% if loop.first %}true{% else %}false{% endif %}"></button>
             {% endfor %}
         </div>
         {% endif %}
@@ -93,15 +97,12 @@
 
     <div class="achievement-slider" data-achievement-slider>
         {% for slide in achievement_slides %}
-        <article class="achievement-slide {% if loop.first %}is-active{% endif %}" aria-hidden="{% if loop.first %}false{% else %}true{% endif %}">
+        <article class="achievement-slide {% if loop.first %}is-active{% endif %}"
+            aria-hidden="{% if loop.first %}false{% else %}true{% endif %}">
             <div class="achievement-slide__media">
-                <img
-                    src="{{ slide.image_url }}"
-                    {% if slide.image_srcset %}srcset="{{ slide.image_srcset }}"{% endif %}
-                    sizes="{{ slide.image_sizes }}"
-                    alt="{{ slide.alt_text }}"
-                    loading="{% if loop.first %}eager{% else %}lazy{% endif %}"
-                    decoding="async">
+                <img src="{{ slide.image_url }}" {% if slide.image_srcset %}srcset="{{ slide.image_srcset }}" {% endif
+                    %} sizes="{{ slide.image_sizes }}" alt="{{ slide.alt_text }}"
+                    loading="{% if loop.first %}eager{% else %}lazy{% endif %}" decoding="async">
             </div>
             <div class="achievement-slide__caption">
                 <div class="achievement-slide__top">
@@ -123,16 +124,25 @@
 
         {% if achievement_slides|length > 1 %}
         <div class="achievement-slider__controls" aria-label="Achievement slideshow controls">
-            <button type="button" class="achievement-slider__arrow" aria-label="Previous achievement" data-achievement-prev>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            <button type="button" class="achievement-slider__arrow" aria-label="Previous achievement"
+                data-achievement-prev>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
             </button>
             <button type="button" class="achievement-slider__arrow" aria-label="Next achievement" data-achievement-next>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18l6-6-6-6" />
+                </svg>
             </button>
         </div>
         <div class="achievement-slider__pagination">
             {% for slide in achievement_slides %}
-            <button type="button" class="achievement-slider__dot {% if loop.first %}is-active{% endif %}" aria-label="Go to achievement {{ loop.index }}" data-achievement-dot aria-current="{% if loop.first %}true{% else %}false{% endif %}"></button>
+            <button type="button" class="achievement-slider__dot {% if loop.first %}is-active{% endif %}"
+                aria-label="Go to achievement {{ loop.index }}" data-achievement-dot
+                aria-current="{% if loop.first %}true{% else %}false{% endif %}"></button>
             {% endfor %}
         </div>
         {% endif %}
@@ -159,130 +169,148 @@
 
 
 {% set initiative_galleries = [
-    {
-        'label': 'Education',
-        'title': 'Anchor Public School',
-        'description': 'Holistic education providing a stable, nurturing environment where children build confidence, discipline, and curiosity through daily classroom support and guided learning.',
-        'accent': '#1f4e79',
-        'soft': '#eaf1f8',
-        'details': ['Classroom learning', 'Foundation support', 'Student mentoring', 'School guidance'],
-        'logo': 'photos/About_Us/Academic_Programme/Anchor_Public_School_Logo.png',
-        'photos': [
-            {'file': 'photos/About_Us/Academic_Programme/Academic_Programme.png', 'alt': 'Academic programme classroom session'},
-            {'file': 'photos/About_Us/Academic_Programme/Academic_Programme2.png', 'alt': 'Students engaged in learning activities'},
-            {'file': 'photos/About_Us/Academic_Programme/Academic_Programme3.png', 'alt': 'School environment and campus'},
-            {'file': 'photos/About_Us/Academic_Programme/Anchor_Public_School.png', 'alt': 'Anchor Public School building'}
-        ]
-    },
-    {
-        'label': 'Eco & Sustainability',
-        'title': 'Eco Urban Project',
-        'description': 'Practical eco awareness, community spaces, local livelihood, and sustainable habits — bridging environmental consciousness with daily community life. Includes Bagan Bilash, our community café.',
-        'accent': '#2357D8',
-        'soft': '#eaf0ff',
-        'details': ['Eco awareness', 'Green habits', 'Community livelihood', 'Bagan Bilash café'],
-        'logo': '',
-        'photos': [
-            {'file': 'photos/About_Us/Eco_Urban_Project/Eco_Urban_Project.png', 'alt': 'Eco Urban Project sustainability activities'},
-            {'file': 'photos/About_Us/Eco_Urban_Project/Eco_Urban_Project2.png', 'alt': 'Community eco awareness session'},
-            {'file': 'photos/About_Us/Eco_Urban_Project/Bagan_Bilash.png', 'alt': 'Bagan Bilash community café'},
-            {'file': 'photos/About_Us/Eco_Urban_Project/Bagan_Bilash2.png', 'alt': 'Bagan Bilash café interior'}
-        ]
-    },
-    {
-        'label': 'Women Empowerment',
-        'title': 'Nivedita SHG',
-        'description': 'Women-led self-help groups building household income support, savings discipline, and practical leadership in local communities through shared learning and collective action.',
-        'accent': '#B85C38',
-        'soft': '#fff0e8',
-        'details': ['Self-help meetings', 'Savings & records', 'Income support', 'Community awareness'],
-        'logo': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG_Logo.png',
-        'photos': [
-            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG1.png', 'alt': 'Nivedita SHG members in discussion'},
-            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG2.png', 'alt': 'Self-help group documentation'},
-            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG3.png', 'alt': 'Community women in awareness activity'},
-            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG4.png', 'alt': 'Group savings and planning session'},
-            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG5.png', 'alt': 'Women empowerment workshop'},
-            {'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG6.png', 'alt': 'SHG field documentation'}
-        ]
-    },
-    {
-        'label': 'Education Support',
-        'title': 'Learn & Shine',
-        'description': 'Guided independent learning, discipline habits, daily goal setting, and confidence-building support helping students take ownership of their academic journey.',
-        'accent': '#7B5E20',
-        'soft': '#fff6da',
-        'details': ['Independent study', 'Mentor guidance', 'Life skills', 'Confidence building'],
-        'logo': 'photos/About_Us/Learn&Shine/Learn&Shine_logo.png',
-        'photos': [
-            {'file': 'photos/About_Us/Learn&Shine/Learn&Shine1.png', 'alt': 'Students in guided study session'},
-            {'file': 'photos/About_Us/Learn&Shine/Learn&Shine2.png', 'alt': 'Independent learning activities'},
-            {'file': 'photos/About_Us/Learn&Shine/Learn&Shine3.png', 'alt': 'Mentor-student interaction'},
-            {'file': 'photos/About_Us/Learn&Shine/Learn&Shine4.png', 'alt': 'Confidence building workshop'}
-        ]
-    },
-    {
-        'label': 'Child Development',
-        'title': 'Minions Fun House',
-        'description': 'A playful, safe space for children featuring art, storytelling, play-based learning, and social development sessions that keep childhood energetic and expressive.',
-        'accent': '#b8841f',
-        'soft': '#fff6da',
-        'details': ['Creative workshops', 'Play & movement', 'Group interaction', 'Safe learning space'],
-        'logo': 'photos/About_Us/Minions_Fun_School/Minions_Fun_House_Logo_Upperpart.png',
-        'photos': [
-            {'file': 'photos/About_Us/Minions_Fun_School/Minions_Fun_House.png', 'alt': 'Children enjoying activities at Minions Fun House'},
-            {'file': 'photos/About_Us/Minions_Fun_School/Minions_Fun_House2.png', 'alt': 'Kids in creative play session'}
-        ]
-    },
-    {
-        'label': 'Health Access',
-        'title': 'Finding Cures',
-        'description': 'Accessible healthcare through basic consultations, medicine support, preventive health awareness, and referral guidance for families in need.',
-        'accent': '#1F6D8C',
-        'soft': '#e8f5fb',
-        'details': ['Health camps', 'Basic check-ups', 'Medicine guidance', 'Referrals & follow-up'],
-        'logo': 'photos/About_Us/Finding_Cures/Finding_Cure_Logo.png',
-        'photos': [
-            {'file': 'photos/About_Us/Finding_Cures/Finding_cures1.png', 'alt': 'Community health camp consultation'},
-            {'file': 'photos/About_Us/Finding_Cures/Finding_Cures2.png', 'alt': 'Medical support and volunteer assistance'}
-        ]
-    },
-    {
-        'label': 'Language & Communication',
-        'title': 'Atma Katha',
-        'description': 'Spoken language practice, reading circles, writing support, and communication confidence for learners of all ages — building bridges to wider participation.',
-        'accent': '#6b4c8a',
-        'soft': '#f0eaf8',
-        'details': ['Reading circles', 'Spoken practice', 'Writing support', 'Communication confidence'],
-        'logo': 'photos/About_Us/Atma_Katha/Atma_Katha_Logo.png',
-        'photos': [
-            {'file': 'photos/About_Us/Atma_Katha/Atma_Katha1.png', 'alt': 'Language learning class in progress'},
-            {'file': 'photos/About_Us/Atma_Katha/Atma_Katha2.png', 'alt': 'Students practicing communication skills'}
-        ]
-    },
-    {
-        'label': 'Career Readiness',
-        'title': 'Career Edge',
-        'description': 'Career guidance, presentation skills, and direction — helping participants move from aspiration toward practical steps, employability, and economic confidence.',
-        'accent': '#2357D8',
-        'soft': '#eaf0ff',
-        'details': ['Career counseling', 'Interview prep', 'Skill development', 'Employability support'],
-        'logo': 'photos/About_Us/Career_Edge/Career_Edge_Logo.png',
-        'photos': [
-            {'file': 'photos/About_Us/Career_Edge/Careet_Edge.png', 'alt': 'Career development workshop session'},
-            {'file': 'photos/About_Us/Career_Edge/Career_Edge1.png', 'alt': 'Young professionals in collaborative training'}
-        ]
-    }
+{
+'label': 'Education',
+'title': 'Anchor Public School',
+'description': 'Holistic education providing a stable, nurturing environment where children build confidence,
+discipline, and curiosity through daily classroom support and guided learning.',
+'accent': '#1f4e79',
+'soft': '#eaf1f8',
+'details': ['Classroom learning', 'Foundation support', 'Student mentoring', 'School guidance'],
+'logo': 'photos/About_Us/Academic_Programme/Anchor_Public_School_Logo.png',
+'photos': [
+{'file': 'photos/About_Us/Academic_Programme/Academic_Programme.png', 'alt': 'Academic programme classroom session'},
+{'file': 'photos/About_Us/Academic_Programme/Academic_Programme2.png', 'alt': 'Students engaged in learning
+activities'},
+{'file': 'photos/About_Us/Academic_Programme/Academic_Programme3.png', 'alt': 'School environment and campus'},
+{'file': 'photos/About_Us/Academic_Programme/Anchor_Public_School.png', 'alt': 'Anchor Public School building'}
+]
+},
+{
+'label': 'Eco & Sustainability',
+'title': 'Eco Urban Project',
+'description': 'Practical eco awareness, community spaces, local livelihood, and sustainable habits — bridging
+environmental consciousness with daily community life. Includes Bagan Bilash, our community café.',
+'accent': '#2357D8',
+'soft': '#eaf0ff',
+'details': ['Eco awareness', 'Green habits', 'Community livelihood', 'Bagan Bilash café'],
+'logo': '',
+'photos': [
+{'file': 'photos/About_Us/Eco_Urban_Project/Eco_Urban_Project.png', 'alt': 'Eco Urban Project sustainability
+activities'},
+{'file': 'photos/About_Us/Eco_Urban_Project/Eco_Urban_Project2.png', 'alt': 'Community eco awareness session'},
+{'file': 'photos/About_Us/Eco_Urban_Project/Bagan_Bilash.png', 'alt': 'Bagan Bilash community café'},
+{'file': 'photos/About_Us/Eco_Urban_Project/Bagan_Bilash2.png', 'alt': 'Bagan Bilash café interior'}
+]
+},
+{
+'label': 'Women Empowerment',
+'title': 'Nivedita SHG',
+'description': 'Women-led self-help groups building household income support, savings discipline, and practical
+leadership in local communities through shared learning and collective action.',
+'accent': '#B85C38',
+'soft': '#fff0e8',
+'details': ['Self-help meetings', 'Savings & records', 'Income support', 'Community awareness'],
+'logo': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG_Logo.png',
+'photos': [
+{'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG1.png', 'alt': 'Nivedita SHG members in discussion'},
+{'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG2.png', 'alt': 'Self-help group documentation'},
+{'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG3.png', 'alt': 'Community women in awareness activity'},
+{'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG4.png', 'alt': 'Group savings and planning session'},
+{'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG5.png', 'alt': 'Women empowerment workshop'},
+{'file': 'photos/About_Us/Nivedita_SHG/Nivedita_SHG6.png', 'alt': 'SHG field documentation'}
+]
+},
+{
+'label': 'Education Support',
+'title': 'Learn & Shine',
+'description': 'Guided independent learning, discipline habits, daily goal setting, and confidence-building support
+helping students take ownership of their academic journey.',
+'accent': '#7B5E20',
+'soft': '#fff6da',
+'details': ['Independent study', 'Mentor guidance', 'Life skills', 'Confidence building'],
+'logo': 'photos/About_Us/Learn&Shine/Learn&Shine_logo.png',
+'photos': [
+{'file': 'photos/About_Us/Learn&Shine/Learn&Shine1.png', 'alt': 'Students in guided study session'},
+{'file': 'photos/About_Us/Learn&Shine/Learn&Shine2.png', 'alt': 'Independent learning activities'},
+{'file': 'photos/About_Us/Learn&Shine/Learn&Shine3.png', 'alt': 'Mentor-student interaction'},
+{'file': 'photos/About_Us/Learn&Shine/Learn&Shine4.png', 'alt': 'Confidence building workshop'}
+]
+},
+{
+'label': 'Child Development',
+'title': 'Minions Fun House',
+'description': 'A playful, safe space for children featuring art, storytelling, play-based learning, and social
+development sessions that keep childhood energetic and expressive.',
+'accent': '#b8841f',
+'soft': '#fff6da',
+'details': ['Creative workshops', 'Play & movement', 'Group interaction', 'Safe learning space'],
+'logo': 'photos/About_Us/Minions_Fun_School/Minions_Fun_House_Logo_Upperpart.png',
+'photos': [
+{'file': 'photos/About_Us/Minions_Fun_School/Minions_Fun_House.png', 'alt': 'Children enjoying activities at Minions Fun
+House'},
+{'file': 'photos/About_Us/Minions_Fun_School/Minions_Fun_House2.png', 'alt': 'Kids in creative play session'}
+]
+},
+{
+'label': 'Health Access',
+'title': 'Finding Cures',
+'description': 'Accessible healthcare through basic consultations, medicine support, preventive health awareness, and
+referral guidance for families in need.',
+'accent': '#1F6D8C',
+'soft': '#e8f5fb',
+'details': ['Health camps', 'Basic check-ups', 'Medicine guidance', 'Referrals & follow-up'],
+'logo': 'photos/About_Us/Finding_Cures/Finding_Cure_Logo.png',
+'photos': [
+{'file': 'photos/About_Us/Finding_Cures/Finding_cures1.png', 'alt': 'Community health camp consultation'},
+{'file': 'photos/About_Us/Finding_Cures/Finding_Cures2.png', 'alt': 'Medical support and volunteer assistance'}
+]
+},
+{
+'label': 'Language & Communication',
+'title': 'Atma Katha',
+'description': 'Spoken language practice, reading circles, writing support, and communication confidence for learners of
+all ages — building bridges to wider participation.',
+'accent': '#6b4c8a',
+'soft': '#f0eaf8',
+'details': ['Reading circles', 'Spoken practice', 'Writing support', 'Communication confidence'],
+'logo': 'photos/About_Us/Atma_Katha/Atma_Katha_Logo.png',
+'photos': [
+{'file': 'photos/About_Us/Atma_Katha/Atma_Katha1.png', 'alt': 'Language learning class in progress'},
+{'file': 'photos/About_Us/Atma_Katha/Atma_Katha2.png', 'alt': 'Students practicing communication skills'}
+]
+},
+{
+'label': 'Career Readiness',
+'title': 'Career Edge',
+'description': 'Career guidance, presentation skills, and direction — helping participants move from aspiration toward
+practical steps, employability, and economic confidence.',
+'accent': '#2357D8',
+'soft': '#eaf0ff',
+'details': ['Career counseling', 'Interview prep', 'Skill development', 'Employability support'],
+'logo': 'photos/About_Us/Career_Edge/Career_Edge_Logo.png',
+'photos': [
+{'file': 'photos/About_Us/Career_Edge/Careet_Edge.png', 'alt': 'Career development workshop session'},
+{'file': 'photos/About_Us/Career_Edge/Career_Edge1.png', 'alt': 'Young professionals in collaborative training'}
+]
+}
 ] %}
 
 {% set regular_activities = [
-    {'title': 'Awareness Programme', 'description': 'Women and children awareness sessions across communities.', 'image': 'photos/About_Us/Other_Regular_activities/Awareness_Programme_Women_and_Children.png', 'accent': '#a85f46'},
-    {'title': 'Disaster Relief Programme', 'description': 'Urgent relief work and essential support during calamities.', 'image': 'photos/About_Us/Other_Regular_activities/Yaas_Disaster_Relief_Programme_1.png', 'accent': '#b86d2f'},
-    {'title': 'Orphan Support Programme', 'description': 'Feeding, essentials, and continuing care for orphaned children.', 'image': 'photos/About_Us/Orphan_Support_Programme/image.png', 'accent': '#2357D8'},
-    {'title': 'Multi-Talent Development', 'description': 'Cultural, creative, and skill activities for all ages.', 'image': 'photos/About_Us/Multi_Talent_Development_Competition/image.png', 'accent': '#b8841f'},
-    {'title': 'Blood Donation Camp', 'description': 'Community blood donation drives and local health action.', 'image': 'photos/About_Us/Other_Regular_activities/Blood_Donation_Camp.png', 'accent': '#9b3d33'},
-    {'title': 'Plantation Programme', 'description': 'Tree plantation and environmental stewardship initiatives.', 'image': 'photos/About_Us/Other_Regular_activities/Tree_Plantation.png', 'accent': '#2357D8'},
-    {'title': 'Cloth Distribution', 'description': 'Seasonal clothing and festival support for families.', 'image': 'photos/About_Us/Other_Regular_activities/Cloth_Distribution_Programme.png', 'accent': '#b86d2f'}
+{'title': 'Awareness Programme', 'description': 'Women and children awareness sessions across communities.', 'image':
+'photos/About_Us/Other_Regular_activities/Awareness_Programme_Women_and_Children.png', 'accent': '#a85f46'},
+{'title': 'Disaster Relief Programme', 'description': 'Urgent relief work and essential support during calamities.',
+'image': 'photos/About_Us/Other_Regular_activities/Yaas_Disaster_Relief_Programme_1.png', 'accent': '#b86d2f'},
+{'title': 'Orphan Support Programme', 'description': 'Feeding, essentials, and continuing care for orphaned children.',
+'image': 'photos/About_Us/Orphan_Support_Programme/image.png', 'accent': '#2357D8'},
+{'title': 'Multi-Talent Development', 'description': 'Cultural, creative, and skill activities for all ages.', 'image':
+'photos/About_Us/Multi_Talent_Development_Competition/image.png', 'accent': '#b8841f'},
+{'title': 'Blood Donation Camp', 'description': 'Community blood donation drives and local health action.', 'image':
+'photos/About_Us/Other_Regular_activities/Blood_Donation_Camp.png', 'accent': '#9b3d33'},
+{'title': 'Plantation Programme', 'description': 'Tree plantation and environmental stewardship initiatives.', 'image':
+'photos/About_Us/Other_Regular_activities/Tree_Plantation.png', 'accent': '#2357D8'},
+{'title': 'Cloth Distribution', 'description': 'Seasonal clothing and festival support for families.', 'image':
+'photos/About_Us/Other_Regular_activities/Cloth_Distribution_Programme.png', 'accent': '#b86d2f'}
 ] %}
 
 <!-- SECTION 4: ABOUT US / OUR INITIATIVES -->
@@ -292,21 +320,21 @@
             <span class="initiatives-story__eyebrow">About Us / Our Initiatives</span>
             <h2 class="initiatives-story__title" id="initiatives-story-title">Our work in the community</h2>
             <p class="initiatives-story__lead">
-                Anchor Association serves West Bengal through education, sustainability, women's empowerment, healthcare, and community development — one programme at a time.
+                Anchor Association serves West Bengal through education, sustainability, women's empowerment,
+                healthcare, and community development — one programme at a time.
             </p>
         </header>
 
         <div class="ig-showcase-stack">
             {% for item in initiative_galleries %}
             <article class="ig-showcase {% if loop.index is even %}ig-showcase--reverse{% endif %}"
-                     data-initiative-gallery
-                     style="--ig-accent: {{ item.accent }}; --ig-soft: {{ item.soft }};"
-                     data-reveal>
+                data-initiative-gallery style="--ig-accent: {{ item.accent }}; --ig-soft: {{ item.soft }};" data-reveal>
                 <div class="ig-showcase__text">
                     <div class="ig-showcase__head">
                         <span class="initiative-chip">{{ item.label }}</span>
                         {% if item.logo %}
-                        <img class="ig-showcase__logo" src="{{ url_for('static', filename=item.logo) }}" alt="{{ item.title }} logo" loading="lazy">
+                        <img class="ig-showcase__logo" src="{{ url_for('static', filename=item.logo) }}"
+                            alt="{{ item.title }} logo" loading="lazy">
                         {% endif %}
                     </div>
                     <h3>{{ item.title }}</h3>
@@ -319,22 +347,18 @@
                 </div>
                 <div class="ig-showcase__gallery">
                     <div class="ig-showcase__main-wrap">
-                        <img class="ig-showcase__main-img"
-                             src="{{ url_for('static', filename=item.photos[0].file) }}"
-                             alt="{{ item.photos[0].alt }}"
-                             data-gallery-main
-                             {% if loop.index <= 2 %}loading="eager" fetchpriority="high"{% else %}loading="lazy" decoding="async"{% endif %}>
+                        <img class="ig-showcase__main-img" src="{{ url_for('static', filename=item.photos[0].file) }}"
+                            alt="{{ item.photos[0].alt }}" data-gallery-main {% if loop.index <=2 %}loading="eager"
+                            fetchpriority="high" {% else %}loading="lazy" decoding="async" {% endif %}>
                     </div>
                     {% if item.photos | length > 1 %}
                     <div class="ig-showcase__thumbs">
                         {% for photo in item.photos %}
-                        <button class="ig-showcase__thumb {% if loop.first %}is-active{% endif %}"
-                                type="button"
-                                data-gallery-thumb
-                                data-src="{{ url_for('static', filename=photo.file) }}"
-                                data-alt="{{ photo.alt }}"
-                                aria-label="View photo {{ loop.index }}">
-                            <img src="{{ url_for('static', filename=photo.file) }}" alt="{{ photo.alt }}" loading="lazy" decoding="async">
+                        <button class="ig-showcase__thumb {% if loop.first %}is-active{% endif %}" type="button"
+                            data-gallery-thumb data-src="{{ url_for('static', filename=photo.file) }}"
+                            data-alt="{{ photo.alt }}" aria-label="View photo {{ loop.index }}">
+                            <img src="{{ url_for('static', filename=photo.file) }}" alt="{{ photo.alt }}" loading="lazy"
+                                decoding="async">
                         </button>
                         {% endfor %}
                     </div>
@@ -354,7 +378,8 @@
             <div class="initiative-activity-grid tw-grid">
                 {% for item in regular_activities %}
                 <article class="initiative-activity-card" style="--initiative-accent: {{ item.accent }};" data-reveal>
-                    <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.title }}" loading="lazy" decoding="async">
+                    <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.title }}" loading="lazy"
+                        decoding="async">
                     <div>
                         <h4>{{ item.title }}</h4>
                         <p>{{ item.description }}</p>
@@ -387,17 +412,45 @@
             <article class="impact-card" data-reveal style="--reveal-delay: {{ loop.index0 * 90 }}ms;">
                 <div class="impact-card__icon" aria-hidden="true">
                     {% if metric.icon == 'book-open' %}
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H22v18H4.5A2.5 2.5 0 0 0 2 22z"/><path d="M2 4.5v17"/><path d="M6 6h10"/></svg>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H22v18H4.5A2.5 2.5 0 0 0 2 22z" />
+                        <path d="M2 4.5v17" />
+                        <path d="M6 6h10" />
+                    </svg>
                     {% elif metric.icon == 'heart' %}
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
                     {% elif metric.icon == 'leaf' %}
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 8-9 16-9 0 8-4 16-9 16z"/><path d="M4 13c2.5 0 5 1 7 3"/></svg>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 20A7 7 0 0 1 4 13c0-5 8-9 16-9 0 8-4 16-9 16z" />
+                        <path d="M4 13c2.5 0 5 1 7 3" />
+                    </svg>
                     {% elif metric.icon == 'award' %}
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.48 12.89 17 22l-5-3-5 3 1.52-9.11"/></svg>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="6" />
+                        <path d="M15.48 12.89 17 22l-5-3-5 3 1.52-9.11" />
+                    </svg>
                     {% elif metric.icon == 'briefcase' %}
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 12h20"/></svg>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" />
+                        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                        <path d="M2 12h20" />
+                    </svg>
                     {% else %}
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
                     {% endif %}
                 </div>
                 <p class="impact-card__number">{{ metric.number }}</p>
@@ -421,25 +474,19 @@
             <span class="section-kicker__eyebrow">Gallery</span>
             <h2 class="section-kicker__title" id="home-gallery-title">Life at Anchor.</h2>
             <p class="section-kicker__lead">
-                Community moments, classrooms, care work, eco projects, and shared milestones in one curated visual field.
+                Community moments, classrooms, care work, eco projects, and shared milestones in one curated visual
+                field.
             </p>
         </header>
 
-        <div class="home-gallery__grid" id="homeGalleryGrid" data-gallery-images='{{ home_gallery_images | tojson | forceescape }}' data-gallery-lightbox>
+        <div class="home-gallery__grid" id="homeGalleryGrid"
+            data-gallery-images='{{ home_gallery_images | tojson | forceescape }}' data-gallery-lightbox>
             {% for image in home_gallery_images[:5] %}
-            <button
-                class="home-gallery__item home-gallery__item--{{ loop.index }}"
-                type="button"
-                data-lightbox-src="{{ image.url }}"
-                data-lightbox-alt="{{ image.alt }}"
+            <button class="home-gallery__item home-gallery__item--{{ loop.index }}" type="button"
+                data-lightbox-src="{{ image.url }}" data-lightbox-alt="{{ image.alt }}"
                 aria-label="Open gallery image: {{ image.alt }}">
-                <img
-                    src="{{ image.url }}"
-                    {% if image.srcset %}srcset="{{ image.srcset }}"{% endif %}
-                    sizes="100vw"
-                    alt="{{ image.alt }}"
-                    loading="lazy"
-                    decoding="async">
+                <img src="{{ image.url }}" {% if image.srcset %}srcset="{{ image.srcset }}" {% endif %} sizes="100vw"
+                    alt="{{ image.alt }}" loading="lazy" decoding="async">
                 {% if image.category %}
                 <span class="home-gallery__label">{{ image.category }}</span>
                 {% endif %}
@@ -463,13 +510,13 @@
 
     {% for story in member_stories %}
     {{ member_story(
-        role_tag=story.role_tag,
-        name=story.name,
-        qualification=story.qualification,
-        body_html=story.body_html,
-        portrait_url=story.portrait_url,
-        section_id='member-story-' ~ story.id,
-        image_on_right=story.image_on_right
+    role_tag=story.role_tag,
+    name=story.name,
+    qualification=story.qualification,
+    body_html=story.body_html,
+    portrait_url=story.portrait_url,
+    section_id='member-story-' ~ story.id,
+    image_on_right=story.image_on_right
     ) }}
     {% endfor %}
 </section>
@@ -483,7 +530,7 @@
             <h2 class="community-queue__title">Our Community</h2>
             <p class="community-queue__subtitle">Meet the wonderful people who make Anchor Association possible.</p>
         </div>
-        
+
         <!-- We pass the raw JSON data to a data attribute so JavaScript can handle the queue -->
         <div class="community-queue__grid" id="communityGrid" data-members='{{ community_members | tojson | safe }}'>
             <!-- Slots will be generated by JS -->
@@ -500,20 +547,24 @@
                 <span class="section-kicker__eyebrow">Join the Mission</span>
                 <h2 id="contact-title">Together We Build<br>Lasting Change.</h2>
                 <p>
-                    Every act of support — a partnership, a donation, a conversation — helps strengthen communities that need it most. Reach out and become part of the work.
+                    Every act of support — a partnership, a donation, a conversation — helps strengthen communities that
+                    need it most. Reach out and become part of the work.
                 </p>
             </div>
             <div class="contact-panel__actions" aria-label="Contact actions">
-                <a href="{{ url_for('donate') }}" class="contact-panel__button contact-panel__button--accent">Support Our Work</a>
+                <a href="{{ url_for('donate') }}" class="contact-panel__button contact-panel__button--accent">Support
+                    Our Work</a>
                 <a href="{{ url_for('join_member') }}" class="contact-panel__button">Volunteer to the NGO</a>
-                <a href="mailto:info@anchorassociation.org" class="contact-panel__button contact-panel__button--ghost">Email Us</a>
+                <a href="mailto:anchorassociation.ngo@gmail.com"
+                    class="contact-panel__button contact-panel__button--ghost">Email Us</a>
             </div>
         </div>
     </div>
 </section>
 
 <dialog class="home-lightbox" id="homeLightbox" aria-label="Gallery image preview">
-    <button class="home-lightbox__close" type="button" data-home-lightbox-close aria-label="Close gallery preview">&times;</button>
+    <button class="home-lightbox__close" type="button" data-home-lightbox-close
+        aria-label="Close gallery preview">&times;</button>
     <img class="home-lightbox__image" id="homeLightboxImage" src="" alt="">
 </dialog>
 
