@@ -81,19 +81,6 @@ class ImpactMetric(db.Model):
         return f'<ImpactMetric {self.title}>'
 
 
-class TeamMember(db.Model):
-    __tablename__ = 'team_members'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-    position = db.Column(db.String(200))
-    image_url = db.Column(db.String(500))
-    speech = db.Column(db.Text)
-    is_leader = db.Column(db.Boolean, default=False)
-    order = db.Column('order', db.Integer, default=0, quote=True)
-
-    def __repr__(self):
-        return f'<TeamMember {self.name}>'
 
 
 class InitiativeSection(db.Model):

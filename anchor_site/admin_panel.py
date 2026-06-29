@@ -12,7 +12,6 @@ try:
         HeroSlide,
         GalleryImage,
         ImpactMetric,
-        TeamMember,
         AdminUser,
         InitiativeSection,
         InitiativeSubitem,
@@ -25,7 +24,6 @@ except ImportError:
         HeroSlide,
         GalleryImage,
         ImpactMetric,
-        TeamMember,
         AdminUser,
         InitiativeSection,
         InitiativeSubitem,
@@ -367,13 +365,7 @@ class ImpactMetricView(SecureModelView):
     }
 
 
-class TeamMemberView(CloudinaryUploadView):
-    upload_column = 'image_url'
-    upload_folder = 'anchor/admin/team'
-    column_list = ['id', 'name', 'position', 'is_leader', 'order']
-    column_sortable_list = ['name', 'order', 'is_leader']
-    column_default_sort = 'order'
-    form_columns = ['name', 'position', 'upload_file', 'speech', 'is_leader', 'order']
+
 
 
 def _format_layout_direction(view, context, model, name):
@@ -584,8 +576,25 @@ class CommunityMemberView(CloudinaryUploadView):
     ]
 
 
+def _patch_wtforms_tuple_bug():
+    try:
+        import flask_admin.contrib.sqla.validators as sqla_validators
+        if hasattr(sqla_validators.Unique, 'field_flags') and isinstance(sqla_validators.Unique.field_flags, tuple):
+            sqla_validators.Unique.field_flags = {k: True for k in sqla_validators.Unique.field_flags}
+            
+        import flask_admin.form.validators as form_validators
+        for name in dir(form_validators):
+            obj = getattr(form_validators, name)
+            if hasattr(obj, 'field_flags') and isinstance(obj.field_flags, tuple):
+                obj.field_flags = {k: True for k in obj.field_flags}
+    except Exception:
+        pass
+
+
 def setup_admin(app, db):
     """Initialize Flask-Admin with secure model views."""
+    _patch_wtforms_tuple_bug()
+    
     admin = Admin(
         app,
         name='Anchor Admin',
@@ -595,7 +604,6 @@ def setup_admin(app, db):
     admin.add_view(AchievementSlideView(AchievementSlide, db.session, name='Achievements'))
     admin.add_view(ImpactMetricView(ImpactMetric, db.session, name='Impact Metrics'))
     admin.add_view(GalleryImageView(GalleryImage, db.session, name='Gallery'))
-    admin.add_view(TeamMemberView(TeamMember, db.session, name='Team'))
     admin.add_view(InitiativeSectionView(InitiativeSection, db.session, name='Initiatives'))
     admin.add_view(InitiativeSubitemView(InitiativeSubitem, db.session, name='Initiative Items'))
     admin.add_view(AdminUserView(AdminUser, db.session, name='Admins'))
