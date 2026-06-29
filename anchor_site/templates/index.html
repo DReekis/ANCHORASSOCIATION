@@ -104,14 +104,19 @@
                     decoding="async">
             </div>
             <div class="achievement-slide__caption">
-                <span class="achievement-slide__count">{{ "%02d"|format(loop.index) }}</span>
-                <h3>{{ slide.title }}</h3>
-                {% if slide.description %}
-                <p>{{ slide.description }}</p>
-                {% endif %}
-                {% if slide.button_text and slide.button_link %}
-                <a href="{{ slide.button_link }}" class="achievement-slide__button">{{ slide.button_text }}</a>
-                {% endif %}
+                <div class="achievement-slide__top">
+                    <span class="achievement-slide__count">{{ "%02d"|format(loop.index) }}</span>
+                    <h3>{{ slide.title }}</h3>
+                    <div class="achievement-slide__accent"></div>
+                </div>
+                <div class="achievement-slide__bottom">
+                    {% if slide.description %}
+                    <p>{{ slide.description }}</p>
+                    {% endif %}
+                    {% if slide.button_text and slide.button_link %}
+                    <a href="{{ slide.button_link }}" class="achievement-slide__button">{{ slide.button_text }}</a>
+                    {% endif %}
+                </div>
             </div>
         </article>
         {% endfor %}
@@ -487,21 +492,21 @@
 </section>
 {% endif %}
 
-<!-- SECTION: CONTACT -->
+<!-- SECTION: CONTACT — Call to Action -->
 <section class="contact-section section" id="contact" aria-labelledby="contact-title">
     <div class="container">
         <div class="contact-panel" data-reveal>
             <div class="contact-panel__copy">
-                <span class="section-kicker__eyebrow">Contact</span>
-                <h2 id="contact-title">Start a conversation with Anchor.</h2>
+                <span class="section-kicker__eyebrow">Join the Mission</span>
+                <h2 id="contact-title">Together We Build<br>Lasting Change.</h2>
                 <p>
-                    For partnerships, volunteering, membership, program support, or donations, reach out and the team will guide the next step.
+                    Every act of support — a partnership, a donation, a conversation — helps strengthen communities that need it most. Reach out and become part of the work.
                 </p>
             </div>
             <div class="contact-panel__actions" aria-label="Contact actions">
-                <a href="mailto:info@anchorassociation.org" class="contact-panel__button">Email us</a>
-                <a href="{{ url_for('join_member') }}" class="contact-panel__button contact-panel__button--ghost">Become a member</a>
-                <a href="{{ url_for('donate') }}" class="contact-panel__button contact-panel__button--accent">Donate</a>
+                <a href="{{ url_for('donate') }}" class="contact-panel__button contact-panel__button--accent">Support Our Work</a>
+                <a href="{{ url_for('join_member') }}" class="contact-panel__button">Become a Member</a>
+                <a href="mailto:info@anchorassociation.org" class="contact-panel__button contact-panel__button--ghost">Email Us</a>
             </div>
         </div>
     </div>

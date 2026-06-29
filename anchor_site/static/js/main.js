@@ -985,16 +985,39 @@
         "'": '&#39;',
     }[character]));
 
+    // Generate a deterministic color from a name
+    const nameToColor = (name) => {
+        let hash = 0;
+        for (let i = 0; i < (name || '').length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const hue = Math.abs(hash % 360);
+        return `hsl(${hue}, 42%, 58%)`;
+    };
+
+    // Get initials from a name (first letter of first and last name)
+    const getInitials = (name) => {
+        const parts = (name || '?').trim().split(/\s+/);
+        if (parts.length === 1) return parts[0][0].toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    };
+
     // Helper to generate HTML for a member
-    const createMemberHTML = (member) => `
+    const createMemberHTML = (member) => {
+        const hasPhoto = member.photo_url && member.photo_url.trim() !== '';
+        const photoHTML = hasPhoto
+            ? `<img src="${escapeHTML(member.photo_url)}" alt="${escapeHTML(member.name)}" class="community-member__photo" loading="lazy">`
+            : `<span class="community-member__initials" style="background:${nameToColor(member.name)}">${escapeHTML(getInitials(member.name))}</span>`;
+        return `
         <div class="community-member" data-id="${escapeHTML(member.id)}">
             <div class="community-member__photo-wrapper">
-                <img src="${escapeHTML(member.photo_url || '/static/photos/logo.png')}" alt="${escapeHTML(member.name)}" class="community-member__photo" loading="lazy">
+                ${photoHTML}
             </div>
             <h3 class="community-member__name">${escapeHTML(member.name)}</h3>
             <p class="community-member__qual">${escapeHTML(member.qualification)}</p>
         </div>
     `;
+    };
 
     // Initialize grid
     gridContainer.innerHTML = displayQueue.map(createMemberHTML).join('');

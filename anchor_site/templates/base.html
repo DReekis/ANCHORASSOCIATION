@@ -73,12 +73,12 @@
 
                 <div class="nav-glass__links" id="site-navigation">
                     <a href="{{ url_for('home') }}" class="nav-glass__link {% if request.path == '/' %}active{% endif %}">Home</a>
-                    <a href="{{ url_for('home') }}#achievements" class="nav-glass__link">Achievements</a>
+                    <a href="{{ url_for('home') }}#achievements" class="nav-glass__link" data-short="Achievements">Achievements</a>
                     <a href="{{ url_for('home') }}#mission" class="nav-glass__link">Mission</a>
                     <a href="{{ url_for('home') }}#initiatives" class="nav-glass__link">Initiatives</a>
                     <a href="{{ url_for('home') }}#impact" class="nav-glass__link">Impact</a>
                     <a href="{{ url_for('home') }}#gallery" class="nav-glass__link">Gallery</a>
-                    <a href="{{ url_for('home') }}#guided-purpose" class="nav-glass__link">Guided by Purpose</a>
+                    <a href="{{ url_for('home') }}#guided-purpose" class="nav-glass__link" data-short="Purpose">Guided by Purpose</a>
                     <a href="{{ url_for('home') }}#community" class="nav-glass__link">Community</a>
                     <a href="{{ url_for('home') }}#contact" class="nav-glass__link">Contact</a>
 
