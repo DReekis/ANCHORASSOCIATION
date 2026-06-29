@@ -228,10 +228,10 @@
         'accent': '#b8841f',
         'soft': '#fff6da',
         'details': ['Creative workshops', 'Play & movement', 'Group interaction', 'Safe learning space'],
-        'logo': 'photos/About_Us/Minions_Fun School/Minions_Fun_House_Logo_Upperpart.png',
+        'logo': 'photos/About_Us/Minions_Fun_School/Minions_Fun_House_Logo_Upperpart.png',
         'photos': [
-            {'file': 'photos/About_Us/Minions_Fun School/Minions_Fun_House.png', 'alt': 'Children enjoying activities at Minions Fun House'},
-            {'file': 'photos/About_Us/Minions_Fun School/Minions_Fun_House2.png', 'alt': 'Kids in creative play session'}
+            {'file': 'photos/About_Us/Minions_Fun_School/Minions_Fun_House.png', 'alt': 'Children enjoying activities at Minions Fun House'},
+            {'file': 'photos/About_Us/Minions_Fun_School/Minions_Fun_House2.png', 'alt': 'Kids in creative play session'}
         ]
     },
     {
@@ -276,13 +276,13 @@
 ] %}
 
 {% set regular_activities = [
-    {'title': 'Awareness Programme', 'description': 'Women and children awareness sessions across communities.', 'image': 'photos/About_Us/Other Regular activities/Awareness_Programme_women and Childrean.png', 'accent': '#a85f46'},
-    {'title': 'Disaster Relief Programme', 'description': 'Urgent relief work and essential support during calamities.', 'image': 'photos/About_Us/Other Regular activities/Yaas Disaster Relief Programme_1.png', 'accent': '#b86d2f'},
-    {'title': 'Orphan Support Programme', 'description': 'Feeding, essentials, and continuing care for orphaned children.', 'image': 'photos/About_Us/Orphan Support Programme/image.png', 'accent': '#2357D8'},
-    {'title': 'Multi-Talent Development', 'description': 'Cultural, creative, and skill activities for all ages.', 'image': 'photos/About_Us/Multi Talent Development Competition/image.png', 'accent': '#b8841f'},
-    {'title': 'Blood Donation Camp', 'description': 'Community blood donation drives and local health action.', 'image': 'photos/About_Us/Other Regular activities/Blood_Donation_Camp.png', 'accent': '#9b3d33'},
-    {'title': 'Plantation Programme', 'description': 'Tree plantation and environmental stewardship initiatives.', 'image': 'photos/About_Us/Other Regular activities/Tree_Plantation.png', 'accent': '#2357D8'},
-    {'title': 'Cloth Distribution', 'description': 'Seasonal clothing and festival support for families.', 'image': 'photos/About_Us/Other Regular activities/Cloth Distribution Programme.png', 'accent': '#b86d2f'}
+    {'title': 'Awareness Programme', 'description': 'Women and children awareness sessions across communities.', 'image': 'photos/About_Us/Other_Regular_activities/Awareness_Programme_Women_and_Children.png', 'accent': '#a85f46'},
+    {'title': 'Disaster Relief Programme', 'description': 'Urgent relief work and essential support during calamities.', 'image': 'photos/About_Us/Other_Regular_activities/Yaas_Disaster_Relief_Programme_1.png', 'accent': '#b86d2f'},
+    {'title': 'Orphan Support Programme', 'description': 'Feeding, essentials, and continuing care for orphaned children.', 'image': 'photos/About_Us/Orphan_Support_Programme/image.png', 'accent': '#2357D8'},
+    {'title': 'Multi-Talent Development', 'description': 'Cultural, creative, and skill activities for all ages.', 'image': 'photos/About_Us/Multi_Talent_Development_Competition/image.png', 'accent': '#b8841f'},
+    {'title': 'Blood Donation Camp', 'description': 'Community blood donation drives and local health action.', 'image': 'photos/About_Us/Other_Regular_activities/Blood_Donation_Camp.png', 'accent': '#9b3d33'},
+    {'title': 'Plantation Programme', 'description': 'Tree plantation and environmental stewardship initiatives.', 'image': 'photos/About_Us/Other_Regular_activities/Tree_Plantation.png', 'accent': '#2357D8'},
+    {'title': 'Cloth Distribution', 'description': 'Seasonal clothing and festival support for families.', 'image': 'photos/About_Us/Other_Regular_activities/Cloth_Distribution_Programme.png', 'accent': '#b86d2f'}
 ] %}
 
 <!-- SECTION 4: ABOUT US / OUR INITIATIVES -->
@@ -323,7 +323,7 @@
                              src="{{ url_for('static', filename=item.photos[0].file) }}"
                              alt="{{ item.photos[0].alt }}"
                              data-gallery-main
-                             loading="lazy" decoding="async">
+                             {% if loop.index <= 2 %}loading="eager" fetchpriority="high"{% else %}loading="lazy" decoding="async"{% endif %}>
                     </div>
                     {% if item.photos | length > 1 %}
                     <div class="ig-showcase__thumbs">
