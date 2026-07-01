@@ -11,7 +11,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #B08968;
+    color: var(--primary);
     margin-bottom: 12px;
 }
 
@@ -28,7 +28,7 @@
 .donate-hero__sub {
     font-size: clamp(1rem, 2.2vw, 1.15rem);
     color: var(--text-muted);
-    max-width: 520px;
+    max-width: 560px;
     margin: 0 auto;
     line-height: 1.7;
 }
@@ -39,7 +39,7 @@
 }
 
 
-/* Main Grid */
+/* ---------- Main Grid ---------- */
 .donate-main {
     padding: 40px 0 120px;
     background: var(--bg-main);
@@ -47,171 +47,269 @@
 
 .donate-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
     align-items: start;
 }
 
 
-/* THE HONOR CARD */
-.donate-card-col {
+/* ========================
+   LEFT: QR PAYMENT CARD
+   ======================== */
+.donate-qr-col {
     position: sticky;
-    top: 120px;
+    top: 100px;
 }
 
-.honor-card {
-    position: relative;
-    width: 100%;
-    max-width: 420px;
-    aspect-ratio: 1.586 / 1;
-    border-radius: 20px;
-    padding: 32px;
-    overflow: hidden;
-    transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-    /* Default: royal blue tier */
-    background: linear-gradient(135deg, #13294B, #2357D8, #5f7ff0);
-    box-shadow: 0 20px 60px rgba(35, 87, 216, 0.32);
+.qr-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 24px;
+    padding: clamp(28px, 3.5vw, 44px);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 8px 32px rgba(35, 87, 216, 0.06);
 }
 
-.honor-card:hover {
-    transform: translateY(-10px) scale(1.02) rotateX(2deg);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.1);
-}
-
-.honor-card__shine {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg,
-            transparent 30%,
-            rgba(255, 255, 255, 0.08) 45%,
-            rgba(255, 255, 255, 0.15) 50%,
-            rgba(255, 255, 255, 0.08) 55%,
-            transparent 70%);
-    background-size: 200% 100%;
-    background-position: 0% 50%;
-    pointer-events: none;
-    z-index: 1;
-    transition: background-position 0.6s ease, opacity 0.4s ease;
-    opacity: 0.6;
-}
-
-.honor-card:hover .honor-card__shine {
-    background-position: 100% 50%;
-    opacity: 1;
-}
-
-.honor-card__content {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.honor-card__logo {
-    font-family: 'Playfair Display', var(--font-head);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.honor-card__bottom {
-    display: flex;
-    flex-direction: column;
-}
-
-.honor-card__rank {
-    font-family: var(--font-body);
-    font-size: 0.68rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 6px;
-    transition: color 0.3s ease;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-}
-
-.honor-card__name {
-    font-family: 'Playfair Display', var(--font-head);
-    font-size: clamp(1.3rem, 3vw, 1.6rem);
-    font-weight: 700;
-    color: white;
-    margin-bottom: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-}
-
-.honor-card__meta {
-    display: flex;
-    justify-content: space-between;
+/* Badge */
+.qr-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 9999px;
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.9);
-    letter-spacing: 0.03em;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #15803d;
+    background: rgba(21, 128, 61, 0.08);
+    margin-bottom: 20px;
 }
 
-
-/* --- Tier: Silver (Gunmetal Steel) --- */
-.honor-card--silver {
-    background: linear-gradient(135deg, #2c3e50, #4a5568, #718096);
-    box-shadow: 0 20px 60px rgba(44, 62, 80, 0.4);
+.qr-card__badge svg {
+    flex-shrink: 0;
+    color: #15803d;
 }
 
-/* --- Tier: Gold (Bronze / Antique Gold) --- */
-.honor-card--gold {
-    background: linear-gradient(135deg, #78350f, #92400e, #b45309);
-    box-shadow: 0 20px 60px rgba(120, 53, 15, 0.45);
+/* Title */
+.qr-card__title {
+    font-family: 'Playfair Display', var(--font-head);
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 8px;
 }
 
-.honor-card--gold .honor-card__shine {
-    background: linear-gradient(120deg,
-            transparent 25%,
-            rgba(255, 255, 255, 0.12) 40%,
-            rgba(255, 255, 255, 0.25) 50%,
-            rgba(255, 255, 255, 0.12) 60%,
-            transparent 75%);
-    background-size: 200% 100%;
+.qr-card__subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 28px;
 }
 
-/* --- Tier: Blue (Royal Anchor) --- */
-.honor-card--green {
-    background: linear-gradient(135deg, #13294B, #2357D8, #5f7ff0);
-    box-shadow: 0 20px 60px rgba(35, 87, 216, 0.32);
+/* QR Image */
+.qr-card__image-wrap {
+    background: #faf9f7;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: center;
 }
 
-.card-hint {
-    text-align: center;
+.qr-card__image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+}
+
+/* UPI Copy Block */
+.qr-card__upi-copy {
+    margin-bottom: 16px;
+}
+
+.qr-card__upi-copy-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.qr-card__upi-copy-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1.5px solid rgba(35, 87, 216, 0.12);
+    border-radius: 14px;
+    background: rgba(35, 87, 216, 0.02);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.qr-card__upi-copy-row:hover {
+    border-color: rgba(35, 87, 216, 0.25);
+    box-shadow: 0 2px 12px rgba(35, 87, 216, 0.06);
+}
+
+.qr-card__upi-copy-id {
+    flex: 1;
+    min-width: 0;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: 0.01em;
+    word-break: break-all;
+    line-height: 1.4;
+    user-select: all;
+    -webkit-user-select: all;
+}
+
+.qr-card__copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--primary);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    white-space: nowrap;
+}
+
+.qr-card__copy-btn:hover {
+    background: var(--primary-dark, #1d46ae);
+    transform: translateY(-1px);
+}
+
+.qr-card__copy-btn:active {
+    transform: scale(0.97);
+}
+
+.qr-card__copy-btn--copied {
+    background: #15803d;
+}
+
+.qr-card__copy-btn--copied:hover {
+    background: #15803d;
+}
+
+.qr-card__copy-icon,
+.qr-card__check-icon {
+    flex-shrink: 0;
+}
+
+/* Meta row */
+.qr-card__meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
     font-size: 0.78rem;
     color: var(--text-muted);
-    margin-top: 20px;
+    line-height: 1.4;
 }
 
 
-/* THE FORM */
+/* ========================
+   RIGHT: GATEWAY (GREYED)
+   ======================== */
+.donate-gateway-col {}
+
+.gateway-card {
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 24px;
+    overflow: hidden;
+    background: #fff;
+}
+
+/* The greyed overlay */
+.gateway-card__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.gateway-card__overlay-content {
+    text-align: center;
+    padding: 32px;
+    max-width: 320px;
+}
+
+.gateway-card__overlay-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: rgba(35, 87, 216, 0.06);
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+.gateway-card__overlay-content h3 {
+    font-family: 'Playfair Display', var(--font-head);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+.gateway-card__overlay-content p {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* Inner form (shown beneath the overlay, muted) */
+.gateway-card__inner {
+    padding: clamp(28px, 3.5vw, 44px);
+    filter: grayscale(0.6);
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+}
+
+.gateway-card__desc {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+
+/* ---------- Shared Form Styles ---------- */
 .form-title {
     font-family: 'Playfair Display', var(--font-head);
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--text-main);
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 }
 
 .field--selector {
     margin-bottom: 10px;
-}
-
-.donate-purpose-note {
-    margin: 0 0 22px;
-    color: var(--text-muted);
-    font-size: 0.94rem;
 }
 
 /* Amount Pills */
@@ -235,7 +333,7 @@
     transition: all 0.2s ease;
 }
 
-.pill:hover {
+.pill:hover:not(:disabled) {
     border-color: #B08968;
     color: #B08968;
 }
@@ -406,170 +504,28 @@
 }
 
 
-/* SUCCESS MODAL */
-.success-modal {
-    border: none;
-    border-radius: 20px;
-    padding: 48px 40px;
-    max-width: 460px;
-    width: 90%;
-    background: white;
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    overflow: visible;
-}
-
-.success-modal::backdrop {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-}
-
-.success-modal__content {
-    text-align: center;
-}
-
-.success-title {
-    font-family: 'Playfair Display', var(--font-head);
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 8px;
-}
-
-.success-sub {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    margin-bottom: 32px;
-}
-
-.success-modal .honor-card {
-    max-width: 340px;
-    margin: 0 auto 32px;
-}
-
-.honor-card--final .honor-card__shine {
-    animation: shimmer 2.5s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-
-    0%,
-    100% {
-        transform: translateX(-100%);
-    }
-
-    50% {
-        transform: translateX(100%);
+/* ========================
+   RESPONSIVE
+   ======================== */
+@media (max-width: 1024px) {
+    .donate-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
     }
 }
 
-.success-actions {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.success-btn {
-    flex: 1;
-    padding: 14px 20px;
-    border: none;
-    border-radius: 12px;
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    transition: transform 0.2s ease;
-}
-
-.success-btn:hover {
-    transform: translateY(-2px);
-}
-
-.success-btn--download {
-    background: rgba(0, 0, 0, 0.06);
-    color: var(--text-main);
-}
-
-.success-btn--whatsapp {
-    background: #25D366;
-    color: white;
-}
-
-.success-close {
-    background: none;
-    border: none;
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 8px;
-    font-family: var(--font-body);
-}
-
-.success-close:hover {
-    color: var(--text-main);
-}
-
-
-/* CONFETTI (Pure CSS) */
-.confetti-container {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    height: 0;
-    pointer-events: none;
-    overflow: visible;
-}
-
-.confetti-piece {
-    position: absolute;
-    top: -10px;
-    left: var(--x);
-    width: 8px;
-    height: 12px;
-    background: hsl(var(--hue), 80%, 60%);
-    border-radius: 2px;
-    animation: confetti-fall 1.8s ease-out var(--delay) forwards;
-    opacity: 0;
-}
-
-@keyframes confetti-fall {
-    0% {
-        transform: translateY(0) rotate(0deg) scale(1);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(300px) rotate(720deg) scale(0.3);
-        opacity: 0;
-    }
-}
-
-
-/* RESPONSIVE */
 @media (max-width: 900px) {
     .donate-grid {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 32px;
     }
 
-    .donate-card-col {
+    .donate-qr-col {
         position: static;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
 
-    .honor-card {
-        max-width: 360px;
+    .qr-card__image {
+        max-width: 340px;
     }
 
     .donate-hero {
@@ -586,9 +542,31 @@
         padding: 24px 0 80px;
     }
 
-    .honor-card {
+    .qr-card {
+        padding: 24px 18px;
+        border-radius: 20px;
+    }
+
+    .qr-card__image {
         max-width: 100%;
-        padding: 28px 24px;
+    }
+
+    .qr-card__upi-copy-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .qr-card__upi-copy-id {
+        font-size: 0.7rem;
+    }
+
+    .qr-card__copy-btn {
+        align-self: flex-start;
+    }
+
+    .gateway-card__inner {
+        padding: 24px 18px;
     }
 
     .amount-pills {
@@ -602,13 +580,5 @@
 
     .field-row {
         grid-template-columns: 1fr;
-    }
-
-    .success-modal {
-        padding: 32px 24px;
-    }
-
-    .success-actions {
-        flex-direction: column;
     }
 }

@@ -802,17 +802,18 @@
 
 .ig-showcase__head {
    display: flex;
-   flex-direction: column;
+   flex-direction: row;
+   justify-content: space-between;
    align-items: flex-start;
-   gap: 8px;
+   gap: 16px;
+   margin-bottom: 8px;
 }
 
 .ig-showcase__logo {
-   height: 42px;
-   width: auto;
-   max-width: 120px;
+   width: clamp(82px, 8vw, 116px);
+   height: clamp(82px, 8vw, 116px);
    object-fit: contain;
-   border-radius: 8px;
+   filter: drop-shadow(0 4px 12px rgba(19, 41, 75, 0.08));
    transition: transform 300ms var(--ease-premium);
 }
 

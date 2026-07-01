@@ -13,392 +13,165 @@
 <section class="donate-hero">
     <div class="container">
         <span class="donate-label">Make a Difference</span>
-        <h1 class="donate-hero__title">Give Hope.<br>Earn Honor.</h1>
+        <h1 class="donate-hero__title">Support Our<br>Mission.</h1>
         <p class="donate-hero__sub">
-            Every donation unlocks your personal <strong>Digital Honor Card</strong> —
-            a badge of your generosity that grows with your giving.
+            Every contribution fuels education, sustainability, and community empowerment
+            across West Bengal. Choose how you'd like to give below.
         </p>
     </div>
 </section>
 
 
-<!-- TWO-COLUMN LAYOUT -->
+<!-- TWO-COLUMN: QR (left) + Razorpay (right) -->
 <section class="donate-main">
     <div class="container">
         <div class="donate-grid">
 
-            <!-- LEFT: Live Honor Card Preview -->
-            <div class="donate-card-col">
-                <div class="honor-card" id="honorCard">
-                    <div class="honor-card__shine"></div>
-                    <div class="honor-card__content">
-                        <div class="honor-card__logo">ANCHOR ASSOCIATION</div>
-                        <div class="honor-card__bottom">
-                            <div class="honor-card__rank" id="cardRank">Friend of Anchor</div>
-                            <div class="honor-card__name" id="cardName">Your Name</div>
-                            <div class="honor-card__meta">
-                                <span>Member Since <span id="cardYear">2026</span></span>
-                                <span id="cardAmount">₹0</span>
+            <!-- LEFT: UPI / QR Code Payment -->
+            <div class="donate-qr-col">
+                <div class="qr-card">
+                    <div class="qr-card__badge">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        Verified &amp; Secure
+                    </div>
+                    <h2 class="qr-card__title">Pay via UPI</h2>
+                    <p class="qr-card__subtitle">Scan with any UPI app — Google Pay, PhonePe, Paytm, BHIM, or your bank app.</p>
+                    
+                    <div class="qr-card__image-wrap">
+                        <img src="{{ url_for('static', filename='photos/donation_qr.jpeg') }}" alt="Karnataka Bank UPI QR Code for ANCHOR donation" class="qr-card__image">
+                    </div>
+
+                    <div class="qr-card__upi-copy" id="upiCopyBlock">
+                        <span class="qr-card__upi-copy-label">UPI ID</span>
+                        <div class="qr-card__upi-copy-row">
+                            <code class="qr-card__upi-copy-id" id="upiId">ASSEMBLAGEOFNOTABLEANDCHARITABLEHELP@kbl</code>
+                            <button class="qr-card__copy-btn" id="copyUpiBtn" type="button" aria-label="Copy UPI ID">
+                                <svg class="qr-card__copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                <svg class="qr-card__check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span class="qr-card__copy-text" id="copyBtnText">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="qr-card__meta-row">
+                        <span>Karnataka Bank</span>
+                        <span>·</span>
+                        <span>ANCHOR (ASSEMBLAGE OF NOTABLE AND CHARITABLE HELP)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Online Gateway (Coming Soon) -->
+            <div class="donate-gateway-col">
+                <div class="gateway-card">
+                    <div class="gateway-card__overlay">
+                        <div class="gateway-card__overlay-content">
+                            <div class="gateway-card__overlay-icon">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </div>
+                            <h3>Online Payment Gateway</h3>
+                            <p>Razorpay integration coming soon.<br>Please use UPI QR to donate for now.</p>
+                        </div>
+                    </div>
+
+                    <div class="gateway-card__inner">
+                        <h2 class="form-title">Pay Online</h2>
+                        <p class="gateway-card__desc">Automated payment via Razorpay with instant receipt generation.</p>
+
+                        <div class="field field--selector">
+                            <label for="donationPurpose">Donation Purpose</label>
+                            <select id="donationPurpose" name="donationPurpose" disabled>
+                                {% for option in donation_options %}
+                                <option value="{{ option.value }}">{{ option.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Amount Pills -->
+                        <div class="amount-pills">
+                            <button class="pill" type="button" disabled>₹500</button>
+                            <button class="pill" type="button" disabled>₹1,200</button>
+                            <button class="pill pill--gold" type="button" disabled>₹5,000</button>
+                            <div class="pill-custom">
+                                <span>₹</span>
+                                <input type="number" placeholder="Custom" disabled>
                             </div>
                         </div>
+
+                        <!-- Donor Info -->
+                        <div class="form-fields">
+                            <div class="field">
+                                <label>Full Name</label>
+                                <input type="text" placeholder="Full Name" disabled>
+                            </div>
+                            <div class="field">
+                                <label>Email</label>
+                                <input type="email" placeholder="youremail@example.com" disabled>
+                            </div>
+                            <div class="field-row">
+                                <div class="field">
+                                    <label>Phone</label>
+                                    <input type="tel" placeholder="+91 9876543210" disabled>
+                                </div>
+                                <div class="field">
+                                    <label>PAN (for 80G)</label>
+                                    <input type="text" placeholder="ABCDE1234F" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="donate-btn" type="button" disabled>
+                            <span class="donate-btn__text">Pay via Razorpay</span>
+                            <span class="donate-btn__icon">→</span>
+                        </button>
+                        <p class="donate-secure">🔒 Secured by Razorpay · 80G Tax Benefit</p>
                     </div>
                 </div>
-                <p class="card-hint">Your card updates as you fill in details ↗</p>
             </div>
 
-            <!-- RIGHT: Donation Form -->
-            <div class="donate-form-col">
-                <h2 class="form-title">Choose Your Impact</h2>
-                <div class="field field--selector">
-                    <label for="donationPurpose">Donation Purpose</label>
-                    <select id="donationPurpose" name="donationPurpose">
-                        {% for option in donation_options %}
-                        <option value="{{ option.value }}" {% if option.value == (donation_purpose or 'General Support') %}selected{% endif %}>
-                            {{ option.label }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <p class="donate-purpose-note">Support the whole NGO or choose a specific initiative.</p>
-
-                <!-- Amount Pills -->
-                <div class="amount-pills">
-                    <button class="pill" data-amount="500" type="button">₹500</button>
-                    <button class="pill" data-amount="1200" type="button">₹1,200</button>
-                    <button class="pill pill--gold" data-amount="5000" type="button">₹5,000</button>
-                    <div class="pill-custom">
-                        <span>₹</span>
-                        <input type="number" id="customAmount" placeholder="Custom" min="1">
-                    </div>
-                </div>
-
-                <input type="hidden" id="selectedAmount" value="0">
-                <input type="hidden" id="impactTitle" value="Friend of Anchor">
-
-                <!-- Donor Info -->
-                <div class="form-fields">
-                    <div class="field">
-                        <label for="donorName">Full Name</label>
-                        <input type="text" id="donorName" placeholder="Full Name" autocomplete="name">
-                    </div>
-                    <div class="field">
-                        <label for="donorEmail">Email</label>
-                        <input type="email" id="donorEmail" placeholder="youremail@example.com" autocomplete="email">
-                    </div>
-                    <div class="field-row">
-                        <div class="field">
-                            <label for="donorPhone">Phone</label>
-                            <input type="tel" id="donorPhone" placeholder="+91 9876543210" autocomplete="tel">
-                        </div>
-                        <div class="field">
-                            <label for="donorPAN">PAN (for 80G)</label>
-                            <input type="text" id="donorPAN" placeholder="ABCDE1234F" maxlength="10"
-                                style="text-transform:uppercase;">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Submit -->
-                <button class="donate-btn" id="donateBtn" type="button" disabled>
-                    <span class="donate-btn__text">Donate & Claim Card</span>
-                    <span class="donate-btn__icon">→</span>
-                </button>
-                <p class="donate-secure">🔒 Secured by Razorpay · 80G Tax Benefit</p>
-            </div>
         </div>
     </div>
 </section>
 
-
-<!-- SUCCESS MODAL -->
-<dialog class="success-modal" id="successModal">
-    <div class="success-modal__content">
-        <!-- Confetti -->
-        <div class="confetti-container" id="confettiBox"></div>
-
-        <h2 class="success-title">🎉 Card Unlocked!</h2>
-        <p class="success-sub">Thank you for your generous donation.</p>
-
-        <!-- Final Shiny Card -->
-        <div class="honor-card honor-card--final" id="finalCard">
-            <div class="honor-card__shine"></div>
-            <div class="honor-card__content">
-                <div class="honor-card__logo">ANCHOR ASSOCIATION</div>
-                <div class="honor-card__bottom">
-                    <div class="honor-card__rank" id="finalRank">Friend of Anchor</div>
-                    <div class="honor-card__name" id="finalName">Your Name</div>
-                    <div class="honor-card__meta">
-                        <span>Member Since 2026</span>
-                        <span id="finalAmount">₹0</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="success-actions">
-            <button class="success-btn success-btn--download" id="downloadBtn" type="button">
-                Download Card
-            </button>
-            <a class="success-btn success-btn--whatsapp" id="shareBtn" href="#" target="_blank" rel="noopener">
-                Share to WhatsApp
-            </a>
-        </div>
-        <button class="success-close" id="closeModal" type="button">Close</button>
-    </div>
-</dialog>
-
 {% endblock %}
 
-
 {% block scripts %}
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
-    (function () {
-        /* ---- DOM refs ---- */
-        const pills = document.querySelectorAll('.pill');
-        const customInput = document.getElementById('customAmount');
-        const selectedAmt = document.getElementById('selectedAmount');
-        const impactTitle = document.getElementById('impactTitle');
-        const purposeSelect = document.getElementById('donationPurpose');
-        const nameInput = document.getElementById('donorName');
-        const emailInput = document.getElementById('donorEmail');
-        const phoneInput = document.getElementById('donorPhone');
-        const donateBtn = document.getElementById('donateBtn');
+(function() {
+    const copyBtn = document.getElementById('copyUpiBtn');
+    const upiId = document.getElementById('upiId');
+    const copyText = document.getElementById('copyBtnText');
+    const copyIcon = copyBtn.querySelector('.qr-card__copy-icon');
+    const checkIcon = copyBtn.querySelector('.qr-card__check-icon');
 
-        // Card preview
-        const honorCard = document.getElementById('honorCard');
-        const cardRank = document.getElementById('cardRank');
-        const cardName = document.getElementById('cardName');
-        const cardAmount = document.getElementById('cardAmount');
-
-        // Modal
-        const modal = document.getElementById('successModal');
-        const finalCard = document.getElementById('finalCard');
-        const finalRank = document.getElementById('finalRank');
-        const finalName = document.getElementById('finalName');
-        const finalAmount = document.getElementById('finalAmount');
-        const closeModal = document.getElementById('closeModal');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const shareBtn = document.getElementById('shareBtn');
-        const confettiBox = document.getElementById('confettiBox');
-
-        let currentAmount = 0;
-
-        /* ---- Tier logic ---- */
-        function getTier(amount) {
-            if (amount >= 5000) return { rank: 'Champion of Change', tier: 'gold' };
-            if (amount >= 1000) return { rank: 'Guardian of Education', tier: 'silver' };
-            return { rank: 'Friend of Anchor', tier: 'green' };
+    copyBtn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(upiId.textContent.trim());
+        } catch {
+            /* Fallback for older browsers */
+            const ta = document.createElement('textarea');
+            ta.value = upiId.textContent.trim();
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
         }
 
-        function updateCard(amount) {
-            currentAmount = amount;
-            const { rank, tier } = getTier(amount);
-            cardRank.textContent = rank;
-            cardAmount.textContent = '₹' + amount.toLocaleString('en-IN');
-            impactTitle.value = rank;
+        /* Visual feedback */
+        copyText.textContent = 'Copied!';
+        copyIcon.style.display = 'none';
+        checkIcon.style.display = 'inline';
+        copyBtn.classList.add('qr-card__copy-btn--copied');
 
-            honorCard.className = 'honor-card honor-card--' + tier;
-            validateForm();
-        }
-
-        /* ---- Amount pills ---- */
-        pills.forEach(pill => {
-            pill.addEventListener('click', () => {
-                pills.forEach(p => p.classList.remove('pill--active'));
-                pill.classList.add('pill--active');
-                customInput.value = '';
-                const amt = parseInt(pill.dataset.amount);
-                selectedAmt.value = amt;
-                updateCard(amt);
-            });
-        });
-
-        customInput.addEventListener('input', () => {
-            pills.forEach(p => p.classList.remove('pill--active'));
-            const amt = parseInt(customInput.value) || 0;
-            selectedAmt.value = amt;
-            updateCard(amt);
-        });
-
-        /* ---- Name sync ---- */
-        nameInput.addEventListener('input', () => {
-            cardName.textContent = nameInput.value || 'Your Name';
-            validateForm();
-        });
-
-        /* ---- Validation ---- */
-        function validateForm() {
-            const valid = currentAmount > 0 && nameInput.value.trim() && emailInput.value.trim();
-            donateBtn.disabled = !valid;
-        }
-        emailInput.addEventListener('input', validateForm);
-        phoneInput.addEventListener('input', validateForm);
-
-        /* ---- Razorpay ---- */
-        donateBtn.addEventListener('click', async () => {
-            const amount = parseInt(selectedAmt.value);
-            if (!amount || amount <= 0) return;
-            const donationPurpose = purposeSelect?.value || 'General Support';
-
-            // 1. Create order (mock)
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            let orderData;
-            try {
-                const res = await fetch('/api/create_order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken
-                    },
-                    body: JSON.stringify({ amount })
-                });
-                orderData = await res.json();
-            } catch {
-                alert('Could not create order. Please try again.');
-                return;
-            }
-
-            // 2. Open Razorpay
-            const options = {
-                key: '{{ rzp_key }}',
-                amount: orderData.amount,
-                currency: 'INR',
-                name: 'Anchor Association',
-                description: donationPurpose === 'General Support'
-                    ? impactTitle.value
-                    : `${donationPurpose} - ${impactTitle.value}`,
-                order_id: orderData.order_id,
-                prefill: {
-                    name: nameInput.value,
-                    email: emailInput.value,
-                    contact: phoneInput.value
-                },
-                notes: {
-                    donation_purpose: donationPurpose,
-                    donor_tier: impactTitle.value
-                },
-                theme: { color: '#B08968' },
-                handler: async function (response) {
-                    // 3. Verify (mock)
-                    try {
-                        const vRes = await fetch('/api/verify_payment', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': csrfToken
-                            },
-                            body: JSON.stringify({
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature
-                            })
-                        });
-                        const vData = await vRes.json();
-                        if (vData.status === 'success') {
-                            showSuccess(amount);
-                        }
-                    } catch {
-                        showSuccess(amount); // still show in dev
-                    }
-                }
-            };
-
-            const rzp = new Razorpay(options);
-            rzp.open();
-        });
-
-        /* ---- Success modal ---- */
-        function showSuccess(amount) {
-            const { rank, tier } = getTier(amount);
-            const donationPurpose = purposeSelect?.value || 'General Support';
-            const purposeText = donationPurpose === 'General Support'
-                ? 'Anchor Association'
-                : donationPurpose;
-            finalRank.textContent = rank;
-            finalName.textContent = nameInput.value || 'Donor';
-            finalAmount.textContent = '₹' + amount.toLocaleString('en-IN');
-            finalCard.className = 'honor-card honor-card--final honor-card--' + tier;
-
-            // WhatsApp share
-            const msg = encodeURIComponent(
-                `I just donated ₹${amount.toLocaleString('en-IN')} to ${purposeText} through Anchor Association and earned the "${rank}" Honor Card! 🎉 Join me: anchorassociation.org/donate` //change to the main website url
-            );
-            shareBtn.href = 'https://wa.me/?text=' + msg;
-
-            // Confetti
-            confettiBox.innerHTML = '';
-            for (let i = 0; i < 60; i++) {
-                const c = document.createElement('div');
-                c.className = 'confetti-piece';
-                c.style.setProperty('--x', (Math.random() * 100) + '%');
-                c.style.setProperty('--delay', (Math.random() * 0.6) + 's');
-                c.style.setProperty('--hue', Math.floor(Math.random() * 360));
-                confettiBox.appendChild(c);
-            }
-
-            modal.showModal();
-        }
-
-        closeModal.addEventListener('click', () => modal.close());
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.close();
-        });
-
-        function sanitizeFilename(value) {
-            return (value || 'donor')
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '') || 'donor';
-        }
-
-        async function downloadHonorCard() {
-            if (typeof html2canvas !== 'function') {
-                alert('Card download is unavailable right now. Please try again.');
-                return;
-            }
-
-            const originalButtonText = downloadBtn.textContent;
-            const shine = finalCard.querySelector('.honor-card__shine');
-            const originalShineAnimation = shine ? shine.style.animation : '';
-
-            downloadBtn.disabled = true;
-            downloadBtn.textContent = 'Preparing...';
-            if (shine) shine.style.animation = 'none';
-
-            try {
-                if (document.fonts && document.fonts.ready) {
-                    await document.fonts.ready;
-                }
-
-                await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-
-                const canvas = await html2canvas(finalCard, {
-                    scale: Math.min(window.devicePixelRatio || 2, 3),
-                    useCORS: true,
-                    backgroundColor: null,
-                    logging: false
-                });
-
-                const donorSlug = sanitizeFilename(finalName.textContent);
-                const link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
-                link.download = `anchor-honor-card-${donorSlug}.png`;
-
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-            } catch {
-                alert('Could not download your card. Please try again.');
-            } finally {
-                if (shine) shine.style.animation = originalShineAnimation;
-                downloadBtn.disabled = false;
-                downloadBtn.textContent = originalButtonText;
-            }
-        }
-
-        downloadBtn.addEventListener('click', downloadHonorCard);
-    })();
+        setTimeout(() => {
+            copyText.textContent = 'Copy';
+            copyIcon.style.display = 'inline';
+            checkIcon.style.display = 'none';
+            copyBtn.classList.remove('qr-card__copy-btn--copied');
+        }, 2000);
+    });
+})();
 </script>
 {% endblock %}
