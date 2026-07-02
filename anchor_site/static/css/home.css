@@ -1268,7 +1268,7 @@
    Premium Homepage Polish
    -------------------------------------------------------------------------- */
 .hero {
-   min-height: clamp(560px, 72vh, 760px);
+   min-height: clamp(480px, 60vh, 680px);
    padding-top: clamp(64px, 8vw, 110px);
    padding-bottom: clamp(56px, 8vw, 96px);
    background:
@@ -1296,8 +1296,8 @@
 
 .hero__title {
    color: var(--dark);
-   font-size: clamp(2.8rem, 6.8vw, 5.8rem);
-   line-height: 0.98;
+   font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+   line-height: 1.05;
    letter-spacing: 0;
    text-wrap: balance;
 }
@@ -1459,7 +1459,7 @@
    position: relative;
    display: grid;
    width: min(calc(100vw - 32px), 1320px);
-   min-height: 650px;
+   min-height: clamp(450px, 70vh, 580px);
    margin: 0 auto;
    overflow: hidden;
    border: 1px solid rgba(35, 87, 216, 0.1);
@@ -1472,7 +1472,7 @@
 .achievement-slide {
    position: relative;
    grid-area: 1 / 1;
-   min-height: 650px;
+   min-height: clamp(450px, 70vh, 580px);
    opacity: 0;
    visibility: hidden;
    pointer-events: none;
