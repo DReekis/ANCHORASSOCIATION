@@ -1070,3 +1070,54 @@
         observer.observe(communitySection);
     }
 })();
+
+// ---- Scrollspy for Navigation Links ----
+(function () {
+    const sections = document.querySelectorAll('section[id], header[id], .hero[id]');
+    const navLinks = document.querySelectorAll('.nav-glass__link, .side-menu__link, .footer__link, .expandable-icon');
+    if (!sections.length || !navLinks.length) return;
+
+    function onScroll() {
+        let currentSectionId = '';
+        const scrollPosition = window.scrollY + 200; // offset
+
+        sections.forEach((section) => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                currentSectionId = section.getAttribute('id');
+            }
+        });
+
+        // Special case: if at the very top of the page, default to home
+        if (window.scrollY < 50) {
+            currentSectionId = 'home';
+        }
+
+        navLinks.forEach((link) => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+
+            // Check if it's an anchor link
+            if (href.includes('#')) {
+                const linkId = href.split('#')[1];
+                if (linkId === currentSectionId) {
+                    link.classList.add('active');
+                } else if (href.startsWith('/') || href.startsWith('#')) {
+                    link.classList.remove('active');
+                }
+            } else if (href === '/' || href === window.location.pathname) {
+                // It's the Home link
+                if (currentSectionId === 'home') {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            }
+        });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('load', onScroll);
+    setTimeout(onScroll, 100); // Initial call
+})();
