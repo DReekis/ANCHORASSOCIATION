@@ -48,7 +48,6 @@
             <a href="{{ url_for('home') }}"
                 class="side-menu__link {% if request.path == '/' %}active{% endif %}">Home</a>
             <a href="{{ url_for('home') }}#achievements" class="side-menu__link">Achievements</a>
-            <a href="{{ url_for('home') }}#mission" class="side-menu__link">Mission</a>
             <a href="{{ url_for('home') }}#initiatives" class="side-menu__link">Initiatives</a>
             <a href="{{ url_for('home') }}#impact" class="side-menu__link">Impact</a>
             <a href="{{ url_for('home') }}#gallery" class="side-menu__link">Gallery</a>
@@ -84,7 +83,6 @@
                         class="nav-glass__link {% if request.path == '/' %}active{% endif %}">Home</a>
                     <a href="{{ url_for('home') }}#achievements" class="nav-glass__link"
                         data-short="Achievements">Achievements</a>
-                    <a href="{{ url_for('home') }}#mission" class="nav-glass__link">Mission</a>
                     <a href="{{ url_for('home') }}#initiatives" class="nav-glass__link">Initiatives</a>
                     <a href="{{ url_for('home') }}#impact" class="nav-glass__link">Impact</a>
                     <a href="{{ url_for('home') }}#gallery" class="nav-glass__link">Gallery</a>
@@ -148,19 +146,6 @@
 
                 <div class="mobile-nav__actions">
                     <div class="mobile-nav__icons">
-                        <a href="{{ url_for('home') }}#mission" class="expandable-icon" id="icon-mission"
-                            aria-label="Mission">
-                            <span class="e-icon-btn" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"
-                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                </svg>
-                            </span>
-                            <span class="e-icon-text">Mission</span>
-                        </a>
                         <a href="{{ url_for('home') }}#achievements" class="expandable-icon" id="icon-achievements"
                             aria-label="Achievements">
                             <span class="e-icon-btn" aria-hidden="true">
@@ -244,7 +229,6 @@
             <nav class="footer__links" aria-label="Footer navigation">
                 <a href="{{ url_for('home') }}" class="footer__link">Home</a>
                 <a href="{{ url_for('home') }}#achievements" class="footer__link">Achievements</a>
-                <a href="{{ url_for('home') }}#mission" class="footer__link">Mission</a>
                 <a href="{{ url_for('home') }}#initiatives" class="footer__link">Initiatives</a>
                 <a href="{{ url_for('home') }}#impact" class="footer__link">Impact</a>
                 <a href="{{ url_for('home') }}#gallery" class="footer__link">Gallery</a>

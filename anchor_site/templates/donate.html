@@ -31,23 +31,38 @@
             <div class="donate-qr-col">
                 <div class="qr-card">
                     <div class="qr-card__badge">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
                         Verified &amp; Secure
                     </div>
-                    <h2 class="qr-card__title">Pay via UPI</h2>
-                    <p class="qr-card__subtitle">Scan with any UPI app — Google Pay, PhonePe, Paytm, BHIM, or your bank app.</p>
-                    
+                    <h2 class="qr-card__title">Contribute via UPI</h2>
+                    <p class="qr-card__subtitle">Scan with any UPI app — Google Pay, PhonePe, Paytm, BHIM, or your bank
+                        app.</p>
+
                     <div class="qr-card__image-wrap">
-                        <img src="{{ url_for('static', filename='photos/donation_qr.jpeg') }}" alt="Karnataka Bank UPI QR Code for ANCHOR donation" class="qr-card__image">
+                        <img src="{{ url_for('static', filename='photos/donation_qr.jpeg') }}"
+                            alt="Karnataka Bank UPI QR Code for ANCHOR donation" class="qr-card__image">
                     </div>
 
                     <div class="qr-card__upi-copy" id="upiCopyBlock">
                         <span class="qr-card__upi-copy-label">UPI ID</span>
                         <div class="qr-card__upi-copy-row">
-                            <code class="qr-card__upi-copy-id" id="upiId">ASSEMBLAGEOFNOTABLEANDCHARITABLEHELP@kbl</code>
+                            <code class="qr-card__upi-copy-id"
+                                id="upiId">ASSEMBLAGEOFNOTABLEANDCHARITABLEHELP@kbl</code>
                             <button class="qr-card__copy-btn" id="copyUpiBtn" type="button" aria-label="Copy UPI ID">
-                                <svg class="qr-card__copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                <svg class="qr-card__check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+                                <svg class="qr-card__copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                </svg>
+                                <svg class="qr-card__check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round" style="display:none">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
                                 <span class="qr-card__copy-text" id="copyBtnText">Copy</span>
                             </button>
                         </div>
@@ -67,7 +82,11 @@
                     <div class="gateway-card__overlay">
                         <div class="gateway-card__overlay-content">
                             <div class="gateway-card__overlay-icon">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
                             </div>
                             <h3>Online Payment Gateway</h3>
                             <p>Razorpay integration coming soon.<br>Please use UPI QR to donate for now.</p>
@@ -76,7 +95,8 @@
 
                     <div class="gateway-card__inner">
                         <h2 class="form-title">Pay Online</h2>
-                        <p class="gateway-card__desc">Automated payment via Razorpay with instant receipt generation.</p>
+                        <p class="gateway-card__desc">Automated payment via Razorpay with instant receipt generation.
+                        </p>
 
                         <div class="field field--selector">
                             <label for="donationPurpose">Donation Purpose</label>
@@ -137,41 +157,41 @@
 
 {% block scripts %}
 <script>
-(function() {
-    const copyBtn = document.getElementById('copyUpiBtn');
-    const upiId = document.getElementById('upiId');
-    const copyText = document.getElementById('copyBtnText');
-    const copyIcon = copyBtn.querySelector('.qr-card__copy-icon');
-    const checkIcon = copyBtn.querySelector('.qr-card__check-icon');
+    (function () {
+        const copyBtn = document.getElementById('copyUpiBtn');
+        const upiId = document.getElementById('upiId');
+        const copyText = document.getElementById('copyBtnText');
+        const copyIcon = copyBtn.querySelector('.qr-card__copy-icon');
+        const checkIcon = copyBtn.querySelector('.qr-card__check-icon');
 
-    copyBtn.addEventListener('click', async () => {
-        try {
-            await navigator.clipboard.writeText(upiId.textContent.trim());
-        } catch {
-            /* Fallback for older browsers */
-            const ta = document.createElement('textarea');
-            ta.value = upiId.textContent.trim();
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            ta.remove();
-        }
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(upiId.textContent.trim());
+            } catch {
+                /* Fallback for older browsers */
+                const ta = document.createElement('textarea');
+                ta.value = upiId.textContent.trim();
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+            }
 
-        /* Visual feedback */
-        copyText.textContent = 'Copied!';
-        copyIcon.style.display = 'none';
-        checkIcon.style.display = 'inline';
-        copyBtn.classList.add('qr-card__copy-btn--copied');
+            /* Visual feedback */
+            copyText.textContent = 'Copied!';
+            copyIcon.style.display = 'none';
+            checkIcon.style.display = 'inline';
+            copyBtn.classList.add('qr-card__copy-btn--copied');
 
-        setTimeout(() => {
-            copyText.textContent = 'Copy';
-            copyIcon.style.display = 'inline';
-            checkIcon.style.display = 'none';
-            copyBtn.classList.remove('qr-card__copy-btn--copied');
-        }, 2000);
-    });
-})();
+            setTimeout(() => {
+                copyText.textContent = 'Copy';
+                copyIcon.style.display = 'inline';
+                checkIcon.style.display = 'none';
+                copyBtn.classList.remove('qr-card__copy-btn--copied');
+            }, 2000);
+        });
+    })();
 </script>
 {% endblock %}
