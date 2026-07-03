@@ -3,7 +3,7 @@
 {% block title %}Anchor Association - Roots of Education, Fruits of Sustainability{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}?v={{ range(1, 100000) | random }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home-tailwind.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
 {% endblock %}
