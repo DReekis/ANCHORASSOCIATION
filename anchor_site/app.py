@@ -1319,7 +1319,7 @@ def verify_payment():
 # --- Admin Login / Logout ---
 
 
-@app.route('/admin-login', methods=['GET', 'POST'])
+@app.route('/anchor-auth-x7k9p2', methods=['GET', 'POST'])
 def admin_login():
     error = None
     if request.method == 'POST':
@@ -1337,7 +1337,7 @@ def admin_login():
     return render_template('admin_login.html', error=error)
 
 
-@app.route('/admin-logout')
+@app.route('/anchor-exit-x7k9p2')
 def admin_logout():
     session.pop('admin_logged_in', None)
     return redirect(url_for('home'))

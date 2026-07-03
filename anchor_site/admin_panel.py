@@ -599,7 +599,8 @@ def setup_admin(app, db):
     admin = Admin(
         app,
         name='Anchor Admin',
-        index_view=SecureAdminIndex()
+        index_view=SecureAdminIndex(),
+        url='/anchor-dashboard-x7k9p2'
     )
     admin.add_view(HeroSlideView(HeroSlide, db.session, name='Hero Slides'))
     admin.add_view(AchievementSlideView(AchievementSlide, db.session, name='Achievements'))
@@ -612,4 +613,4 @@ def setup_admin(app, db):
     admin.add_view(CommunityMemberView(CommunityMember, db.session, name='Community Members'))
     admin.add_view(GalleryUploadView(name='Bulk Photo Upload', endpoint='bulk_upload'))
     admin.add_view(SyncDatabaseView(db, name='Sync Database', endpoint='sync-db'))
-    admin.add_link(MenuLink(name='Logout', url='/admin-logout'))
+    admin.add_link(MenuLink(name='Logout', url='/anchor-exit-x7k9p2'))

@@ -810,8 +810,8 @@
 }
 
 .ig-showcase__logo {
-   width: clamp(82px, 8vw, 116px);
-   height: clamp(82px, 8vw, 116px);
+   width: clamp(110px, 12vw, 160px);
+   height: clamp(110px, 12vw, 160px);
    object-fit: contain;
    filter: drop-shadow(0 4px 12px rgba(19, 41, 75, 0.08));
    transition: transform 300ms var(--ease-premium);
@@ -975,7 +975,7 @@
    }
 
    .ig-showcase__logo {
-      height: 34px;
+      height: 64px;
    }
 }
 
@@ -998,7 +998,7 @@
    }
 
    .ig-showcase__logo {
-      height: 28px;
+      height: 52px;
    }
 }
 
@@ -1684,9 +1684,9 @@
 .ig-showcase__logo {
    display: block;
    height: auto;
-   max-height: 56px;
+   max-height: 96px;
    width: auto;
-   max-width: 140px;
+   max-width: 220px;
    object-fit: contain;
    padding: 6px;
    border-radius: 12px;
@@ -2062,8 +2062,8 @@
    }
 
    .ig-showcase__logo {
-      max-height: 48px;
-      max-width: 120px;
+      max-height: 72px;
+      max-width: 160px;
    }
 
    .contact-panel__actions {
