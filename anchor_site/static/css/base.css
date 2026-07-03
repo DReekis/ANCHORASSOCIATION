@@ -45,6 +45,7 @@ body {
 }
 
 html {
+    font-size: 14.5px;
     scroll-behavior: smooth;
     scroll-padding-top: 112px;
 }
@@ -186,6 +187,7 @@ button {
     font-weight: 500;
     color: var(--text-main);
     border-radius: 9999px;
+    white-space: nowrap;
     transition: var(--transition-smooth);
 }
 
