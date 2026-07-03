@@ -1,6 +1,6 @@
 /* SECTION 1: HERO */
 .hero {
-   min-height: 100vh;
+   min-height: 80vh;
    display: flex;
    align-items: center;
    justify-content: center;
@@ -18,7 +18,7 @@
 
 .hero__title {
    font-family: var(--font-head);
-   font-size: clamp(2.5rem, 6vw, 4rem);
+   font-size: clamp(2.2rem, 5vw, 3.4rem);
    font-weight: 700;
    line-height: 1.1;
    color: var(--text-main);
@@ -156,7 +156,7 @@
     margin: 0;
     color: var(--text-main, #1a1a1a);
     font-family: var(--font-head);
-    font-size: clamp(1.75rem, 3vw, 3rem);
+    font-size: clamp(1.5rem, 2.5vw, 2.5rem);
     font-weight: 700;
     line-height: 1.12;
     letter-spacing: -0.02em;

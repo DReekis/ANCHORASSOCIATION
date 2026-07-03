@@ -338,7 +338,7 @@ button {
 
     .nav-glass {
         width: calc(100% - 24px);
-        max-width: 430px;
+        max-width: 650px;
         padding: 10px 12px 10px 18px;
         gap: 14px;
         justify-content: space-between;
